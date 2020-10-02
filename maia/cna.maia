@@ -1,0 +1,787 @@
+##
+# @license
+# Copyright 2020 Roberto Luiz Souza Monteiro,
+#                Renata Souza Barreto,
+#                Hernane Borges de Barros Pereira.
+#
+# Licensed under the Apache License, Version 2.0 (the 'License');
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at;
+#
+#   http://www.apache.org/licenses/LICENSE-2.0;
+#
+# Unless required by applicable law or agreed to in writing, software;
+# distributed under the License is distributed on an 'AS IS' BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, eitherMath.express or implied.
+# See the License for the specific language governing permissions and;
+# limitations under the License.
+#
+
+##
+# MaiaScript Social and Complex Network Analysis library.
+# @class cna
+#
+namespace cna {
+    ##
+    # Creates a Pajek file.
+    # @method createPajekFile
+    # @param {object}   adj - Adjascence matrix.
+    # @param {string}   type - File type (edges, arcs or matrix).
+    # @return {string}  A Pajek file.
+    #
+    function createPajekFile(adj, type) {
+        if (core.type(type) == "undefined") {
+            type = "edges"
+        }
+        dimAdj = core.dim(adj)
+        dimI = dimAdj[0]
+        dimJ = dimAdj[1]
+        // Each line in a Pajek files must terminate with CR+LF.
+        newLine = "\r\n"
+        // Save vertices.
+        fileContents = "*Vertices " + (dimI - 1) + newLine
+        for (i = 1; i < dimI; i = i + 1) {
+            fileContents = fileContents + i + " \"" + adj[i, 0] + "\"" + newLine
+        }
+        // Save edges.
+        if (type == "edges") {
+            fileContents = fileContents + "*Edges" + newLine
+            for (i = 1; i < dimI; i = i + 1) {
+                for (j = 1; j < dimJ; j = j + 1) {
+                    if (adj[i, j] != 0) {
+                        fileContents = fileContents + i + " " + j + " " + adj[i, j] + newLine
+                    }
+                }
+            }
+        // Save arcs.
+        } elseif (type == "arcs") {
+            fileContents = fileContents + "*Arcs" + newLine
+            for (i = 1; i < dimI; i = i + 1) {
+                for (j = 1; j < dimJ; j = j + 1) {
+                    if (adj[i, j] != 0) {
+                        fileContents = fileContents + i + " " + j + " " + adj[i, j] + newLine
+                    }
+                }
+            }
+        // Save matrix.
+        } elseif (type == "matrix") {
+            fileContents = fileContents + "*Matrix" + newLine
+            for (i = 1; i < dimI; i = i + 1) {
+                for (j = 1; j < dimJ; j = j + 1) {
+                    fileContents = fileContents + " " + adj[i, j]
+                }
+                fileContents = fileContents + newLine
+            }
+        }
+        return(fileContents)
+    }
+    
+    ##
+    # Parses a Pajek file.
+    # @method parsePajekFile
+    # @param {string}   fileContents - Pajek file contents.
+    # @return {object}  An adjascence matrix.
+    #
+    function parsePajekFile(fileContents) {
+        fileSection = "none"
+        fileLines = core.split(fileContents, "\r\n")
+        for (l = 0; l < fileLines.length; l = l + 1) {
+            line = fileLines[l]
+            record = core.split(line.trim(), " ")
+            if ((core.toLowerCase(record[0]) == "*vertices") || (core.toLowerCase(record[0]) == "*edges") || (core.toLowerCase(record[0]) == "*arcs") || (core.toLowerCase(record[0]) == "*matrix")) {
+                fileSection = core.toLowerCase(record[0])
+                if (fileSection == "*vertices") {
+                    n = core.toNumber(record[1]) + 1
+                    adj = core.matrix(0, n, n)
+                }
+                i = 0
+                continue
+            }
+            if (core.length(record) >= 2) {
+                if (fileSection == "*vertices") {
+                    adj[0, i + 1] = record[1]
+                    adj[i + 1, 0] = record[1]
+                    i = i + 1
+                } elseif (fileSection == "*edges") {
+                    i = core.toNumber(record[0])
+                    j = core.toNumber(record[1])
+                    if (core.length(record) == 2) {
+                        adj[i, j] = 1
+                        adj[j, i] = 1
+                    } else {
+                        adj[i, j] = core.toNumber(record[2])
+                        adj[j, i] = core.toNumber(record[2])
+                    }
+                } elseif (fileSection == "*arcs") {
+                    i = core.toNumber(record[0])
+                    j = core.toNumber(record[1])
+                    if (core.length(record) == 2) {
+                        adj[i, j] = 1
+                    } else {
+                        adj[i, j] = core.toNumber(record[2])
+                    }
+                } elseif (fileSection == "*matrix") {
+                    for (j = 0; j < record.length; j = j + 1) {
+                        v = record[j]
+                        adj[i + 1, j + 1] = core.toNumber(v)
+                        if (i == n) {
+                            break
+                        }
+                    }
+                    i = i + 1
+                }
+            }
+        }
+        return(adj)
+    }
+    
+    ##
+    # Transitive closure between two matrices (A and B).
+    # @method getTransitiveClosure
+    # @param {object}   a - Matrix A.
+    # @param {object}   b - Matrix B.
+    # @return {object}  Transitive closure between two matrices.
+    #
+    function getTransitiveClosure(a, b) {
+        dimA = core.dim(a)
+        dimB = core.dim(b)
+        if (dimA[1] == dimB[0]) {
+            c = core.matrix(0, dimA[1], dimB[0])
+            for (i = 1; i < dimA[0]; i = i + 1) {
+                for (j = 1; j < dimB[1]; j = j + 1) {
+                    s = 0
+                    for (k = 1; k < dimB[0]; k = k + 1) {
+                        s = s || a[i,k] && b[k,j]
+                    }
+                    c[i,j] = s
+                }
+            }
+            return(c)
+        } else {
+            throw(Error("The number of columns in matrix A must equal the number of rows in matrix B"))
+        }
+    }
+    
+    ##
+    # Boolean OR between two matrices (A and B).
+    # @method getBooleanOr
+    # @param {object}   a - Matrix A.
+    # @param {object}   b - Matrix B.
+    # @return {object}  Boolean OR between two matrices.
+    #
+    function getBooleanOr(a, b) {
+        dimA = core.dim(a)
+        dimB = core.dim(b)
+        if (dimA == dimB) {
+            c = core.matrix(0, dimA[0], dimA[1])
+            for (i = 1; i < dimA[0]; i = i + 1) {
+                for (j = 1; j < dimA[1]; j = j + 1) {    
+                    c[i,j] = a[i, j] || b[i, j]
+                }
+            }
+            return(c)
+        } else {
+            throw(Error("The dimensions of matrix A must be the same as that of matrix B"))
+        }
+    }
+    
+    ##
+    # Calculates the network density.
+    # @method getDensity
+    # @param {object}   adj - Adjascence matrix.
+    # @param {boolean}  directed - True if the network is directed.
+    # @return {number}  The network density.
+    #
+    function getDensity(adj, directed) {
+        if (core.type(directed) == "undefined") {
+            directed = false
+        }
+        dimAdj = core.dim(adj)
+        dimI = dimAdj[0]
+        n = dimI - 1
+        // Remove vertex data from the matrix.
+        for (i = 0; i < dimI; i = i + 1) {
+            adj[0, i] = 0
+            adj[i, 0] = 0
+        }
+        nedges = matrix.count(adj)
+        if (directed) {
+            density = nedges / (n * (n - 1))
+        } else {
+            density = nedges / (n * (n - 1)) / 2
+        }
+        return(density)
+    }
+    
+    ##
+    # Calculates the degrees of the vertices of the matrix.
+    # @method getDegrees
+    # @param {object}   adj - Adjascence matrix.
+    # @param {boolean}  directed - True if the network is directed.
+    # @return {object}  Returns a array containing the degrees of the vertices.
+    #
+    function getDegrees(adj, directed) {
+        if (core.type(directed) == "undefined") {
+            directed = false
+        }
+        dimAdj = core.dim(adj)
+        dimI = dimAdj[0]
+        dimJ = dimAdj[1]
+        degrees = core.matrix(0, dimI, 3)
+        for (i = 1; i < dimI; i = i + 1) {
+            degrees[i, 0] = matrix.count(adj, i, 1, i, dimJ - 1)
+            degrees[i, 1] = matrix.count(adj, 1, i, dimI - 1, i)
+            if (directed) {
+                degrees[i, 2] = degrees[i, 0] + degrees[i, 1]
+            } else {
+                if (degrees[i, 0] != 0) {
+                    degrees[i, 2] = degrees[i, 0]
+                } else {
+                    degrees[i, 2] = degrees[i, 1]
+                }
+            }
+        }
+        return(degrees)
+    }
+    
+    ##
+    # Calculates the degrees distribution in the network.
+    # @method getDegreeDistribution
+    # @param {object}   degrees - Array containing degrees of the vertices.
+    # @return {object}  Returns an array containing the degrees distribution in the network.
+    #
+    function getDegreeDistribution(degrees) {
+        dimDegrees = core.dim(degrees)
+        dimI = dimDegrees[0]
+        degDist = []
+        for (i = 1; i < dimI; i = i + 1) {
+            degree = degrees[i, 2]
+            if (core.type(degDist[degree]) == "undefined") {
+                degDist[degree] = 1
+            } else {
+                degDist[degree] = degDist[degree] + 1
+			}
+        }
+        hist = core.matrix(0, core.length(degDist), 3)
+        i = 0
+        foreach(degDist; deg; dist) {
+            hist[i, 0] = deg
+            hist[i, 1] = dist
+    		i = i + 1
+        }
+        dimHist = core.dim(hist)
+        sumDegs = matrix.sum(hist, 0, 1, dimHist[0] - 1, 1)
+        for (i = 0; i < dimHist[0]; i = i + 1) {
+            hist[i, 2] = (hist[i, 1] / sumDegs) * 100
+        }
+        // Sort data.
+        for (i = 0; i < dimHist[0] - 1; i = i + 1) {
+            for (j = i; j < dimHist[0]; j = j + 1) {
+                if (hist[i, 0] > hist[j, 0]) {
+                    degree = hist[i, 0]
+                    hist[i, 0] = hist[j, 0]
+                    hist[j, 0] = degree
+                    
+                    frequency = hist[i, 1]
+                    hist[i, 1] = hist[j, 1]
+                    hist[j, 1] = frequency
+
+                    percentual = hist[i, 2]
+                    hist[i, 2] = hist[j, 2]
+                    hist[j, 2] = percentual
+                }
+            }
+        }
+    	return(hist)
+    }
+    
+    ##
+    # Calculates average degree of the network.
+    # @method getAverageDegree
+    # @param {object}   degrees - Array containing degrees of the vertices.
+    # @return {number}  Returns the average degree of the network.
+    #
+    function getAverageDegree(degrees) {
+        dimDegrees = core.dim(degrees)
+        dimI = dimDegrees[0]
+        avgDeg = matrix.avg(degrees, 1, 2, (dimI - 1), 2)
+        return(avgDeg)
+    }
+    
+    ##
+    # Calculates the clustering coefficients of the vertices.
+    # @method getClustering
+    # @param {object}   adj - Adjascence matrix.
+    # @param {boolean}  directed - True if the network is directed.
+    # @return {object}  Returns an array containing the clustering coefficients of the vertices.
+    #
+    function getClustering(adj, directed) {
+        if (core.type(directed) == "undefined") {
+            directed = false
+        }
+        dimAdj = core.dim(adj)
+        dimI = dimAdj[0]
+        dimJ = dimAdj[1]
+        // To calculate the clustering coefficient we need an undirected graph.
+        if (directed) {
+            for (i = 1; i < dimI; i = i + 1) {
+                for (j = 1; j < dimJ; j = j + 1) {
+                    if (adj[i, j] == 1) {
+                        adj[j, i] = 1
+                    }
+                }
+            }
+        }
+        clustering = core.matrix(0, dimI, 1)
+        // Calculate the clustering coefficient for each vertex.
+        for (i = 1; i < dimI; i = i + 1) {
+            neighbor = []
+            ki = matrix.count(adj, i, 1, i, (dimJ - 1))
+            // If the vertex has any neighbor.
+            if (ki > 0) {
+                // Get all neighbor indexes.
+                for (j = 1; j < dimJ; j = j + 1) {
+                    if ((adj[i, j] == 1) || (adj[j, i] == 1)) {
+                        neighbor.push(j)
+                    }
+                }
+                if (core.length(neighbor) > 0) {
+                    // Calculate the number of neighbors connected one to other.
+                    n = 0
+                    for (n1 = 0; n1 < core.length(neighbor); n1 = n1 + 1) {
+                        for (n2 = 0; n2 < core.length(neighbor); n2 = n2 + 1) {
+                            if (n1 != n2) {
+                                if (adj[neighbor[n1], neighbor[n2]] == 1) {
+                                    n = n + 1
+                                }
+                            }
+                        }
+                    }
+                }
+                // Calculate the clustering coefficient to this vertex.
+                if ((ki == 0) || (ki == 1)) {
+                    clustering[i, 0] = 0
+                } else {
+                    clustering[i, 0] = (n / 2) / ((ki * (ki - 1)) / 2)
+                }
+            }
+        }
+        return(clustering)
+    }
+    
+    ##
+    # Calculates average clustering coefficient of the network.
+    # @method getAverageClustering
+    # @param {object}   clustering - Array containing the clustering coefficients of the vertices.
+    # @return {number}  Returns the average clustering coefficient of the network.
+    #
+    function getAverageClustering(clustering) {
+        dimClustering = core.dim(clustering)
+        n = dimClustering[0] - 1
+        avgClustering = matrix.sum(clustering) / n
+        return(avgClustering)
+    }
+    
+    ##
+    # Calculates the shortest parh between each two vetices in the matrix.
+    # @method getShortestPath
+    # @param {object}   adj - Adjascence matrix.
+    # @return {object}  Returns an array containing the shortest parh between each two vetice in the matrix.
+    #
+    function getShortestPath(adj) {
+        dimAdj = core.dim(adj)
+        dimI = dimAdj[0]
+        dimJ = dimAdj[1]
+        matrixOne = core.one(dimI, dimJ)
+        matrixZero = core.zero(dimI, dimJ)   
+        // Remove vertex data from the matrix.
+        for (i = 0; i < dimI; i = i + 1) {
+            adj[0, i] = 0
+            adj[i, 0] = 0
+        } 
+        geodesic = adj.slice()
+        if ((adj == matrixZero) || (adj == matrixOne)) {
+            return(geodesic)
+        }
+        old = adj.slice()
+        prod = adj.slice()
+        order = 1
+        while (true) {
+            prod = this.getTransitiveClosure(adj, old)
+            path = this.getBooleanOr(old, prod)
+            order = order + 1      
+            for (i = 1; i < dimI; i = i + 1) {
+                for (j = 1; j < dimJ; j = j + 1) {
+                    if ((prod[i, j] == 1) && (geodesic[i, j] == 0) && (i != j)) {
+                        geodesic[i, j] = order
+                    }
+                }
+            } 
+            if (path == matrixOne) {
+                break
+            } elseif (path == old) {
+                break
+            } elseif (order == dimI) {
+                break
+            }
+            old = prod
+        }
+        return(geodesic)
+    }
+    
+    ##
+    # Calculates average shortest path of the network.
+    # @method getAverageShortestPath
+    # @param {object}   geodesic - Array the shortest parh between each two vetices in the matrix.
+    # @return {number}  Returns the average shortest path of the network.
+    #
+    function getAverageShortestPath(geodesic) {
+        dimGeodesic = core.dim(geodesic)
+        dimI = dimGeodesic[0]
+        dimJ = dimGeodesic[1]
+        n = matrix.count(geodesic, 1, 1, dimI - 1, dimJ - 1)
+        if (n > 0) {
+            avgshortestpath = matrix.sum(geodesic, 1, 1, dimI - 1, dimJ - 1) / n
+        } else {
+            avgshortestpath = 0
+        }
+        return(avgshortestpath)
+    }
+    
+    ##
+    # Calculates the network diameter.
+    # @method getDiameter
+    # @param {object}   geodesic - Array the shortest parh between each two vetices in the matrix.
+    # @return {number}  Returns the network diameter.
+    #
+    function getDiameter(geodesic) {
+        diameter = matrix.max(geodesic)
+        return(diameter)
+    }
+    
+    ##
+    # Calculates the shortest parh between each two vetices in the matrix using Floyd Warshall method.
+    # @method getFloydWarshallShortestPath
+    # @param {object}   adj - Adjascence matrix.
+    # @param {object}   path - Matrix to store paths.
+    # @return {object}  Returns an array containing the shortest parh between each two vetice in the matrix.
+    #
+    function getFloydWarshallShortestPath(adj, path) {
+        dimAdj = core.dim(adj)
+        dimI = dimAdj[0]
+        dimJ = dimAdj[1]
+        geodesic = adj
+        if (core.type(path) == "undefined") {
+            path = core.matrix(-1, dimI, dimJ)
+        }
+        for (i = 1; i < dimI; i = i + 1) {
+            for (j = 1; j < dimJ; j = j + 1) {
+                for (k = 1; k < dimI; k = k + 1) {
+                    if (geodesic[j, k] == 0) {
+                        geodesic[j, k] = 999999999
+                    }
+                    if (geodesic[j, i] == 0) {
+                        geodesic[j, i] = 999999999
+                    }
+                    if (geodesic[i, k] == 0) {
+                        geodesic[i, k] = 999999999
+                    }
+                    if ((geodesic[j, i] + geodesic[i, k]) < geodesic[j, k]) {
+                        geodesic[j, k] = geodesic[j, i] + geodesic[i, k]
+                        path[j, k] = i
+                    }
+                }
+            }
+        }
+        for (i = 0; i < dimI; i = i + 1) {
+            geodesic[0, i] = 0
+            geodesic[i, 0] = 0
+            geodesic[i, i] = 0
+        }
+        // Fix geodesics.
+        for (i = 0; i < dimI; i = i + 1) {
+            for (j = 0; j < dimJ; j = j + 1) {
+                if (geodesic[i, j] == 999999999) {
+                    geodesic[i, j] = 0
+                }
+            }
+        }
+        return(geodesic)
+    }
+    
+    ##
+    # Do a shortest parh walk in the network and returns the path.
+    # @method doShortestPathWalk
+    # @param {object}   geodesic - Geodesics matrix.
+    # @param {object}   path - Paths matrix.
+    # @param {number}   j - Element index.
+    # @param {number}   k - Element index.
+    # @return {object}  Returns an array containing the shortest parh walk between two vetice in the matrix.
+    #
+    function doShortestPathWalk(geodesic, path, j, k) {
+        if (geodesic[j, k] == 0) {
+            return([])
+        }
+        i = path[j, k]
+        if (i == -1) {
+            return([])
+        } else {
+            pji = this.doShortestPathWalk(geodesic, path, j, i)
+            pik = this.doShortestPathWalk(geodesic, path, i, k)
+            pjk = []
+            if (core.length(pji) != 0) {
+                pjk.push(pji)
+            }
+            pjk.push(i)
+            if (core.length(pik) != 0) {
+                pjk.push(pik)
+            }
+            return(pjk)
+        }
+    }
+    
+    ##
+    # Return the number os geodesics in the network.
+    # @method getNumberOfGeodesics
+    # @param {object}   adj - Adjascence matrix.
+    # @param {object}   geodesic - Vector including the geodesics of the network.
+    # @param {boolean}  directed - True if the network is directed. False otherwise.
+    # @return {number}  Returns the number os geodesics in the network.
+    #
+    function getNumberOfGeodesics(adj, geodesic, directed) {
+        dimGeodesic = core.dim(geodesic)
+        dimI = dimGeodesic[0]
+        dimJ = dimGeodesic[1]
+        gjk = adj.slice()
+        for (i = 0; i < dimI; i = i + 1) {
+            gjk[0, i] = 0
+            gjk[i, 0] = 0
+            gjk[i, i] = 1
+        }
+        diameter = this.getDiameter(geodesic)
+        // Count how many geodesics are there between vertices i and j.
+        for (p = 2; p <= diameter; p = p + 1) {
+            npaths = adj ^ p
+            for (i = 1; i < dimI; i = i + 1) {
+                for (j = 1; j < dimJ; j = j + 1) {
+                    if (i != j) {
+                        if (gjk[i, j] == 0) {
+                            gjk[i, j] = npaths[i, j]
+                        }
+                    }
+                }
+            }
+        }
+        return(gjk)
+    }
+    
+    ##
+    # Returns an array containing the centralities of each pair of the network's vertices.
+    # @method getCentrality
+    # @param {object}   adj - Adjascence matrix.
+    # @param {object}   geodesic - Vector including the geodesics of the network.
+    # @param {boolean}  directed - True if the network is directed. False otherwise.
+    # @return {object}  Returns an array containing the centralities of each pair of the network's vertices
+    #
+    function getCentrality(adj, geodesic, directed) {
+        dimGeodesic = core.dim(geodesic)
+        dimI = dimGeodesic[0]
+        dimJ = dimGeodesic[1]
+        // Column 0 contains the closeness centrality,
+        // Column 1 contains the betweenness centrality.
+        // Column 2 contains the normalized closeness centrality,
+        // Column 3 contains the normalized betweenness centrality.
+        centrality = core.matrix(0, dimI, 5)
+        n = dimI - 1
+        // Calculate the closeness centrality for each vertex.
+        for (i = 1; i < dimI; i = i + 1) {
+            s = matrix.sum(geodesic, i, 1, i, dimJ - 1)
+            if (s > 0) {
+                centrality[i, 0] = 1 / s
+                centrality[i, 2] = (n - 1) / s
+                centrality[i, 4] = s
+            }
+        }
+        // Calculate the betweenness centrality for each vertex.
+        gjk = this.getNumberOfGeodesics(adj, geodesic, directed)
+        for (i = 1; i < dimI; i = i + 1) {
+            bc = 0
+            for (j = 1; j < dimI; j = j + 1) {
+                for (k = 1; k < dimJ; k = k + 1) {
+                    // Must insert an if to test if it is a directed graph.
+                    if ((j < k) && (j != i) && (i != k)) {
+                        spjk = geodesic[j, k]
+                        if ((geodesic[j, i] + geodesic[i, k]) == spjk) {
+                            bc = bc + math.max(gjk[j, i], gjk[i, k]) / gjk[j, k]
+                        }
+                    }
+                }
+            }
+            centrality[i, 1] = bc
+            centrality[i, 3] = (2 * bc) / (n ^ 2 - 3 * n + 2)
+        }
+        return(centrality)
+    }
+    
+    ##
+    # Returns an array containing the vertex efficiency of each pair of the network's vertices.
+    # @method getVertexEfficiency
+    # @param {object}   geodesic - Vector including the geodesics of the network.
+    # @return {object}  Returns an array containing the vertex efficiency of each pair of the network's vertices
+    #
+    function getVertexEfficiency(geodesic) {
+        dimGeodesic = core.dim(geodesic)
+        dimI = dimGeodesic[0]
+        dimJ = dimGeodesic[1]
+        efficiency = core.matrix(0, dimI, dimJ)
+        for (i = 1; i < dimI; i = i + 1) {
+            for (j = 1; j < dimJ; j = j + 1) {
+                if (geodesic[i, j] != 0) {
+                    efficiency[i, j] = 1 / geodesic[i, j]
+                }
+            }
+        }
+        return(efficiency)
+    }
+    
+    ##
+    # Returns the network's global efficiency.
+    # @method getGlobalEfficiency
+    # @param {object}   efficiency - Array containing the vertex efficiency of each vertex of the network.
+    # @param {boolean}  directed - True if the network is directed. False otherwise.
+    # @return {number}  Returns the network's global efficiency.
+    #
+    function getGlobalEfficiency(efficiency, directed) {
+        if (core.type(directed) == "undefined") {
+            directed = false
+        }
+        dimEfficiency = core.dim(efficiency)
+        n = dimEfficiency[0] - 1
+        if (directed) {
+            avgeff = matrix.sum(efficiency) / (n * (n - 1))
+        } else {
+            avgeff = matrix.sum(efficiency) / (n * (n - 1)) / 2
+        }
+        return(avgeff)
+    }
+    
+    ##
+    # Returns the network's subgraphs efficiencies.
+    # @method getSubgraphEfficiency
+    # @param {object}   adj - Adjascence matrix.
+    # @param {object}   efficiency - Array containing the vertex efficiency of each vertex of the network.
+    # @param {boolean}  directed - True if the network is directed. False otherwise.
+    # @return {object}  Returns the network's subgraphs efficiencies.
+    #
+    function getSubgraphEfficiency(adj, efficiency, directed) {
+        if (core.type(directed) == "undefined") {
+            directed = false
+        }
+        dimAdj = core.dim(adj)
+        dimEfficiency = core.dim(efficiency)
+        dimI = dimAdj[0]
+        dimJ = dimAdj[1]
+        subgraphEfficiency = core.matrix(0, dimI, 1)
+        // Calculate the local efficiency for each vertex.
+        for (i = 1; i < dimI; i = i + 1) {
+            // Get all neighbor indexes.
+            neighbor = []
+            for (j = 1; j < dimJ; j = j + 1) {
+                if ((adj[i, j] == 1) || (adj[j, i] == 1)) {
+                    neighbor.push(j)
+                }
+            }
+            // Sum all neighbors efficiency.
+            if (core.length(neighbor) > 0) {
+                s = 0.0
+                for (n1 = 0; n1 < core.length(neighbor); n1 = n1 + 1) {
+                    for (n2 = 0; n2 < core.length(neighbor); n2 = n2 + 1) {
+                        if (n1 != n2) {
+                            if (adj[neighbor[n1], neighbor[n2]] == 1) {
+                                s = s + efficiency[n1, n2]
+                            }
+                        }
+                    }
+                }
+                n = core.length(neighbor)
+                // Calculate the local efficiency to this vertex.
+                if ((n == 0) || (n == 1)) {
+                    subgraphEfficiency[i, 0] = 0
+                } else {
+                    if (n == dimI - 1) {
+                        subgraphEfficiency[i, 0] = 1
+                    } else {
+                        if (directed) {
+                            subgraphEfficiency[i, 0] = s / (n * (n - 1))
+                        } else {
+                            subgraphEfficiency[i, 0] = s / (n * (n - 1)) / 2
+                        }
+                    }
+                }
+            }
+        }
+        return(subgraphEfficiency)
+    }
+    
+    ##
+    # Returns the network's local efficiency.
+    # @method getLocalEfficiency
+    # @param {object}   subgraphEfficiency - An array containing network subgraphs efficiencies.
+    # @return {number}  Returns the network's local efficiency.
+    #
+    function getLocalEfficiency(subgraphEfficiency, directed) {
+        dimSubgraphEfficiency = core.dim(subgraphEfficiency)
+        n = dimSubgraphEfficiency[0] - 1
+        localEfficiency = matrix.sum(subgraphEfficiency) / (n * (n - 1))
+        return(localEfficiency)
+    }
+    
+    ##
+    # Returns the network vertices labels.
+    # @method getLabels
+    # @param {object}   adj - Adjascence matrix.
+    # @return {object}  Returns the network vertices labels.
+    #
+    function getLabels(adj) {
+        dimAdj = core.dim(adj)
+        dimI = dimAdj[0]
+        labels = []
+        for (i = 1; i < dimI; i = i + 1) {
+            labels[i] = adj[i, 0]
+        }
+        return(labels)
+    }
+    
+    ##
+    # Sets the network vertices labels.
+    # @method getLabels
+    # @param {object}  adj - Adjascence matrix.
+    # @param {object}  labels - Array containing the vertices labels.
+    # @return {obj}    Matrix with vertex labels set.
+    #
+    function setLabels(adj) {
+        dimAdj = core.dim(adj)
+        dimI = dimAdj[0]
+        for (i = 0; i < dimI; i = i + 1) {
+            adj[i, 0] = labels[i]
+            adj[0, i] = labels[i]
+        }
+        return(adj)
+    }
+    
+    ##
+    # Removes the network vertices labels.
+    # @method getLabels
+    # @param {object}   adj - Adjascence matrix.
+    # @return {number}  Removes the network vertices labels.
+    #
+    function removeLabels(adj) {
+        dimAdj = core.dim(adj)
+        dimI = dimAdj[0]
+        for (i = 0; i < dimI; i = i + 1) {
+            adj[i, 0] = 0
+            adj[0, i] = 0
+        }
+        return(adj)
+    }
+}
