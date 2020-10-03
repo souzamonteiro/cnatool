@@ -1,0 +1,14 @@
+@import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
+.list {
+    list-style-type: none;
+    font-family: Montserrat, sans-serif;
+    font-weight: bold;
+}
+.item {
+    color: white;
+    background: gray;
+    margin-left: 0px;
+    margin-right: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

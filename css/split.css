@@ -1,0 +1,31 @@
+/* Split the screen in half. */
+.split {
+  height: 100%;
+  position: fixed;
+  z-index: -1;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+/* Control the left side. */
+.left {
+    width: 30%;
+    left: 0;
+    background-color: darkgray;
+}
+
+/* Control the right side. */
+.right {
+    width: 70%;
+    right: 0;
+    background-color: whitesmoke;
+}
+
+/* If you want the content centered horizontally and vertically. */
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}

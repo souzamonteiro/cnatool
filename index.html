@@ -5,15 +5,28 @@
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <link rel="stylesheet" href="http://maia.maiascript.com:8015/cnatool/css/menu.css">
+   <link rel="stylesheet" href="http://maia.maiascript.com:8015/cnatool/css/split.css">
+   <link rel="stylesheet" href="http://maia.maiascript.com:8015/cnatool/css/list.css">
    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
    <script src="http://maia.maiascript.com:8015/cnatool/js/menu.js"></script>
+   <script src="http://maia.maiascript.com:8015/cnatool/js/sigma.min.js"></script>
+   <script src="http://maia.maiascript.com:8015/cnatool/js/plugins/sigma.layout.forceAtlas2.min.js"></script>
+   <script src="http://maia.maiascript.com:8015/cnatool/js/plugins/sigma.parsers.json.min.js"></script>
+   <script src="http://maia.maiascript.com:8015/cnatool/js/plugins/sigma.parsers.gexf.min.js"></script>
    <script src="http://maia.maiascript.com:8015/maiastudio/js/maiascript.js"></script>
    <title>Complex Network Analysis Tool</title>
+   <style type="text/css">
+      #container {
+         max-width: 400px;
+         height: 400px;
+         margin: auto;
+      }
+   </style>
 </head>
 <body style="background-color: black;" onload="maiavm.compile();">
    <div id="cssmenu">
       <ul>
-         <li><a href="index.html">Home</a></li>
+         <li><a href="http://maia.maiascript.com">Maia</a></li>
          <li><a class="active" href="#">File</a>
             <ul>
                <li><a id="newFile" onclick="newFile()">New</a></li>
@@ -21,18 +34,93 @@
                <li><a id="saveFile" onclick="saveFile()">Save</a></li>
             </ul>
          </li>
-         <li><a id="showAboutDialog" onclick="showAboutDialog()">About</a></li>
-         <li><a href="mailto:roberto@souzamonteiro.com">Contact</a></li>
+         <li><a href="#">Help</a>
+            <ul>
+               <li><a id="showAboutDialog" onclick="showAboutDialog()">About</a></li>
+               <li><a href="mailto:roberto@souzamonteiro.com">Contact</a></li>
+            </ul>
+         </li>
       </ul>
    </div>
+   <div>
+      <div class="split left">
+         <ul class="list">
+            <li id="vertices" class="item">Vertices: </li>
+            <li id="edges" class="item">Edges: </li>
+            <li id="density" class="item">Density: </li>
+            <li id="averageDegree" class="item">Average Degree: </li>
+            <li id="averageClusteringCoefficient" class="item">Average Clustering Coefficient: </li>
+            <li id="averageShortestPath" class="item">Average Shortest Path: </li>
+            <li id="globalEfficiency" class="item">Global Efficiency: </li>
+            <li id="localEfficiency" class="item">Local Efficiency: </li>
+         </ul>
+      </div>
+      <div class="split right">
+         <div id="container"></div>
+      </div>
+   </div>
    <script type="text/maiascript" src="http://maia.maiascript.com:8015/cnatool/maia/cna.maia"></script>
+   <script type="text/javascript">
+      function showGraph(data) {
+         sigmaConfig = { 
+            graph: data,
+            container: 'container',
+            settings: {
+               defaultNodeColor: '#ec5148'
+            }
+         }
+         var graph = new sigma(sigmaConfig);
+      }
+   </script>
    <script type="text/maiascript">
       function newFile() {
          copyright = "Function not yet implemented."
          system.showMessageDialog(copyright)
       }
       function openFile() {
-         
+         data = {
+            "nodes": [
+               {
+                  "id": "n0",
+                  "label": "A node",
+                  "x": 0,
+                  "y": 0,
+                  "size": 3
+               },
+               {
+                  "id": "n1",
+                  "label": "Another node",
+                  "x": 3,
+                  "y": 1,
+                  "size": 2
+               },
+               {
+                  "id": "n2",
+                  "label": "And a last one",
+                  "x": 1,
+                  "y": 3,
+                  "size": 1
+               }
+            ],
+            "edges": [
+               {
+                  "id": "e0",
+                  "source": "n0",
+                  "target": "n1"
+               },
+               {
+                  "id": "e1",
+                  "source": "n1",
+                  "target": "n2"
+               },
+               {
+                  "id": "e2",
+                  "source": "n2",
+                  "target": "n0"
+               }
+            ]
+         }
+         showGraph(data)
       }
       function saveFile() {
          
