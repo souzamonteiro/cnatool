@@ -136,6 +136,60 @@ namespace cna {
     }
     
     ##
+    # Convert a file in Pajek format to JSON.
+    # @method pajekFileToJson
+    # @param {string}   fileContents - Pajek file contents.
+    # @return {object}  A JSON containing the network..
+    #
+    function pajekFileToJson(fileContents) {
+        network = {
+            "nodes": [],
+            "edges": []
+        }
+        fileSection = "none"
+        fileLines = core.split(fileContents, "\r\n")
+        for (l = 0; l < fileLines.length; l = l + 1) {
+            line = fileLines[l]
+            record = core.split(line.trim(), " ")
+            if ((core.toLowerCase(record[0]) == "*vertices") || (core.toLowerCase(record[0]) == "*edges") || (core.toLowerCase(record[0]) == "*arcs") || (core.toLowerCase(record[0]) == "*matrix")) {
+                fileSection = core.toLowerCase(record[0])
+                i = 0
+                continue
+            }
+            if (core.length(record) >= 2) {
+                if (fileSection == "*vertices") {
+                    node = {
+                        "id": "n" + core.toString(record[0]),
+                        "label": record[1],
+                        "x": math.random(),
+                        "y": math.random(),
+                        "size": 1
+                    }
+                    network.nodes.push(node)
+                    i = i + 1
+                } elseif (fileSection == "*edges") {
+                    edge = {
+                        "id": "e" + core.toString(i),
+                        "source": "n" + core.toString(record[0]),
+                        "target": "n" + core.toString(record[1])
+                    }
+                    network.edges.push(edge)
+                    i = i + 1
+                } elseif (fileSection == "*arcs") {
+                    edge = {
+                        "id": "e" + core.toString(i),
+                        "source": "n" + core.toString(record[0]),
+                        "target": "n" + core.toString(record[1])
+                    }
+                    network.edges.push(edge)
+                    i = i + 1
+                }
+            }
+        }
+        return(network)
+    }
+
+    ##
     # Transitive closure between two matrices (A and B).
     # @method getTransitiveClosure
     # @param {object}   a - Matrix A.
