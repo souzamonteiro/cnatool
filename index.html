@@ -45,14 +45,14 @@
    <div>
       <div class="split left">
          <ul class="list">
-            <li id="vertices" class="item">Vertices: </li>
-            <li id="edges" class="item">Edges: </li>
-            <li id="density" class="item">Density: </li>
-            <li id="averageDegree" class="item">Average Degree: </li>
-            <li id="averageClusteringCoefficient" class="item">Average Clustering Coefficient: </li>
-            <li id="averageShortestPath" class="item">Average Shortest Path: </li>
-            <li id="globalEfficiency" class="item">Global Efficiency: </li>
-            <li id="localEfficiency" class="item">Local Efficiency: </li>
+            <li class="item"><div class="label">Vertices:</div><div id="vertices" class="value"></div></li>
+            <li class="item"><div class="label">Edges:</div><div id="edges" class="value"></div></li>
+            <li class="item"><div class="label">Density:</div><div id="density" class="value"></div></li>
+            <li class="item"><div class="label">Avg. Degree:</div><div id="averageDegree" class="value"></div></li>
+            <li class="item"><div class="label">Avg. Clustering Coef.:</div><div id="averageClusteringCoefficient" class="value"></div></li>
+            <li class="item"><div class="label">Avg. Shortest Path:</div><div id="averageShortestPath" class="value"></div></li>
+            <li class="item"><div class="label">Global Efficiency:</div><div id="globalEfficiency" class="value"></div></li>
+            <li class="item"><div class="label">Local Efficiency:</div><div id="localEfficiency" class="value"></div></li>
          </ul>
       </div>
       <div class="split right">
@@ -69,13 +69,40 @@
                defaultNodeColor: "#ec5148"
             }
          }
+         document.getElementById("container").innerHTML = "";
          var graph = new sigma(sigmaConfig);
       }
    </script>
    <script type="text/maiascript">
+      function showProperties(adj) {
+         vertices = document.getElementById("vertices")
+         edges = document.getElementById("edges")
+         density = document.getElementById("density")
+         averageDegree = document.getElementById("averageDegree")
+         averageClusteringCoefficient = document.getElementById("averageClusteringCoefficient")
+         averageShortestPath = document.getElementById("averageShortestPath")
+         globalEfficiency = document.getElementById("globalEfficiency")
+         localEfficiency = document.getElementById("localEfficiency")
+
+         dimAdj = core.dim(adj)
+         nVertices = dimAdj[0] - 1
+         degrees = cna.getDegrees(adj)
+         clustering = cna.getClustering(adj)
+         shortestPath = cna.getShortestPath(adj)
+         vertexEfficiency = cna.getVertexEfficiency(shortestPath)
+         subgraphEfficiency = cna.getSubgraphEfficiency(adj, vertexEfficiency, false)
+         vertices.innerHTML = nVertices
+         edges.innerHTML = matrix.count(adj, 1, 1, nVertices, nVertices) / 2
+         density.innerHTML = string.sprintf("%.2f", cna.getDensity(adj))
+         averageDegree.innerHTML = string.sprintf("%.2f", cna.getAverageDegree(degrees))
+         averageClusteringCoefficient.innerHTML = string.sprintf("%.2f", cna.getAverageClustering(clustering))
+         averageShortestPath.innerHTML = string.sprintf("%.2f", cna.getAverageShortestPath(shortestPath))
+         globalEfficiency.innerHTML = string.sprintf("%.2f", cna.getGlobalEfficiency(vertexEfficiency, false))
+         localEfficiency.innerHTML = string.sprintf("%.2f", cna.getLocalEfficiency(subgraphEfficiency, false))
+      }
+
       function newFile() {
-         copyright = "Function not yet implemented."
-         system.showMessageDialog(copyright)
+         win = window.open("index.html", "", "")
       }
       function openFile() {
          fileObject = {
@@ -86,14 +113,20 @@
          }
 
          function callBack(fileObject) {
-            showGraph(fileObject.fileData)
+            fileData = cna.pajekFileToJson(fileObject.fileData)
+            showGraph(fileData)
+
+            adj = cna.parsePajekFile(fileObject.fileData)
+            showProperties(adj)
          }
 
          system.uploadFile(fileObject, callBack)
       }
+
       function saveFile() {
          
       }
+
       function showAboutDialog() {
          copyright = "Copyright (C) Roberto Luiz Souza Monteiro,\nRenata Souza Barreto,\nHernane Barrros de Borges Pereira.\n\nwww.maiascript.com"
          system.showMessageDialog(copyright)

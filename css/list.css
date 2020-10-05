@@ -12,3 +12,13 @@
     margin-top: 5px;
     margin-bottom: 5px;
 }
+/* Control the left side. */
+.label {
+    left: 0;
+    text-align: left;
+}
+/* Control the right side. */
+.value {
+    color: lightgray;
+    text-align: right;
+}
