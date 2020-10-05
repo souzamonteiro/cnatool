@@ -23,6 +23,22 @@
 #
 namespace cna {
     ##
+    # Creates an artificial network.
+    # @method createNetwork
+    # @param {string}   topology - Graph topology. It can be:
+    #                              complete, random, small world,
+    #                              scale-free or hybrid.
+    # @param {number}   numVertices - Number of vertices.
+    # @param {number}   numEdges - Number of edges.
+    # @param {number}   edgeProbability - Edge probability.
+    # @param {number}   averageDegree - Average degree.
+    # @return {object}  An artificial network.
+    #
+    function createNetwork(topology, numVertices, numEdges, edgeProbability, averageDegree) {
+        return(ann.createANN(topology, numVertices, numEdges, edgeProbability, averageDegree))
+    }
+
+    ##
     # Creates a Pajek file.
     # @method createPajekFile
     # @param {object}   adj - Adjascence matrix.
@@ -203,13 +219,21 @@ namespace cna {
     # Convert a file in Pajek format to JSON.
     # @method pajekFileToJson
     # @param {string}   fileContents - Pajek file contents.
+    # @param {object}   properties - Network properties (n, m and directed).
     # @return {object}  A JSON containing the network..
     #
-    function pajekFileToJson(fileContents) {
+    function pajekFileToJson(fileContents, properties) {
+        properties = {
+            "n": 0,
+            "m": 0,
+            "directed": false
+        }
+        
         network = {
             "nodes": [],
             "edges": []
         }
+
         fileSection = "none"
         fileLines = core.split(fileContents, "\r\n")
         for (l = 0; l < fileLines.length; l = l + 1) {
@@ -217,6 +241,25 @@ namespace cna {
             record = core.split(line.trim(), " ")
             if ((core.toLowerCase(record[0]) == "*vertices") || (core.toLowerCase(record[0]) == "*edges") || (core.toLowerCase(record[0]) == "*arcs") || (core.toLowerCase(record[0]) == "*matrix")) {
                 fileSection = core.toLowerCase(record[0])
+                if (fileSection == "*vertices") {
+                    n = ""
+                    for (j = 1; j < record.length; j = j + 1) {
+                        if (record[j] == "") {
+                            continue
+                        }
+                        if (n == "") {
+                            n = core.toNumber(record[j])
+                            break
+                        }
+                    }
+                    if (n == "") {
+                        break
+                    } else {
+                        properties.n = n
+                    }
+                } elseif (fileSection == "*arcs") {
+                    properties.directed = true
+                }
                 i = 0
                 continue
             }
@@ -297,6 +340,8 @@ namespace cna {
                     }
                     network.edges.push(edge)
                     i = i + 1
+
+                    properties.m = properties.m + 1
                 } elseif (fileSection == "*arcs") {
                     id = ""
                     source = ""
@@ -325,6 +370,8 @@ namespace cna {
                     }
                     network.edges.push(edge)
                     i = i + 1
+
+                    properties.m = properties.m + 1
                 }
             }
         }

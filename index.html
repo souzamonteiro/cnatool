@@ -15,6 +15,7 @@
    <script src="http://maia.maiascript.com:8015/cnatool/js/plugins/sigma.layout.noverlap.min.js"></script>
    <script src="http://maia.maiascript.com:8015/cnatool/js/plugins/sigma.parsers.json.min.js"></script>
    <script src="http://maia.maiascript.com:8015/cnatool/js/plugins/sigma.parsers.gexf.min.js"></script>
+   <script src="http://maia.maiascript.com:8015/cnatool/js/plugins/sigma.exporters.svg.min.js"></script>
    <script src="http://maia.maiascript.com:8015/maiastudio/js/maiascript.js"></script>
    <title>Complex Network Analysis Tool</title>
    <style type="text/css">
@@ -34,9 +35,10 @@
                <li><a id="#">New</a>
                   <ul>
                      <li><a id="newFile" onclick="newFile()">Blank</a></li>
+                     <li><a id="newComplete" onclick="newComplete()">Complete</a></li>
                      <li><a id="newRandom" onclick="newRandom()">Random</a></li>
                      <li><a id="newScaleFree" onclick="newScaleFree()">Scale-free</a></li>
-                     <li><a id="newSmallworld" onclick="newSmallworld()">Smallworld</a></li>
+                     <li><a id="newSmallWorld" onclick="newSmallWorld()">Small world</a></li>
                      <li><a id="newHybrid" onclick="newHybrid()">Hybrid</a></li>
                      
                   </ul>
@@ -96,7 +98,7 @@
             settings: {
                defaultNodeColor: "#ec5148"
             }
-         }
+         };
          document.getElementById("container").innerHTML = "";
          graph = new sigma(sigmaConfig);
       }
@@ -145,6 +147,13 @@
       }
    </script>
    <script type="text/maiascript">
+      fileObject = {
+         "fullFileName": "",
+         "fileName": "",
+         "fileExtension": "",
+         "fileData": ""
+      }
+
       function showProperties(adj, properties) {
          vertices = document.getElementById("vertices")
          edges = document.getElementById("edges")
@@ -176,26 +185,72 @@
       function newFile() {
          win = window.open("index.html", "", "")
       }
+      function newComplete() {
+         n = core.toNumber(system.showInputDialog("Number of vertices:", "0"))
+         
+         properties = {
+            "n": n,
+            "m": n * (n - 1),
+            "directed": false
+         }
+         
+         adj = cna.createNetwork("complete", n)
+         
+         fileObject = {
+            "fullFileName": "complete.net",
+            "fileName": "complete",
+            "fileExtension": "net",
+            "fileData": cna.createPajekFile(adj, "edges")
+         }
+         
+         fileData = cna.pajekFileToJson(fileObject.fileData, properties)
+         showGraph(fileData)
+
+         showProperties(adj, properties)
+      }
       function newRandom() {
-         system.showMessageDialog("Not implemented yet.")
+         p = 0
+         d = 0
+         n = core.toNumber(system.showInputDialog("Number of vertices:", "0"))
+         m = core.toNumber(system.showInputDialog("Number of edges:", "0"))
+         
+         properties = {
+            "n": n,
+            "m": m,
+            "directed": false
+         }
+         
+         if (m == 0) {
+            p = core.toNumber(system.showInputDialog("Edge probability:", "0"))
+            if (p == 0) {
+               d = core.toNumber(system.showInputDialog("Average degree:", "0"))   
+            }
+         }
+
+         adj = cna.createNetwork("random", n, m, p, d)
+         
+         fileObject = {
+            "fullFileName": "random.net",
+            "fileName": "random",
+            "fileExtension": "net",
+            "fileData": cna.createPajekFile(adj, "edges")
+         }
+         
+         fileData = cna.pajekFileToJson(fileObject.fileData, properties)
+         showGraph(fileData)
+
+         showProperties(adj, properties)
       }
       function newScaleFree() {
          system.showMessageDialog("Not implemented yet.")
       }
-      function newSmallworld() {
+      function newSmallWorld() {
          system.showMessageDialog("Not implemented yet.")
       }
       function newHybrid() {
          system.showMessageDialog("Not implemented yet.")
       }
       function openFile() {
-         fileObject = {
-            "fullFileName": "",
-            "fileName": "",
-            "fileExtension": "",
-            "fileData": ""
-         }
-
          function callBack(fileObject) {
             properties = {
                "n": 0,
@@ -214,11 +269,17 @@
       }
 
       function saveFile() {
-         system.showMessageDialog("Not implemented yet.")
+         system.downloadFile(fileObject.fullFileName, fileObject.fileData, "text/" + fileObject.fileExtension)
       }
+
       function saveGraph() {
-         system.showMessageDialog("Not implemented yet.")
+         svgConfig = {
+            "download": true,
+            "filename": fileObject.fileName + ".svg"
+         }
+         graph.toSVG(svgConfig)
       }
+
       function saveReport() {
          system.showMessageDialog("Not implemented yet.")
       }
