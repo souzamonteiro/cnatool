@@ -80,9 +80,14 @@ namespace cna {
     # Parses a Pajek file.
     # @method parsePajekFile
     # @param {string}   fileContents - Pajek file contents.
+    # @param {object}   properties - Network properties (n, m and directed).
     # @return {object}  An adjascence matrix.
     #
-    function parsePajekFile(fileContents) {
+    function parsePajekFile(fileContents, properties) {
+        properties.n = 0
+        properties.m = 0
+        properties.directed = false
+
         adj = []
         fileSection = "none"
         fileLines = core.split(fileContents, "\r\n")
@@ -106,7 +111,10 @@ namespace cna {
                         break
                     } else {
                         adj = core.matrix(0, n + 1, n + 1)
+                        properties.n = n
                     }
+                } elseif (fileSection == "*arcs") {
+                    properties.directed = true
                 }
                 continue
             }
@@ -156,6 +164,8 @@ namespace cna {
                     }
                     adj[source, target] = weight
                     adj[target, source] = weight
+
+                    properties.m = properties.m + 1
                 } elseif (fileSection == "*arcs") {
                     source = ""
                     target = ""
@@ -181,6 +191,8 @@ namespace cna {
                         weight = 1
                     }
                     adj[source, target] = weight
+
+                    properties.m = properties.m + 1
                 }
             }
         }
@@ -832,20 +844,12 @@ namespace cna {
     # Returns the network's global efficiency.
     # @method getGlobalEfficiency
     # @param {object}   efficiency - Array containing the vertex efficiency of each vertex of the network.
-    # @param {boolean}  directed - True if the network is directed. False otherwise.
     # @return {number}  Returns the network's global efficiency.
     #
-    function getGlobalEfficiency(efficiency, directed) {
-        if (core.type(directed) == "undefined") {
-            directed = false
-        }
+    function getGlobalEfficiency(efficiency) {
         dimEfficiency = core.dim(efficiency)
         n = dimEfficiency[0] - 1
-        if (directed) {
-            avgeff = matrix.sum(efficiency) / (n * (n - 1))
-        } else {
-            avgeff = matrix.sum(efficiency) / (n * (n - 1)) / 2
-        }
+        avgeff = matrix.sum(efficiency) / (n * (n - 1))
         return(avgeff)
     }
     
@@ -913,10 +917,10 @@ namespace cna {
     # @param {object}   subgraphEfficiency - An array containing network subgraphs efficiencies.
     # @return {number}  Returns the network's local efficiency.
     #
-    function getLocalEfficiency(subgraphEfficiency, directed) {
+    function getLocalEfficiency(subgraphEfficiency) {
         dimSubgraphEfficiency = core.dim(subgraphEfficiency)
         n = dimSubgraphEfficiency[0] - 1
-        localEfficiency = matrix.sum(subgraphEfficiency) / (n * (n - 1))
+        localEfficiency = matrix.sum(subgraphEfficiency) / n
         return(localEfficiency)
     }
     

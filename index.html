@@ -10,7 +10,9 @@
    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
    <script src="http://maia.maiascript.com:8015/cnatool/js/menu.js"></script>
    <script src="http://maia.maiascript.com:8015/cnatool/js/sigma.min.js"></script>
+   <script src="http://maia.maiascript.com:8015/cnatool/js/plugins/sigma.plugins.animate.min.js"></script>
    <script src="http://maia.maiascript.com:8015/cnatool/js/plugins/sigma.layout.forceAtlas2.min.js"></script>
+   <script src="http://maia.maiascript.com:8015/cnatool/js/plugins/sigma.layout.noverlap.min.js"></script>
    <script src="http://maia.maiascript.com:8015/cnatool/js/plugins/sigma.parsers.json.min.js"></script>
    <script src="http://maia.maiascript.com:8015/cnatool/js/plugins/sigma.parsers.gexf.min.js"></script>
    <script src="http://maia.maiascript.com:8015/maiastudio/js/maiascript.js"></script>
@@ -29,9 +31,24 @@
          <li><a href="http://maia.maiascript.com">Maia</a></li>
          <li><a class="active" href="#">File</a>
             <ul>
-               <li><a id="newFile" onclick="newFile()">New</a></li>
+               <li><a id="#">New</a>
+                  <ul>
+                     <li><a id="newFile" onclick="newFile()">Blank</a></li>
+                     <li><a id="newRandom" onclick="newRandom()">Random</a></li>
+                     <li><a id="newScaleFree" onclick="newScaleFree()">Scale-free</a></li>
+                     <li><a id="newSmallworld" onclick="newSmallworld()">Smallworld</a></li>
+                     <li><a id="newHybrid" onclick="newHybrid()">Hybrid</a></li>
+                     
+                  </ul>
+               </li>
                <li><a id="openFile" onclick="openFile()">Open</a></li>
-               <li><a id="saveFile" onclick="saveFile()">Save</a></li>
+               <li><a id="#">Save</a>
+                  <ul>
+                     <li><a id="saveFile" onclick="saveFile()">File</a></li>
+                     <li><a id="saveGraph" onclick="saveGraph()">Graph</a></li>
+                     <li><a id="saveReport" onclick="saveReport()">Report</a></li>
+                  </ul>
+               </li>
             </ul>
          </li>
          <li><a href="#">Help</a>
@@ -51,8 +68,17 @@
             <li class="item"><div class="label">Avg. Degree:</div><div id="averageDegree" class="value"></div></li>
             <li class="item"><div class="label">Avg. Clustering Coef.:</div><div id="averageClusteringCoefficient" class="value"></div></li>
             <li class="item"><div class="label">Avg. Shortest Path:</div><div id="averageShortestPath" class="value"></div></li>
+            <li class="item"><div class="label">Diameter:</div><div id="diameter" class="value"></div></li>
             <li class="item"><div class="label">Global Efficiency:</div><div id="globalEfficiency" class="value"></div></li>
             <li class="item"><div class="label">Local Efficiency:</div><div id="localEfficiency" class="value"></div></li>
+            <li class="item">
+               <label class="label" for="algorithm">Algorithm:</label>
+               <select id="algorithm" name="algorithm" class="control" onchange="updateGraph()">
+                  <option value="forceAtlas2">Force Atlas 2</option>
+                  <option value="noverlap">No Overlap</option>
+                  <option value="ramdom" selected="selected">Random</option>
+               </select>
+            </li>
          </ul>
       </div>
       <div class="split right">
@@ -61,6 +87,8 @@
    </div>
    <script type="text/maiascript" src="http://maia.maiascript.com:8015/cnatool/maia/cna.maia"></script>
    <script type="text/javascript">
+      var graph;
+
       function showGraph(data) {
          sigmaConfig = { 
             graph: data,
@@ -70,39 +98,95 @@
             }
          }
          document.getElementById("container").innerHTML = "";
-         var graph = new sigma(sigmaConfig);
+         graph = new sigma(sigmaConfig);
+      }
+
+      function updateGraph() {
+         algorithm = document.getElementById("algorithm");
+
+         try {
+            if (algorithm.value == "noverlap") {
+               if (graph.isForceAtlas2Running()) {
+                  graph.stopForceAtlas2();
+               }
+               var config = {
+                  nodeMargin: 2.0,
+                  scaleNodes: 1.0
+               };
+               // Configure the algorithm.
+               var listener = graph.configNoverlap(config);
+               // Bind all events.
+               listener.bind('start stop interpolate', function(event) {
+                  console.log(event.type);
+               });
+               // Start the algorithm.
+               graph.startNoverlap();
+            } else if (algorithm.value == "forceAtlas2") {
+               if (graph.isNoverlapRunning()) {
+                  graph.stopNoverlap();
+               }
+               var config = {
+                  worker: true,
+                  barnesHutOptimize: false
+               }
+               // Start the algorithm.
+               graph.startForceAtlas2(config);
+            } else {
+               if (graph.isNoverlapRunning()) {
+                  graph.stopNoverlap();
+               }
+               if (graph.isForceAtlas2Running()) {
+                  graph.stopForceAtlas2();
+               }
+            }
+         } catch (e) {
+            alert(e.message);
+         }
       }
    </script>
    <script type="text/maiascript">
-      function showProperties(adj) {
+      function showProperties(adj, properties) {
          vertices = document.getElementById("vertices")
          edges = document.getElementById("edges")
          density = document.getElementById("density")
          averageDegree = document.getElementById("averageDegree")
          averageClusteringCoefficient = document.getElementById("averageClusteringCoefficient")
          averageShortestPath = document.getElementById("averageShortestPath")
+         diameter = document.getElementById("diameter")
          globalEfficiency = document.getElementById("globalEfficiency")
          localEfficiency = document.getElementById("localEfficiency")
 
-         dimAdj = core.dim(adj)
-         nVertices = dimAdj[0] - 1
-         degrees = cna.getDegrees(adj)
-         clustering = cna.getClustering(adj)
+         degrees = cna.getDegrees(adj, properties.directed)
+         clustering = cna.getClustering(adj, properties.directed)
          shortestPath = cna.getShortestPath(adj)
          vertexEfficiency = cna.getVertexEfficiency(shortestPath)
-         subgraphEfficiency = cna.getSubgraphEfficiency(adj, vertexEfficiency, false)
-         vertices.innerHTML = nVertices
-         edges.innerHTML = matrix.count(adj, 1, 1, nVertices, nVertices) / 2
-         density.innerHTML = string.sprintf("%.2f", cna.getDensity(adj))
+         subgraphEfficiency = cna.getSubgraphEfficiency(adj, vertexEfficiency, properties.directed)
+         
+         vertices.innerHTML = properties.n
+         edges.innerHTML = properties.m
+         density.innerHTML = string.sprintf("%.2f", cna.getDensity(adj, properties.directed))
          averageDegree.innerHTML = string.sprintf("%.2f", cna.getAverageDegree(degrees))
          averageClusteringCoefficient.innerHTML = string.sprintf("%.2f", cna.getAverageClustering(clustering))
          averageShortestPath.innerHTML = string.sprintf("%.2f", cna.getAverageShortestPath(shortestPath))
-         globalEfficiency.innerHTML = string.sprintf("%.2f", cna.getGlobalEfficiency(vertexEfficiency, false))
-         localEfficiency.innerHTML = string.sprintf("%.2f", cna.getLocalEfficiency(subgraphEfficiency, false))
+         diameter.innerHTML = cna.getDiameter(shortestPath)
+         globalEfficiency.innerHTML = string.sprintf("%.2f", cna.getGlobalEfficiency(vertexEfficiency, properties.directed))
+         localEfficiency.innerHTML = string.sprintf("%.2f", cna.getLocalEfficiency(subgraphEfficiency, properties.directed))
       }
 
       function newFile() {
          win = window.open("index.html", "", "")
+      }
+      function newRandom() {
+         system.showMessageDialog("Not implemented yet.")
+      }
+      function newScaleFree() {
+         system.showMessageDialog("Not implemented yet.")
+      }
+      function newSmallworld() {
+         system.showMessageDialog("Not implemented yet.")
+      }
+      function newHybrid() {
+         system.showMessageDialog("Not implemented yet.")
       }
       function openFile() {
          fileObject = {
@@ -113,18 +197,30 @@
          }
 
          function callBack(fileObject) {
+            properties = {
+               "n": 0,
+               "m": 0,
+               "directed": false
+            }
+
             fileData = cna.pajekFileToJson(fileObject.fileData)
             showGraph(fileData)
 
-            adj = cna.parsePajekFile(fileObject.fileData)
-            showProperties(adj)
+            adj = cna.parsePajekFile(fileObject.fileData, properties)
+            showProperties(adj, properties)
          }
 
          system.uploadFile(fileObject, callBack)
       }
 
       function saveFile() {
-         
+         system.showMessageDialog("Not implemented yet.")
+      }
+      function saveGraph() {
+         system.showMessageDialog("Not implemented yet.")
+      }
+      function saveReport() {
+         system.showMessageDialog("Not implemented yet.")
       }
 
       function showAboutDialog() {

@@ -22,3 +22,9 @@
     color: lightgray;
     text-align: right;
 }
+/* Control the right side. */
+.control {
+    color: black;
+    font-family: Montserrat, sans-serif;
+    font-weight: bold;
+}
