@@ -72,7 +72,6 @@
             <li class="item"><div class="label">Avg. Shortest Path:</div><div id="averageShortestPath" class="value"></div></li>
             <li class="item"><div class="label">Diameter:</div><div id="diameter" class="value"></div></li>
             <li class="item"><div class="label">Global Efficiency:</div><div id="globalEfficiency" class="value"></div></li>
-            <li class="item"><div class="label">Local Efficiency:</div><div id="localEfficiency" class="value"></div></li>
             <li class="item">
                <label class="label" for="algorithm">Algorithm:</label>
                <select id="algorithm" name="algorithm" class="control" onchange="updateGraph()">
@@ -105,7 +104,6 @@
 
       function updateGraph() {
          algorithm = document.getElementById("algorithm");
-
          try {
             if (algorithm.value == "noverlap") {
                if (graph.isForceAtlas2Running()) {
@@ -154,7 +152,30 @@
          "fileData": ""
       }
 
+      properties = {
+         "n": 0,
+         "m": 0,
+         "directed": false
+      }
+      
       function showProperties(adj, properties) {
+         networkVertices = properties.n
+         if (properties.directed) {
+            networkEdges = properties.m
+         } else {
+            networkEdges = properties.m / 2
+         }
+         networkDegrees = cna.getDegrees(adj, properties.directed)
+         networkAverageDegree = cna.getAverageDegree(networkDegrees)
+         networkDensity = cna.getDensity(adj, properties.directed)
+         networkClustering = cna.getClustering(adj, properties.directed)
+         networkAverageClustering = cna.getAverageClustering(networkClustering)
+         networkShortestPath = cna.getShortestPath(adj)
+         networkAverageShortestPath = cna.getAverageShortestPath(networkShortestPath)
+         networkDiameter = cna.getDiameter(networkShortestPath)
+         networkVertexEfficiency = cna.getVertexEfficiency(networkShortestPath)
+         networkGlobalEfficiency = cna.getGlobalEfficiency(networkVertexEfficiency)
+         
          vertices = document.getElementById("vertices")
          edges = document.getElementById("edges")
          density = document.getElementById("density")
@@ -163,23 +184,15 @@
          averageShortestPath = document.getElementById("averageShortestPath")
          diameter = document.getElementById("diameter")
          globalEfficiency = document.getElementById("globalEfficiency")
-         localEfficiency = document.getElementById("localEfficiency")
-
-         degrees = cna.getDegrees(adj, properties.directed)
-         clustering = cna.getClustering(adj, properties.directed)
-         shortestPath = cna.getShortestPath(adj)
-         vertexEfficiency = cna.getVertexEfficiency(shortestPath)
-         subgraphEfficiency = cna.getSubgraphEfficiency(adj, vertexEfficiency, properties.directed)
          
-         vertices.innerHTML = properties.n
-         edges.innerHTML = properties.m
-         density.innerHTML = string.sprintf("%.2f", cna.getDensity(adj, properties.directed))
-         averageDegree.innerHTML = string.sprintf("%.2f", cna.getAverageDegree(degrees))
-         averageClusteringCoefficient.innerHTML = string.sprintf("%.2f", cna.getAverageClustering(clustering))
-         averageShortestPath.innerHTML = string.sprintf("%.2f", cna.getAverageShortestPath(shortestPath))
-         diameter.innerHTML = cna.getDiameter(shortestPath)
-         globalEfficiency.innerHTML = string.sprintf("%.2f", cna.getGlobalEfficiency(vertexEfficiency, properties.directed))
-         localEfficiency.innerHTML = string.sprintf("%.2f", cna.getLocalEfficiency(subgraphEfficiency, properties.directed))
+         vertices.innerHTML = networkVertices
+         edges.innerHTML = networkEdges
+         density.innerHTML = string.sprintf("%.2f", networkDensity)
+         averageDegree.innerHTML = string.sprintf("%.2f", networkAverageDegree)
+         averageClusteringCoefficient.innerHTML = string.sprintf("%.2f", networkAverageClustering)
+         averageShortestPath.innerHTML = string.sprintf("%.2f", networkAverageShortestPath)
+         diameter.innerHTML = networkDiameter
+         globalEfficiency.innerHTML = string.sprintf("%.2f", networkGlobalEfficiency)
       }
 
       function newFile() {
@@ -189,8 +202,8 @@
          n = core.toNumber(system.showInputDialog("Number of vertices:", "0"))
          
          properties = {
-            "n": n,
-            "m": n * (n - 1),
+            "n": 0,
+            "m": 0,
             "directed": false
          }
          
@@ -207,16 +220,19 @@
          showGraph(fileData)
 
          showProperties(adj, properties)
+         
+         algorithm = document.getElementById("algorithm")
+         algorithm.onchange()
       }
       function newRandom() {
-         p = 0
-         d = 0
          n = core.toNumber(system.showInputDialog("Number of vertices:", "0"))
          m = core.toNumber(system.showInputDialog("Number of edges:", "0"))
+         p = 0
+         d = 0
          
          properties = {
-            "n": n,
-            "m": m,
+            "n": 0,
+            "m": 0,
             "directed": false
          }
          
@@ -240,15 +256,96 @@
          showGraph(fileData)
 
          showProperties(adj, properties)
+
+         algorithm = document.getElementById("algorithm")
+         algorithm.onchange()
       }
       function newScaleFree() {
-         system.showMessageDialog("Not implemented yet.")
+         n = core.toNumber(system.showInputDialog("Number of vertices:", "0"))
+         m = 0
+         d = core.toNumber(system.showInputDialog("Average degree:", "0"))
+         p = core.toNumber(system.showInputDialog("Edge probability:", "0"))
+         
+         properties = {
+            "n": 0,
+            "m": 0,
+            "directed": false
+         }
+         
+         adj = cna.createNetwork("scalefree", n, m, p, d)
+         
+         fileObject = {
+            "fullFileName": "scalefree.net",
+            "fileName": "scalefree",
+            "fileExtension": "net",
+            "fileData": cna.createPajekFile(adj, "edges")
+         }
+         
+         fileData = cna.pajekFileToJson(fileObject.fileData, properties)
+         showGraph(fileData)
+
+         showProperties(adj, properties)
+
+         algorithm = document.getElementById("algorithm")
+         algorithm.onchange()
       }
       function newSmallWorld() {
-         system.showMessageDialog("Not implemented yet.")
+         n = core.toNumber(system.showInputDialog("Number of vertices:", "0"))
+         m = 0
+         d = core.toNumber(system.showInputDialog("Average degree:", "0"))
+         p = core.toNumber(system.showInputDialog("Edge probability:", "0"))
+         
+         properties = {
+            "n": 0,
+            "m": 0,
+            "directed": false
+         }
+         
+         adj = cna.createNetwork("smallworld", n, m, p, d)
+         
+         fileObject = {
+            "fullFileName": "smallworld.net",
+            "fileName": "smallworld",
+            "fileExtension": "net",
+            "fileData": cna.createPajekFile(adj, "edges")
+         }
+         
+         fileData = cna.pajekFileToJson(fileObject.fileData, properties)
+         showGraph(fileData)
+
+         showProperties(adj, properties)
+
+         algorithm = document.getElementById("algorithm")
+         algorithm.onchange()
       }
       function newHybrid() {
-         system.showMessageDialog("Not implemented yet.")
+         n = core.toNumber(system.showInputDialog("Number of vertices:", "0"))
+         m = 0
+         d = core.toNumber(system.showInputDialog("Average degree:", "0"))
+         p = core.toNumber(system.showInputDialog("Edge probability:", "0"))
+         
+         properties = {
+            "n": 0,
+            "m": 0,
+            "directed": false
+         }
+         
+         adj = cna.createNetwork("hybrid", n, m, p, d)
+         
+         fileObject = {
+            "fullFileName": "hybrid.net",
+            "fileName": "hybrid",
+            "fileExtension": "net",
+            "fileData": cna.createPajekFile(adj, "edges")
+         }
+         
+         fileData = cna.pajekFileToJson(fileObject.fileData, properties)
+         showGraph(fileData)
+
+         showProperties(adj, properties)
+
+         algorithm = document.getElementById("algorithm")
+         algorithm.onchange()
       }
       function openFile() {
          function callBack(fileObject) {
@@ -281,7 +378,33 @@
       }
 
       function saveReport() {
-         system.showMessageDialog("Not implemented yet.")
+         vertices = document.getElementById("vertices")
+         edges = document.getElementById("edges")
+         density = document.getElementById("density")
+         averageDegree = document.getElementById("averageDegree")
+         averageClusteringCoefficient = document.getElementById("averageClusteringCoefficient")
+         averageShortestPath = document.getElementById("averageShortestPath")
+         diameter = document.getElementById("diameter")
+         globalEfficiency = document.getElementById("globalEfficiency")
+         
+         html = "<!DOCTYPE html>"
+         html = html + "<html lang=\"en\"><head><meta charset=\"UTF-8\"></head>"
+         html = html + "<body>"
+         html = html + "<table>"
+         html = html + "<caption>NETWORK PROPERTIES</caption>"
+         html = html + "<tr><td>Vertices:</td><td style=\"text-align: right;\">" + vertices.innerHTML + "</td></tr>"
+         html = html + "<tr><td>Edges:</td><td style=\"text-align: right;\">" + edges.innerHTML + "</td></tr>"
+         html = html + "<tr><td>Density:</td></td><td style=\"text-align: right;\">" + density.innerHTML + "</td></tr>"
+         html = html + "<tr><td>Avg. Degree:</td></td><td style=\"text-align: right;\">" + averageDegree.innerHTML + "</td></tr>"
+         html = html + "<tr><td>Avg. Clustering Coef.:</td></td><td style=\"text-align: right;\">" + averageClusteringCoefficient.innerHTML + "</td></tr>"
+         html = html + "<tr><td>Avg. Shortest Path:</td></td><td style=\"text-align: right;\">" + averageShortestPath.innerHTML + "</td></tr>"
+         html = html + "<tr><td>Diameter:</td></td><td style=\"text-align: right;\">" + diameter.innerHTML + "</td></tr>"
+         html = html + "<tr><td>Global Efficiency:</td></td><td style=\"text-align: right;\">" + globalEfficiency.innerHTML + "</td></tr>"
+         html = html + "</table>"
+         html = html + "</body>"
+         html = html + "</html>"
+
+         system.downloadFile(fileObject.fileName + ".html", html, "text/html")
       }
 
       function showAboutDialog() {

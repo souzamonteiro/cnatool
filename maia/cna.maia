@@ -35,7 +35,8 @@ namespace cna {
     # @return {object}  An artificial network.
     #
     function createNetwork(topology, numVertices, numEdges, edgeProbability, averageDegree) {
-        return(ann.createANN(topology, numVertices, numEdges, edgeProbability, averageDegree))
+        adj = ann.createANN(topology, numVertices, numEdges, edgeProbability, averageDegree)
+        return(adj)
     }
 
     ##
@@ -100,9 +101,17 @@ namespace cna {
     # @return {object}  An adjascence matrix.
     #
     function parsePajekFile(fileContents, properties) {
-        properties.n = 0
-        properties.m = 0
-        properties.directed = false
+        if (core.type(properties) == "undefined") {
+            properties = {
+                "n": 0,
+                "m": 0,
+                "directed": false
+            }
+        } else {
+            properties.n = 0
+            properties.m = 0
+            properties.directed = false
+        }
 
         adj = []
         fileSection = "none"
@@ -147,7 +156,7 @@ namespace cna {
                             continue
                         }
                         if (label == "") {
-                            label = record[j]
+                            label = core.eval(record[j])
                             continue
                         }
                     }
@@ -180,8 +189,8 @@ namespace cna {
                     }
                     adj[source, target] = weight
                     adj[target, source] = weight
-
                     properties.m = properties.m + 1
+                    system.println(target)
                 } elseif (fileSection == "*arcs") {
                     source = ""
                     target = ""
@@ -207,7 +216,6 @@ namespace cna {
                         weight = 1
                     }
                     adj[source, target] = weight
-
                     properties.m = properties.m + 1
                 }
             }
@@ -223,10 +231,16 @@ namespace cna {
     # @return {object}  A JSON containing the network..
     #
     function pajekFileToJson(fileContents, properties) {
-        properties = {
-            "n": 0,
-            "m": 0,
-            "directed": false
+        if (core.type(properties) == "undefined") {
+            properties = {
+                "n": 0,
+                "m": 0,
+                "directed": false
+            }
+        } else {
+            properties.n = 0
+            properties.m = 0
+            properties.directed = false
         }
         
         network = {
@@ -279,7 +293,7 @@ namespace cna {
                             continue
                         }
                         if (label == "") {
-                            label = record[j]
+                            label = core.eval(record[j])
                             continue
                         }
                         if (x == "") {
@@ -313,15 +327,11 @@ namespace cna {
                     network.nodes.push(node)
                     i = i + 1
                 } elseif (fileSection == "*edges") {
-                    id = ""
                     source = ""
                     target = ""
+                    weight = ""
                     for (j = 0; j < record.length; j = j + 1) {
                         if (record[j] == "") {
-                            continue
-                        }
-                        if (id == "") {
-                            id = core.toString(record[j])
                             continue
                         }
                         if (source == "") {
@@ -332,26 +342,29 @@ namespace cna {
                             target = core.toNumber(record[j])
                             continue
                         }
+                        if (weight == "") {
+                            weight = core.toNumber(record[j])
+                            continue
+                        }
+                    }
+                    if (weight == "") {
+                        weight = 1
                     }
                     edge = {
                         "id": "e" + core.toString(i),
                         "source": "n" + core.toString(source),
-                        "target": "n" + core.toString(target)
+                        "target": "n" + core.toString(target),
+                        "size": weight
                     }
                     network.edges.push(edge)
                     i = i + 1
-
                     properties.m = properties.m + 1
                 } elseif (fileSection == "*arcs") {
-                    id = ""
                     source = ""
                     target = ""
+                    weight = ""
                     for (j = 0; j < record.length; j = j + 1) {
                         if (record[j] == "") {
-                            continue
-                        }
-                        if (id == "") {
-                            id = core.toString(record[j])
                             continue
                         }
                         if (source == "") {
@@ -362,15 +375,22 @@ namespace cna {
                             target = core.toNumber(record[j])
                             continue
                         }
+                        if (weight == "") {
+                            weight = core.toNumber(record[j])
+                            continue
+                        }
+                    }
+                    if (weight == "") {
+                        weight = 1
                     }
                     edge = {
                         "id": "e" + core.toString(i),
                         "source": "n" + core.toString(source),
-                        "target": "n" + core.toString(target)
+                        "target": "n" + core.toString(target),
+                        "size": weight
                     }
                     network.edges.push(edge)
                     i = i + 1
-
                     properties.m = properties.m + 1
                 }
             }
@@ -449,9 +469,9 @@ namespace cna {
         }
         nedges = matrix.count(adj)
         if (directed) {
-            density = nedges / (n * (n - 1))
+            density = nedges / (n * (n - 1) / 2)
         } else {
-            density = nedges / (n * (n - 1)) / 2
+            density = (nedges / 2) / (n * (n - 1) / 2)
         }
         return(density)
     }
@@ -584,7 +604,7 @@ namespace cna {
             if (ki > 0) {
                 // Get all neighbor indexes.
                 for (j = 1; j < dimJ; j = j + 1) {
-                    if ((adj[i, j] == 1) || (adj[j, i] == 1)) {
+                    if (adj[i, j] == 1) {
                         neighbor.push(j)
                     }
                 }
@@ -602,10 +622,14 @@ namespace cna {
                     }
                 }
                 // Calculate the clustering coefficient to this vertex.
-                if ((ki == 0) || (ki == 1)) {
-                    clustering[i, 0] = 0
+                if (ki == n) {
+                    clustering[i, 0] = 1
                 } else {
-                    clustering[i, 0] = (n / 2) / ((ki * (ki - 1)) / 2)
+                    if ((ki == 0) || (ki == 1)) {
+                        clustering[i, 0] = 0
+                    } else {
+                        clustering[i, 0] = n / (ki * (ki - 1))
+                    }
                 }
             }
         }
@@ -713,7 +737,7 @@ namespace cna {
         dimAdj = core.dim(adj)
         dimI = dimAdj[0]
         dimJ = dimAdj[1]
-        geodesic = adj
+        geodesic = adj.slice()
         if (core.type(path) == "undefined") {
             path = core.matrix(-1, dimI, dimJ)
         }
@@ -899,78 +923,7 @@ namespace cna {
         avgeff = matrix.sum(efficiency) / (n * (n - 1))
         return(avgeff)
     }
-    
-    ##
-    # Returns the network's subgraphs efficiencies.
-    # @method getSubgraphEfficiency
-    # @param {object}   adj - Adjascence matrix.
-    # @param {object}   efficiency - Array containing the vertex efficiency of each vertex of the network.
-    # @param {boolean}  directed - True if the network is directed. False otherwise.
-    # @return {object}  Returns the network's subgraphs efficiencies.
-    #
-    function getSubgraphEfficiency(adj, efficiency, directed) {
-        if (core.type(directed) == "undefined") {
-            directed = false
-        }
-        dimAdj = core.dim(adj)
-        dimEfficiency = core.dim(efficiency)
-        dimI = dimAdj[0]
-        dimJ = dimAdj[1]
-        subgraphEfficiency = core.matrix(0, dimI, 1)
-        // Calculate the local efficiency for each vertex.
-        for (i = 1; i < dimI; i = i + 1) {
-            // Get all neighbor indexes.
-            neighbor = []
-            for (j = 1; j < dimJ; j = j + 1) {
-                if ((adj[i, j] == 1) || (adj[j, i] == 1)) {
-                    neighbor.push(j)
-                }
-            }
-            // Sum all neighbors efficiency.
-            if (core.length(neighbor) > 0) {
-                s = 0.0
-                for (n1 = 0; n1 < core.length(neighbor); n1 = n1 + 1) {
-                    for (n2 = 0; n2 < core.length(neighbor); n2 = n2 + 1) {
-                        if (n1 != n2) {
-                            if (adj[neighbor[n1], neighbor[n2]] == 1) {
-                                s = s + efficiency[n1, n2]
-                            }
-                        }
-                    }
-                }
-                n = core.length(neighbor)
-                // Calculate the local efficiency to this vertex.
-                if ((n == 0) || (n == 1)) {
-                    subgraphEfficiency[i, 0] = 0
-                } else {
-                    if (n == dimI - 1) {
-                        subgraphEfficiency[i, 0] = 1
-                    } else {
-                        if (directed) {
-                            subgraphEfficiency[i, 0] = s / (n * (n - 1))
-                        } else {
-                            subgraphEfficiency[i, 0] = s / (n * (n - 1)) / 2
-                        }
-                    }
-                }
-            }
-        }
-        return(subgraphEfficiency)
-    }
-    
-    ##
-    # Returns the network's local efficiency.
-    # @method getLocalEfficiency
-    # @param {object}   subgraphEfficiency - An array containing network subgraphs efficiencies.
-    # @return {number}  Returns the network's local efficiency.
-    #
-    function getLocalEfficiency(subgraphEfficiency) {
-        dimSubgraphEfficiency = core.dim(subgraphEfficiency)
-        n = dimSubgraphEfficiency[0] - 1
-        localEfficiency = matrix.sum(subgraphEfficiency) / n
-        return(localEfficiency)
-    }
-    
+
     ##
     # Returns the network vertices labels.
     # @method getLabels
