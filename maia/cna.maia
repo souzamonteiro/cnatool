@@ -947,7 +947,7 @@ namespace cna {
     # @param {object}  labels - Array containing the vertices labels.
     # @return {obj}    Matrix with vertex labels set.
     #
-    function setLabels(adj) {
+    function setLabels(adj, labels) {
         dimAdj = core.dim(adj)
         dimI = dimAdj[0]
         for (i = 0; i < dimI; i = i + 1) {
