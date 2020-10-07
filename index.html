@@ -16,6 +16,7 @@
    <script src="http://maia.maiascript.com:8015/cnatool/js/plugins/sigma.parsers.json.min.js"></script>
    <script src="http://maia.maiascript.com:8015/cnatool/js/plugins/sigma.parsers.gexf.min.js"></script>
    <script src="http://maia.maiascript.com:8015/cnatool/js/plugins/sigma.exporters.svg.min.js"></script>
+   <script src="http://maia.maiascript.com:8015/cnatool/js/plugins/sigma.plugins.dragNodes.min.js"></script>
    <script src="http://maia.maiascript.com:8015/maiastudio/js/maiascript.js"></script>
    <title>Complex Network Analysis Tool</title>
    <style type="text/css">
@@ -34,23 +35,30 @@
             <ul>
                <li><a id="#">New</a>
                   <ul>
-                     <li><a id="newFile" onclick="newFile()">Blank</a></li>
-                     <li><a id="newComplete" onclick="newComplete()">Complete</a></li>
-                     <li><a id="newRandom" onclick="newRandom()">Random</a></li>
-                     <li><a id="newScaleFree" onclick="newScaleFree()">Scale-free</a></li>
-                     <li><a id="newSmallWorld" onclick="newSmallWorld()">Small world</a></li>
-                     <li><a id="newHybrid" onclick="newHybrid()">Hybrid</a></li>
+                     <li><a id="newFile" onclick="newFile()">Blank workspace</a></li>
+                     <li><a id="newComplete" onclick="newComplete()">Complete graph</a></li>
+                     <li><a id="newRandom" onclick="newRandom()">Random graph</a></li>
+                     <li><a id="newScaleFree" onclick="newScaleFree()">Scale-free graph</a></li>
+                     <li><a id="newSmallWorld" onclick="newSmallWorld()">Small-world graph</a></li>
+                     <li><a id="newHybrid" onclick="newHybrid()">Hybrid graph</a></li>
                      
                   </ul>
                </li>
                <li><a id="openFile" onclick="openFile()">Open</a></li>
                <li><a id="#">Save</a>
                   <ul>
-                     <li><a id="saveFile" onclick="saveFile()">File</a></li>
-                     <li><a id="saveGraph" onclick="saveGraph()">Graph</a></li>
-                     <li><a id="saveReport" onclick="saveReport()">Report</a></li>
+                     <li><a id="saveFile" onclick="saveFile()">Pajek file</a></li>
+                     <li><a id="saveGraph" onclick="saveGraph()">Graph file</a></li>
+                     <li><a id="saveReport" onclick="saveReport()">Report file</a></li>
                   </ul>
                </li>
+            </ul>
+         </li>
+         <li><a href="#">View</a>
+            <ul>
+               <li><a id="showDegrees" onclick="showDegrees()">Vertices degrees</a></li>
+               <li><a id="showClustering" onclick="showClustering()">Vertices clustering</a></li>
+               <li><a id="showCentralities" onclick="showCentralities()">Vertices centralities</a></li>
             </ul>
          </li>
          <li><a href="#">Help</a>
@@ -75,9 +83,10 @@
             <li class="item">
                <label class="label" for="algorithm">Algorithm:</label>
                <select id="algorithm" name="algorithm" class="control" onchange="updateGraph()">
+                  <option value="none" selected="selected">None</option>
                   <option value="forceAtlas2">Force Atlas 2</option>
                   <option value="noverlap">No Overlap</option>
-                  <option value="ramdom" selected="selected">Random</option>
+                  <option value="ramdom">Random</option>
                </select>
             </li>
          </ul>
@@ -100,6 +109,12 @@
          };
          document.getElementById("container").innerHTML = "";
          graph = new sigma(sigmaConfig);
+
+         try {
+            var dragListener = sigma.plugins.dragNodes(graph, graph.renderers[0]);
+         } catch (e) {
+            alert(e.message);
+         }
       }
 
       function updateGraph() {
@@ -152,23 +167,33 @@
          "fileData": ""
       }
 
-      properties = {
+      property = {
          "n": 0,
          "m": 0,
          "directed": false
       }
       
-      function showProperties(adj, properties) {
-         networkVertices = properties.n
-         if (properties.directed) {
-            networkEdges = properties.m
+      adj = []
+      networkLabel = []
+      networkDegree = []
+      networkDegreeDistribution = []
+      networkClustering = []
+      networkShortestPath = []
+      networkCentrality = []
+      networkVertexEfficiency = []
+      
+      function showProperties(adj, property) {
+         networkVertices = property.n
+         if (property.directed) {
+            networkEdges = property.m
          } else {
-            networkEdges = properties.m / 2
+            networkEdges = property.m / 2
          }
-         networkDegrees = cna.getDegrees(adj, properties.directed)
-         networkAverageDegree = cna.getAverageDegree(networkDegrees)
-         networkDensity = cna.getDensity(adj, properties.directed)
-         networkClustering = cna.getClustering(adj, properties.directed)
+         networkLabel = cna.getLabels(adj)
+         networkDegree = cna.getDegrees(adj, property.directed)
+         networkAverageDegree = cna.getAverageDegree(networkDegree)
+         networkDensity = cna.getDensity(adj, property.directed)
+         networkClustering = cna.getClustering(adj, property.directed)
          networkAverageClustering = cna.getAverageClustering(networkClustering)
          networkShortestPath = cna.getShortestPath(adj)
          networkAverageShortestPath = cna.getAverageShortestPath(networkShortestPath)
@@ -201,7 +226,7 @@
       function newComplete() {
          n = core.toNumber(system.showInputDialog("Number of vertices:", "0"))
          
-         properties = {
+         property = {
             "n": 0,
             "m": 0,
             "directed": false
@@ -216,10 +241,10 @@
             "fileData": cna.createPajekFile(adj, "edges")
          }
          
-         fileData = cna.pajekFileToJson(fileObject.fileData, properties)
+         fileData = cna.pajekFileToJson(fileObject.fileData, property)
          showGraph(fileData)
 
-         showProperties(adj, properties)
+         showProperties(adj, property)
          
          algorithm = document.getElementById("algorithm")
          algorithm.onchange()
@@ -230,7 +255,7 @@
          p = 0
          d = 0
          
-         properties = {
+         property = {
             "n": 0,
             "m": 0,
             "directed": false
@@ -252,10 +277,10 @@
             "fileData": cna.createPajekFile(adj, "edges")
          }
          
-         fileData = cna.pajekFileToJson(fileObject.fileData, properties)
+         fileData = cna.pajekFileToJson(fileObject.fileData, property)
          showGraph(fileData)
 
-         showProperties(adj, properties)
+         showProperties(adj, property)
 
          algorithm = document.getElementById("algorithm")
          algorithm.onchange()
@@ -266,7 +291,7 @@
          d = core.toNumber(system.showInputDialog("Average degree:", "0"))
          p = core.toNumber(system.showInputDialog("Edge probability:", "0"))
          
-         properties = {
+         property = {
             "n": 0,
             "m": 0,
             "directed": false
@@ -281,10 +306,10 @@
             "fileData": cna.createPajekFile(adj, "edges")
          }
          
-         fileData = cna.pajekFileToJson(fileObject.fileData, properties)
+         fileData = cna.pajekFileToJson(fileObject.fileData, property)
          showGraph(fileData)
 
-         showProperties(adj, properties)
+         showProperties(adj, property)
 
          algorithm = document.getElementById("algorithm")
          algorithm.onchange()
@@ -295,7 +320,7 @@
          d = core.toNumber(system.showInputDialog("Average degree:", "0"))
          p = core.toNumber(system.showInputDialog("Edge probability:", "0"))
          
-         properties = {
+         property = {
             "n": 0,
             "m": 0,
             "directed": false
@@ -310,10 +335,10 @@
             "fileData": cna.createPajekFile(adj, "edges")
          }
          
-         fileData = cna.pajekFileToJson(fileObject.fileData, properties)
+         fileData = cna.pajekFileToJson(fileObject.fileData, property)
          showGraph(fileData)
 
-         showProperties(adj, properties)
+         showProperties(adj, property)
 
          algorithm = document.getElementById("algorithm")
          algorithm.onchange()
@@ -324,7 +349,7 @@
          d = core.toNumber(system.showInputDialog("Average degree:", "0"))
          p = core.toNumber(system.showInputDialog("Edge probability:", "0"))
          
-         properties = {
+         property = {
             "n": 0,
             "m": 0,
             "directed": false
@@ -339,17 +364,17 @@
             "fileData": cna.createPajekFile(adj, "edges")
          }
          
-         fileData = cna.pajekFileToJson(fileObject.fileData, properties)
+         fileData = cna.pajekFileToJson(fileObject.fileData, property)
          showGraph(fileData)
 
-         showProperties(adj, properties)
+         showProperties(adj, property)
 
          algorithm = document.getElementById("algorithm")
          algorithm.onchange()
       }
       function openFile() {
          function callBack(fileObject) {
-            properties = {
+            property = {
                "n": 0,
                "m": 0,
                "directed": false
@@ -358,8 +383,8 @@
             fileData = cna.pajekFileToJson(fileObject.fileData)
             showGraph(fileData)
 
-            adj = cna.parsePajekFile(fileObject.fileData, properties)
-            showProperties(adj, properties)
+            adj = cna.parsePajekFile(fileObject.fileData, property)
+            showProperties(adj, property)
          }
 
          system.uploadFile(fileObject, callBack)
@@ -387,11 +412,14 @@
          diameter = document.getElementById("diameter")
          globalEfficiency = document.getElementById("globalEfficiency")
          
+         networkDegreeDistribution = cna.getDegreeDistribution(networkDegree)
+         dimNetworkDegreeDistribution = core.dim(networkDegreeDistribution)
+
          html = "<!DOCTYPE html>"
          html = html + "<html lang=\"en\"><head><meta charset=\"UTF-8\"></head>"
          html = html + "<body>"
          html = html + "<table>"
-         html = html + "<caption>NETWORK PROPERTIES</caption>"
+         html = html + "<caption>Network Properties</caption>"
          html = html + "<tr><td>Vertices:</td><td style=\"text-align: right;\">" + vertices.innerHTML + "</td></tr>"
          html = html + "<tr><td>Edges:</td><td style=\"text-align: right;\">" + edges.innerHTML + "</td></tr>"
          html = html + "<tr><td>Density:</td></td><td style=\"text-align: right;\">" + density.innerHTML + "</td></tr>"
@@ -401,12 +429,100 @@
          html = html + "<tr><td>Diameter:</td></td><td style=\"text-align: right;\">" + diameter.innerHTML + "</td></tr>"
          html = html + "<tr><td>Global Efficiency:</td></td><td style=\"text-align: right;\">" + globalEfficiency.innerHTML + "</td></tr>"
          html = html + "</table>"
+         html = html + "<br />"
+         html = html + "<table>"
+         html = html + "<caption>Degree Disribuion</caption>"
+         html = html + "<tr><td style=\"text-align: right;\">Cluster</td><td style=\"text-align: right;\">Frequency</td><td style=\"text-align: right;\">Frequency(%)</td></tr>"
+         for (i = 0; i < dimNetworkDegreeDistribution[0]; i = i + 1) {
+            html = html + "<tr><td style=\"text-align: right;\">" + core.toString(networkDegreeDistribution[i, 0]) + "</td><td style=\"text-align: right;\">" + core.toString(networkDegreeDistribution[i, 1]) + "</td><td style=\"text-align: right;\">" + core.toString(networkDegreeDistribution[i, 2]) + "</td></tr>"
+         }
+         html = html + "</table>"
          html = html + "</body>"
          html = html + "</html>"
 
          system.downloadFile(fileObject.fileName + ".html", html, "text/html")
       }
 
+      function showDegrees() {
+         dimNetworkLabel = core.dim(networkLabel)
+
+         html = "<!DOCTYPE html>"
+         html = html + "<html lang=\"en\"><head><meta charset=\"UTF-8\"></head>"
+         html = html + "<body>"
+         html = html + "<table>"
+         html = html + "<caption>Vertices Degrees</caption>"
+         html = html + "<tr><td style=\"text-align: right;\">Vertex</td><td style=\"text-align: right;\">Out-degree</td><td style=\"text-align: right;\">In-degree</td><td style=\"text-align: right;\">Degree</td></tr>"
+         for (i = 1; i < dimNetworkLabel[0]; i = i + 1) {
+            html = html + "<tr><td style=\"text-align: right;\">" + networkLabel[i] + "</td><td style=\"text-align: right;\">" + core.toString(networkDegree[i, 0]) + "</td><td style=\"text-align: right;\">" + core.toString(networkDegree[i, 1]) + "</td><td style=\"text-align: right;\">" + core.toString(networkDegree[i, 2]) + "</td></tr>"
+         }
+         html = html + "</table>"
+         html = html + "</body>"
+         html = html + "</html>"
+         
+         win = window.open()
+         iframe = win.document.createElement("iframe")
+         iframe.width = "100%"
+         iframe.height = "100%"
+         iframe.frameBorder = 0
+         iframe.style = "border: 0"
+         iframe.src = "data:text/html;charset=utf-8," + html
+         win.document.body.appendChild(iframe)
+      }
+
+      function showClustering() {
+         dimNetworkLabel = core.dim(networkLabel)
+
+         html = "<!DOCTYPE html>"
+         html = html + "<html lang=\"en\"><head><meta charset=\"UTF-8\"></head>"
+         html = html + "<body>"
+         html = html + "<table>"
+         html = html + "<caption>Vertices Clustering</caption>"
+         html = html + "<tr><td style=\"text-align: right;\">Vertex</td><td style=\"text-align: right;\">Clustering</td></tr>"
+         for (i = 1; i < dimNetworkLabel[0]; i = i + 1) {
+            html = html + "<tr><td style=\"text-align: right;\">" + networkLabel[i] + "</td><td style=\"text-align: right;\">" + string.sprintf("%.2f", networkClustering[i, 0]) + "</td></tr>"
+         }
+         html = html + "</table>"
+         html = html + "</body>"
+         html = html + "</html>"
+         
+         win = window.open()
+         iframe = win.document.createElement("iframe")
+         iframe.width = "100%"
+         iframe.height = "100%"
+         iframe.frameBorder = 0
+         iframe.style = "border: 0"
+         iframe.src = "data:text/html;charset=utf-8," + html
+         win.document.body.appendChild(iframe)
+      }
+
+      function showCentralities() {
+         dimNetworkLabel = core.dim(networkLabel)
+
+         networkCentrality = cna.getCentrality(adj, networkShortestPath, property.directed)
+         
+         html = "<!DOCTYPE html>"
+         html = html + "<html lang=\"en\"><head><meta charset=\"UTF-8\"></head>"
+         html = html + "<body>"
+         html = html + "<table>"
+         html = html + "<caption>Vertices Centralities</caption>"
+         html = html + "<tr><td style=\"text-align: right;\">Vertex</td><td style=\"text-align: right;\">Geodesics</td><td style=\"text-align: right;\">Closeness</td><td style=\"text-align: right;\">Betweenness</td><td style=\"text-align: right;\">nCloseness</td><td style=\"text-align: right;\">nBetweenness</td></tr>"
+         for (i = 1; i < dimNetworkLabel[0]; i = i + 1) {
+            html = html + "<tr><td style=\"text-align: right;\">" + networkLabel[i] + "</td><td style=\"text-align: right;\">" + core.toString(networkCentrality[i, 4]) + "</td><td style=\"text-align: right;\">" + string.sprintf("%.2f", networkCentrality[i, 0]) + "</td><td style=\"text-align: right;\">" + string.sprintf("%.2f", networkCentrality[i, 1]) + "</td><td style=\"text-align: right;\">" + string.sprintf("%.2f", networkCentrality[i, 2]) + "</td><td style=\"text-align: right;\">" + string.sprintf("%.2f", networkCentrality[i, 3]) + "</td></tr>"
+         }
+         html = html + "</table>"
+         html = html + "</body>"
+         html = html + "</html>"
+         
+         win = window.open()
+         iframe = win.document.createElement("iframe")
+         iframe.width = "100%"
+         iframe.height = "100%"
+         iframe.frameBorder = 0
+         iframe.style = "border: 0"
+         iframe.src = "data:text/html;charset=utf-8," + html
+         win.document.body.appendChild(iframe)
+      }
+      
       function showAboutDialog() {
          copyright = "Copyright (C) Roberto Luiz Souza Monteiro,\nRenata Souza Barreto,\nHernane Barrros de Borges Pereira.\n\nwww.maiascript.com"
          system.showMessageDialog(copyright)
