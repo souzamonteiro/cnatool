@@ -6,7 +6,12 @@ This software is distributed under the terms of several open sources licenses.
 
 Please read the files LICENSE, COPYING or COPYING.LIB for further information.
 
-The CNATool tool was developed to allow quick and simplified analysis of graphs of complex networks, from any device connected to the Internet.
+The CNATool tool was developed, using the MaiaScript programming language, to allow quick and simplified analysis of graphs of complex networks, from any device connected to the Internet.
+
+The complete documentation, including the EBNF grammar file and the compiler's
+syntax diagrams (railroad diagrams), for MaiaScript, can be found in the grammar directory.
+
+For more information send mail to: [mailto:support@maiascript.com](mailto:support@maiascript.com)
 
 Currently the tool allows:
 
