@@ -162,7 +162,6 @@ namespace cna {
                     }
                     adj[0, id] = label
                     adj[id, 0] = label
-                    i = i + 1
                 } elseif (fileSection == "*edges") {
                     source = ""
                     target = ""
@@ -190,7 +189,6 @@ namespace cna {
                     adj[source, target] = weight
                     adj[target, source] = weight
                     properties.m = properties.m + 1
-                    system.println(target)
                 } elseif (fileSection == "*arcs") {
                     source = ""
                     target = ""
@@ -737,41 +735,39 @@ namespace cna {
         dimAdj = core.dim(adj)
         dimI = dimAdj[0]
         dimJ = dimAdj[1]
-        geodesic = adj.slice()
+        geodesic = core.matrix(Number.MAX_VALUE, dimI, dimJ)
         if (core.type(path) == "undefined") {
             path = core.matrix(-1, dimI, dimJ)
         }
         for (i = 1; i < dimI; i = i + 1) {
             for (j = 1; j < dimJ; j = j + 1) {
-                for (k = 1; k < dimI; k = k + 1) {
-                    if (geodesic[j, k] == 0) {
-                        geodesic[j, k] = 999999999
+                if (adj[i, j] != 0) {
+                    geodesic[i, j] = adj[i,j]
+                    path[i, j] = j
+                }
+            }
+        }
+        for (i = 0; i < dimI; i = i + 1) {
+            geodesic[i, i] = 0
+            path[i, i] = i
+        }
+        for (k = 1; k < dimI; k = k + 1) {
+            for (i = 1; i < dimI; i = i + 1) {
+                for (j = 1; j < dimJ; j = j + 1) {
+                    if ((geodesic[i, k] == Number.MAX_VALUE) || (geodesic[k, j] == Number.MAX_VALUE)) {
+                        continue
                     }
-                    if (geodesic[j, i] == 0) {
-                        geodesic[j, i] = 999999999
-                    }
-                    if (geodesic[i, k] == 0) {
-                        geodesic[i, k] = 999999999
-                    }
-                    if ((geodesic[j, i] + geodesic[i, k]) < geodesic[j, k]) {
-                        geodesic[j, k] = geodesic[j, i] + geodesic[i, k]
-                        path[j, k] = i
+                    if (geodesic[i, j] > (geodesic[i, k] + geodesic[k, j])) {
+                        geodesic[i, j] = geodesic[i, k] + geodesic[k, j]
+                        path[i, j] = path[i, k]
                     }
                 }
             }
         }
         for (i = 0; i < dimI; i = i + 1) {
+            geodesic[i, i] = 0
             geodesic[0, i] = 0
             geodesic[i, 0] = 0
-            geodesic[i, i] = 0
-        }
-        // Fix geodesics.
-        for (i = 0; i < dimI; i = i + 1) {
-            for (j = 0; j < dimJ; j = j + 1) {
-                if (geodesic[i, j] == 999999999) {
-                    geodesic[i, j] = 0
-                }
-            }
         }
         return(geodesic)
     }
@@ -779,32 +775,21 @@ namespace cna {
     ##
     # Do a shortest parh walk in the network and returns the path.
     # @method doShortestPathWalk
-    # @param {object}   geodesic - Geodesics matrix.
     # @param {object}   path - Paths matrix.
+    # @param {number}   i - Element index.
     # @param {number}   j - Element index.
-    # @param {number}   k - Element index.
     # @return {object}  Returns an array containing the shortest parh walk between two vetice in the matrix.
     #
-    function doShortestPathWalk(geodesic, path, j, k) {
-        if (geodesic[j, k] == 0) {
+    function doShortestPathWalk(path, i, j) {
+        if (path[i, j] == -1) {
             return([])
         }
-        i = path[j, k]
-        if (i == -1) {
-            return([])
-        } else {
-            pji = this.doShortestPathWalk(geodesic, path, j, i)
-            pik = this.doShortestPathWalk(geodesic, path, i, k)
-            pjk = []
-            if (core.length(pji) != 0) {
-                pjk.push(pji)
-            }
-            pjk.push(i)
-            if (core.length(pik) != 0) {
-                pjk.push(pik)
-            }
-            return(pjk)
+        pij = [i]
+        while (i != j) {
+            i = path[i, j]
+            pij.push(i)
         }
+        return(pij)
     }
     
     ##
