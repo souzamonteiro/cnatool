@@ -1,4 +1,32 @@
-///
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: cna.maia</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: cna.maia</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>///
 /// @license
 /// Copyright 2020 Roberto Luiz Souza Monteiro,
 ///                Renata Souza Barreto,
@@ -59,14 +87,14 @@ namespace cna {
         newLine = "\r\n"
         // Save vertices.
         fileContents = "*Vertices " + (dimI - 1) + newLine
-        for (i = 1; i < dimI; i = i + 1) {
+        for (i = 1; i &lt; dimI; i = i + 1) {
             fileContents = fileContents + i + " \"" + adj[i, 0] + "\"" + newLine
         }
         // Save edges.
         if (type == "edges") {
             fileContents = fileContents + "*Edges" + newLine
-            for (i = 1; i < dimI; i = i + 1) {
-                for (j = 1; j < dimJ; j = j + 1) {
+            for (i = 1; i &lt; dimI; i = i + 1) {
+                for (j = 1; j &lt; dimJ; j = j + 1) {
                     if (adj[i, j] != 0) {
                         fileContents = fileContents + i + " " + j + " " + adj[i, j] + newLine
                     }
@@ -75,8 +103,8 @@ namespace cna {
         // Save arcs.
         } elseif (type == "arcs") {
             fileContents = fileContents + "*Arcs" + newLine
-            for (i = 1; i < dimI; i = i + 1) {
-                for (j = 1; j < dimJ; j = j + 1) {
+            for (i = 1; i &lt; dimI; i = i + 1) {
+                for (j = 1; j &lt; dimJ; j = j + 1) {
                     if (adj[i, j] != 0) {
                         fileContents = fileContents + i + " " + j + " " + adj[i, j] + newLine
                     }
@@ -85,8 +113,8 @@ namespace cna {
         // Save matrix.
         } elseif (type == "matrix") {
             fileContents = fileContents + "*Matrix" + newLine
-            for (i = 1; i < dimI; i = i + 1) {
-                for (j = 1; j < dimJ; j = j + 1) {
+            for (i = 1; i &lt; dimI; i = i + 1) {
+                for (j = 1; j &lt; dimJ; j = j + 1) {
                     fileContents = fileContents + " " + adj[i, j]
                 }
                 fileContents = fileContents + newLine
@@ -119,14 +147,14 @@ namespace cna {
         adj = []
         fileSection = "none"
         fileLines = core.split(fileContents, "\r\n")
-        for (l = 0; l < fileLines.length; l = l + 1) {
+        for (l = 0; l &lt; fileLines.length; l = l + 1) {
             line = fileLines[l]
             record = core.split(line.trim(), " ")
             if ((core.toLowerCase(record[0]) == "*vertices") || (core.toLowerCase(record[0]) == "*edges") || (core.toLowerCase(record[0]) == "*arcs") || (core.toLowerCase(record[0]) == "*matrix")) {
                 fileSection = core.toLowerCase(record[0])
                 if (fileSection == "*vertices") {
                     n = ""
-                    for (j = 1; j < record.length; j = j + 1) {
+                    for (j = 1; j &lt; record.length; j = j + 1) {
                         if (record[j] == "") {
                             continue
                         }
@@ -150,7 +178,7 @@ namespace cna {
                 if (fileSection == "*vertices") {
                     id = ""
                     label = ""
-                    for (j = 0; j < record.length; j = j + 1) {
+                    for (j = 0; j &lt; record.length; j = j + 1) {
                         if (record[j] == "") {
                             continue
                         }
@@ -169,7 +197,7 @@ namespace cna {
                     source = ""
                     target = ""
                     weight = ""
-                    for (j = 0; j < record.length; j = j + 1) {
+                    for (j = 0; j &lt; record.length; j = j + 1) {
                         if (record[j] == "") {
                             continue
                         }
@@ -196,7 +224,7 @@ namespace cna {
                     source = ""
                     target = ""
                     weight = ""
-                    for (j = 0; j < record.length; j = j + 1) {
+                    for (j = 0; j &lt; record.length; j = j + 1) {
                         if (record[j] == "") {
                             continue
                         }
@@ -252,14 +280,14 @@ namespace cna {
 
         fileSection = "none"
         fileLines = core.split(fileContents, "\r\n")
-        for (l = 0; l < fileLines.length; l = l + 1) {
+        for (l = 0; l &lt; fileLines.length; l = l + 1) {
             line = fileLines[l]
             record = core.split(line.trim(), " ")
             if ((core.toLowerCase(record[0]) == "*vertices") || (core.toLowerCase(record[0]) == "*edges") || (core.toLowerCase(record[0]) == "*arcs") || (core.toLowerCase(record[0]) == "*matrix")) {
                 fileSection = core.toLowerCase(record[0])
                 if (fileSection == "*vertices") {
                     n = ""
-                    for (j = 1; j < record.length; j = j + 1) {
+                    for (j = 1; j &lt; record.length; j = j + 1) {
                         if (record[j] == "") {
                             continue
                         }
@@ -286,7 +314,7 @@ namespace cna {
                     x = ""
                     y = ""
                     size = ""
-                    for (j = 0; j < record.length; j = j + 1) {
+                    for (j = 0; j &lt; record.length; j = j + 1) {
                         if (record[j] == "") {
                             continue
                         }
@@ -332,7 +360,7 @@ namespace cna {
                     source = ""
                     target = ""
                     weight = ""
-                    for (j = 0; j < record.length; j = j + 1) {
+                    for (j = 0; j &lt; record.length; j = j + 1) {
                         if (record[j] == "") {
                             continue
                         }
@@ -365,7 +393,7 @@ namespace cna {
                     source = ""
                     target = ""
                     weight = ""
-                    for (j = 0; j < record.length; j = j + 1) {
+                    for (j = 0; j &lt; record.length; j = j + 1) {
                         if (record[j] == "") {
                             continue
                         }
@@ -413,11 +441,11 @@ namespace cna {
         dimB = core.dim(b)
         if (dimA[1] == dimB[0]) {
             c = core.matrix(0, dimA[1], dimB[0])
-            for (i = 1; i < dimA[0]; i = i + 1) {
-                for (j = 1; j < dimB[1]; j = j + 1) {
+            for (i = 1; i &lt; dimA[0]; i = i + 1) {
+                for (j = 1; j &lt; dimB[1]; j = j + 1) {
                     s = 0
-                    for (k = 1; k < dimB[0]; k = k + 1) {
-                        s = s || a[i,k] && b[k,j]
+                    for (k = 1; k &lt; dimB[0]; k = k + 1) {
+                        s = s || a[i,k] &amp;&amp; b[k,j]
                     }
                     c[i,j] = s
                 }
@@ -441,8 +469,8 @@ namespace cna {
         dimB = core.dim(b)
         if (dimA == dimB) {
             c = core.matrix(0, dimA[0], dimA[1])
-            for (i = 1; i < dimA[0]; i = i + 1) {
-                for (j = 1; j < dimA[1]; j = j + 1) {    
+            for (i = 1; i &lt; dimA[0]; i = i + 1) {
+                for (j = 1; j &lt; dimA[1]; j = j + 1) {    
                     c[i,j] = a[i, j] || b[i, j]
                 }
             }
@@ -468,7 +496,7 @@ namespace cna {
         dimI = dimAdj[0]
         n = dimI - 1
         // Remove vertex data from the matrix.
-        for (i = 0; i < dimI; i = i + 1) {
+        for (i = 0; i &lt; dimI; i = i + 1) {
             adj[0, i] = 0
             adj[i, 0] = 0
         }
@@ -497,7 +525,7 @@ namespace cna {
         dimI = dimAdj[0]
         dimJ = dimAdj[1]
         degrees = core.matrix(0, dimI, 3)
-        for (i = 1; i < dimI; i = i + 1) {
+        for (i = 1; i &lt; dimI; i = i + 1) {
             degrees[i, 0] = matrix.count(adj, i, 1, i, dimJ - 1)
             degrees[i, 1] = matrix.count(adj, 1, i, dimI - 1, i)
             if (directed) {
@@ -524,7 +552,7 @@ namespace cna {
         dimDegrees = core.dim(degrees)
         dimI = dimDegrees[0]
         degDist = []
-        for (i = 1; i < dimI; i = i + 1) {
+        for (i = 1; i &lt; dimI; i = i + 1) {
             degree = degrees[i, 2]
             if (core.type(degDist[degree]) == "undefined") {
                 degDist[degree] = 1
@@ -541,12 +569,12 @@ namespace cna {
         }
         dimHist = core.dim(hist)
         sumDegs = matrix.sum(hist, 0, 1, dimHist[0] - 1, 1)
-        for (i = 0; i < dimHist[0]; i = i + 1) {
+        for (i = 0; i &lt; dimHist[0]; i = i + 1) {
             hist[i, 2] = (hist[i, 1] / sumDegs) * 100
         }
         // Sort data.
-        for (i = 0; i < dimHist[0] - 1; i = i + 1) {
-            for (j = i; j < dimHist[0]; j = j + 1) {
+        for (i = 0; i &lt; dimHist[0] - 1; i = i + 1) {
+            for (j = i; j &lt; dimHist[0]; j = j + 1) {
                 if (hist[i, 0] > hist[j, 0]) {
                     degree = hist[i, 0]
                     hist[i, 0] = hist[j, 0]
@@ -596,8 +624,8 @@ namespace cna {
         dimJ = dimAdj[1]
         // To calculate the clustering coefficient we need an undirected graph.
         if (directed) {
-            for (i = 1; i < dimI; i = i + 1) {
-                for (j = 1; j < dimJ; j = j + 1) {
+            for (i = 1; i &lt; dimI; i = i + 1) {
+                for (j = 1; j &lt; dimJ; j = j + 1) {
                     if (adj[i, j] == 1) {
                         adj[j, i] = 1
                     }
@@ -606,13 +634,13 @@ namespace cna {
         }
         clustering = core.matrix(0, dimI, 1)
         // Calculate the clustering coefficient for each vertex.
-        for (i = 1; i < dimI; i = i + 1) {
+        for (i = 1; i &lt; dimI; i = i + 1) {
             neighbor = []
             ki = matrix.count(adj, i, 1, i, (dimJ - 1))
             // If the vertex has any neighbor.
             if (ki > 0) {
                 // Get all neighbor indexes.
-                for (j = 1; j < dimJ; j = j + 1) {
+                for (j = 1; j &lt; dimJ; j = j + 1) {
                     if (adj[i, j] == 1) {
                         neighbor.push(j)
                     }
@@ -620,8 +648,8 @@ namespace cna {
                 if (core.length(neighbor) > 0) {
                     // Calculate the number of neighbors connected one to other.
                     n = 0
-                    for (n1 = 0; n1 < core.length(neighbor); n1 = n1 + 1) {
-                        for (n2 = 0; n2 < core.length(neighbor); n2 = n2 + 1) {
+                    for (n1 = 0; n1 &lt; core.length(neighbor); n1 = n1 + 1) {
+                        for (n2 = 0; n2 &lt; core.length(neighbor); n2 = n2 + 1) {
                             if (n1 != n2) {
                                 if (adj[neighbor[n1], neighbor[n2]] == 1) {
                                     n = n + 1
@@ -673,7 +701,7 @@ namespace cna {
         matrixOne = core.one(dimI, dimJ)
         matrixZero = core.zero(dimI, dimJ)   
         // Remove vertex data from the matrix.
-        for (i = 0; i < dimI; i = i + 1) {
+        for (i = 0; i &lt; dimI; i = i + 1) {
             adj[0, i] = 0
             adj[i, 0] = 0
         } 
@@ -688,9 +716,9 @@ namespace cna {
             prod = this.getTransitiveClosure(adj, old)
             path = this.getBooleanOr(old, prod)
             order = order + 1      
-            for (i = 1; i < dimI; i = i + 1) {
-                for (j = 1; j < dimJ; j = j + 1) {
-                    if ((prod[i, j] == 1) && (geodesic[i, j] == 0) && (i != j)) {
+            for (i = 1; i &lt; dimI; i = i + 1) {
+                for (j = 1; j &lt; dimJ; j = j + 1) {
+                    if ((prod[i, j] == 1) &amp;&amp; (geodesic[i, j] == 0) &amp;&amp; (i != j)) {
                         geodesic[i, j] = order
                     }
                 }
@@ -755,21 +783,21 @@ namespace cna {
         if (core.type(path) == "undefined") {
             path = core.matrix(-1, dimI, dimJ)
         }
-        for (i = 1; i < dimI; i = i + 1) {
-            for (j = 1; j < dimJ; j = j + 1) {
+        for (i = 1; i &lt; dimI; i = i + 1) {
+            for (j = 1; j &lt; dimJ; j = j + 1) {
                 if (adj[i, j] != 0) {
                     geodesic[i, j] = adj[i,j]
                     path[i, j] = j
                 }
             }
         }
-        for (i = 0; i < dimI; i = i + 1) {
+        for (i = 0; i &lt; dimI; i = i + 1) {
             geodesic[i, i] = 0
             path[i, i] = i
         }
-        for (k = 1; k < dimI; k = k + 1) {
-            for (i = 1; i < dimI; i = i + 1) {
-                for (j = 1; j < dimJ; j = j + 1) {
+        for (k = 1; k &lt; dimI; k = k + 1) {
+            for (i = 1; i &lt; dimI; i = i + 1) {
+                for (j = 1; j &lt; dimJ; j = j + 1) {
                     if ((geodesic[i, k] == Number.MAX_VALUE) || (geodesic[k, j] == Number.MAX_VALUE)) {
                         continue
                     }
@@ -780,7 +808,7 @@ namespace cna {
                 }
             }
         }
-        for (i = 0; i < dimI; i = i + 1) {
+        for (i = 0; i &lt; dimI; i = i + 1) {
             geodesic[i, i] = 0
             geodesic[0, i] = 0
             geodesic[i, 0] = 0
@@ -823,17 +851,17 @@ namespace cna {
         dimI = dimGeodesic[0]
         dimJ = dimGeodesic[1]
         gjk = adj.slice()
-        for (i = 0; i < dimI; i = i + 1) {
+        for (i = 0; i &lt; dimI; i = i + 1) {
             gjk[0, i] = 0
             gjk[i, 0] = 0
             gjk[i, i] = 1
         }
         diameter = this.getDiameter(geodesic)
         // Count how many geodesics are there between vertices i and j.
-        for (p = 2; p <= diameter; p = p + 1) {
+        for (p = 2; p &lt;= diameter; p = p + 1) {
             npaths = adj ^ p
-            for (i = 1; i < dimI; i = i + 1) {
-                for (j = 1; j < dimJ; j = j + 1) {
+            for (i = 1; i &lt; dimI; i = i + 1) {
+                for (j = 1; j &lt; dimJ; j = j + 1) {
                     if (i != j) {
                         if (gjk[i, j] == 0) {
                             gjk[i, j] = npaths[i, j]
@@ -865,7 +893,7 @@ namespace cna {
         centrality = core.matrix(0, dimI, 5)
         n = dimI - 1
         // Calculate the closeness centrality for each vertex.
-        for (i = 1; i < dimI; i = i + 1) {
+        for (i = 1; i &lt; dimI; i = i + 1) {
             s = matrix.sum(geodesic, i, 1, i, dimJ - 1)
             if (s > 0) {
                 centrality[i, 0] = 1 / s
@@ -875,12 +903,12 @@ namespace cna {
         }
         // Calculate the betweenness centrality for each vertex.
         gjk = this.getNumberOfGeodesics(adj, geodesic, directed)
-        for (i = 1; i < dimI; i = i + 1) {
+        for (i = 1; i &lt; dimI; i = i + 1) {
             bc = 0
-            for (j = 1; j < dimI; j = j + 1) {
-                for (k = 1; k < dimJ; k = k + 1) {
+            for (j = 1; j &lt; dimI; j = j + 1) {
+                for (k = 1; k &lt; dimJ; k = k + 1) {
                     // Must insert an if to test if it is a directed graph.
-                    if ((j < k) && (j != i) && (i != k)) {
+                    if ((j &lt; k) &amp;&amp; (j != i) &amp;&amp; (i != k)) {
                         spjk = geodesic[j, k]
                         if ((geodesic[j, i] + geodesic[i, k]) == spjk) {
                             bc = bc + math.max(gjk[j, i], gjk[i, k]) / gjk[j, k]
@@ -906,8 +934,8 @@ namespace cna {
         dimI = dimGeodesic[0]
         dimJ = dimGeodesic[1]
         efficiency = core.matrix(0, dimI, dimJ)
-        for (i = 1; i < dimI; i = i + 1) {
-            for (j = 1; j < dimJ; j = j + 1) {
+        for (i = 1; i &lt; dimI; i = i + 1) {
+            for (j = 1; j &lt; dimJ; j = j + 1) {
                 if (geodesic[i, j] != 0) {
                     efficiency[i, j] = 1 / geodesic[i, j]
                 }
@@ -941,7 +969,7 @@ namespace cna {
         dimAdj = core.dim(adj)
         dimI = dimAdj[0]
         labels = []
-        for (i = 1; i < dimI; i = i + 1) {
+        for (i = 1; i &lt; dimI; i = i + 1) {
             labels[i] = adj[i, 0]
         }
         return(labels)
@@ -958,7 +986,7 @@ namespace cna {
     function setLabels(adj, labels) {
         dimAdj = core.dim(adj)
         dimI = dimAdj[0]
-        for (i = 0; i < dimI; i = i + 1) {
+        for (i = 0; i &lt; dimI; i = i + 1) {
             adj[i, 0] = labels[i]
             adj[0, i] = labels[i]
         }
@@ -975,10 +1003,33 @@ namespace cna {
     function removeLabels(adj) {
         dimAdj = core.dim(adj)
         dimI = dimAdj[0]
-        for (i = 0; i < dimI; i = i + 1) {
+        for (i = 0; i &lt; dimI; i = i + 1) {
             adj[i, 0] = 0
             adj[0, i] = 0
         }
         return(adj)
     }
 }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="cna.html">cna</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.5</a> on Fri Oct 09 2020 13:59:48 GMT-0300 (Brasilia Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

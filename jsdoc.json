@@ -1,0 +1,10 @@
+// jsdoc.json
+{
+    "source": {
+        "include": [ /* array of paths to files to generate documentation for */ ],
+        "exclude": [ /* array of paths to exclude */ ],
+        "includePattern": ".+\\.maia(doc|x)?$",
+        "excludePattern": "(^|\\/|\\\\)_"
+    },
+    "plugins": ["./jsdoc/plugins/jsdocMaiaScriptPlugin.js"]
+}
