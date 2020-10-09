@@ -21,9 +21,8 @@
    <title>Complex Network Analysis Tool</title>
    <style type="text/css">
       #container {
-         max-width: 400px;
-         height: 400px;
-         margin: auto;
+         max-width: 95%;
+         height: 95%;
       }
    </style>
 </head>
@@ -87,7 +86,6 @@
                   <option value="none" selected="selected">None</option>
                   <option value="forceAtlas2">Force Atlas 2</option>
                   <option value="noverlap">No Overlap</option>
-                  <option value="ramdom">Random</option>
                </select>
             </li>
          </ul>
@@ -105,6 +103,8 @@
             graph: data,
             container: "container",
             settings: {
+               autoResize: true,
+               scalingMode: "inside",
                defaultNodeColor: "#ec5148"
             }
          };
@@ -114,7 +114,7 @@
          try {
             var dragListener = sigma.plugins.dragNodes(graph, graph.renderers[0]);
          } catch (e) {
-            alert(e.message);
+            console.log(e.message);
          }
       }
 
@@ -147,6 +147,13 @@
                }
                // Start the algorithm.
                graph.startForceAtlas2(config);
+            } else if (algorithm.value == "random") {
+               if (graph.isNoverlapRunning()) {
+                  graph.stopNoverlap();
+               }
+               if (graph.isForceAtlas2Running()) {
+                  graph.stopForceAtlas2();
+               }
             } else {
                if (graph.isNoverlapRunning()) {
                   graph.stopNoverlap();
@@ -156,7 +163,7 @@
                }
             }
          } catch (e) {
-            alert(e.message);
+            console.log(e.message);
          }
       }
    </script>
@@ -167,7 +174,7 @@
          "fileExtension": "",
          "fileData": ""
       }
-
+      
       property = {
          "n": 0,
          "m": 0,
@@ -213,12 +220,12 @@
          
          vertices.innerHTML = networkVertices
          edges.innerHTML = networkEdges
-         density.innerHTML = string.sprintf("%.2f", networkDensity)
-         averageDegree.innerHTML = string.sprintf("%.2f", networkAverageDegree)
-         averageClusteringCoefficient.innerHTML = string.sprintf("%.2f", networkAverageClustering)
-         averageShortestPath.innerHTML = string.sprintf("%.2f", networkAverageShortestPath)
+         density.innerHTML = string.sprintf("%.4f", networkDensity)
+         averageDegree.innerHTML = string.sprintf("%.4f", networkAverageDegree)
+         averageClusteringCoefficient.innerHTML = string.sprintf("%.4f", networkAverageClustering)
+         averageShortestPath.innerHTML = string.sprintf("%.4f", networkAverageShortestPath)
          diameter.innerHTML = networkDiameter
-         globalEfficiency.innerHTML = string.sprintf("%.2f", networkGlobalEfficiency)
+         globalEfficiency.innerHTML = string.sprintf("%.4f", networkGlobalEfficiency)
       }
 
       function newFile() {
@@ -392,6 +399,11 @@
       }
 
       function saveFile() {
+         network = {
+            "nodes": graph.graph.nodes(),
+            "edges": graph.graph.edges()
+         }
+         fileObject.fileData = cna.jsonToPajekFile(network)
          system.downloadFile(fileObject.fullFileName, fileObject.fileData, "text/" + fileObject.fileExtension)
       }
 
@@ -476,7 +488,7 @@
          html = html + "<caption>Degree Disribuion</caption>"
          html = html + "<tr><td style=\"text-align: right;\">Cluster</td><td style=\"text-align: right;\">Frequency</td><td style=\"text-align: right;\">Frequency(%)</td></tr>"
          for (i = 0; i < dimNetworkDegreeDistribution[0]; i = i + 1) {
-            html = html + "<tr><td style=\"text-align: right;\">" + core.toString(networkDegreeDistribution[i, 0]) + "</td><td style=\"text-align: right;\">" + core.toString(networkDegreeDistribution[i, 1]) + "</td><td style=\"text-align: right;\">" + core.toString(networkDegreeDistribution[i, 2]) + "</td></tr>"
+            html = html + "<tr><td style=\"text-align: right;\">" + core.toString(networkDegreeDistribution[i, 0]) + "</td><td style=\"text-align: right;\">" + core.toString(networkDegreeDistribution[i, 1]) + "</td><td style=\"text-align: right;\">" + string.sprintf("%.2f", networkDegreeDistribution[i, 2]) + "</td></tr>"
          }
          html = html + "</table>"
          html = html + "</body>"
@@ -528,7 +540,7 @@
          html = html + "<caption>Vertices Clustering</caption>"
          html = html + "<tr><td style=\"text-align: right;\">Vertex</td><td style=\"text-align: right;\">Clustering</td></tr>"
          for (i = 1; i < dimNetworkLabel[0]; i = i + 1) {
-            html = html + "<tr><td style=\"text-align: right;\">" + networkLabel[i] + "</td><td style=\"text-align: right;\">" + string.sprintf("%.2f", networkClustering[i, 0]) + "</td></tr>"
+            html = html + "<tr><td style=\"text-align: right;\">" + networkLabel[i] + "</td><td style=\"text-align: right;\">" + string.sprintf("%.4f", networkClustering[i, 0]) + "</td></tr>"
          }
          html = html + "</table>"
          html = html + "</body>"
@@ -556,7 +568,7 @@
          html = html + "<caption>Vertices Centralities</caption>"
          html = html + "<tr><td style=\"text-align: right;\">Vertex</td><td style=\"text-align: right;\">Geodesics</td><td style=\"text-align: right;\">Closeness</td><td style=\"text-align: right;\">Betweenness</td><td style=\"text-align: right;\">nCloseness</td><td style=\"text-align: right;\">nBetweenness</td></tr>"
          for (i = 1; i < dimNetworkLabel[0]; i = i + 1) {
-            html = html + "<tr><td style=\"text-align: right;\">" + networkLabel[i] + "</td><td style=\"text-align: right;\">" + core.toString(networkCentrality[i, 4]) + "</td><td style=\"text-align: right;\">" + string.sprintf("%.2f", networkCentrality[i, 0]) + "</td><td style=\"text-align: right;\">" + string.sprintf("%.2f", networkCentrality[i, 1]) + "</td><td style=\"text-align: right;\">" + string.sprintf("%.2f", networkCentrality[i, 2]) + "</td><td style=\"text-align: right;\">" + string.sprintf("%.2f", networkCentrality[i, 3]) + "</td></tr>"
+            html = html + "<tr><td style=\"text-align: right;\">" + networkLabel[i] + "</td><td style=\"text-align: right;\">" + core.toString(networkCentrality[i, 4]) + "</td><td style=\"text-align: right;\">" + string.sprintf("%.4f", networkCentrality[i, 0]) + "</td><td style=\"text-align: right;\">" + string.sprintf("%.4f", networkCentrality[i, 1]) + "</td><td style=\"text-align: right;\">" + string.sprintf("%.4f", networkCentrality[i, 2]) + "</td><td style=\"text-align: right;\">" + string.sprintf("%.4f", networkCentrality[i, 3]) + "</td></tr>"
          }
          html = html + "</table>"
          html = html + "</body>"

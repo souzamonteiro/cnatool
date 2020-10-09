@@ -230,7 +230,7 @@ namespace cna {
     /// @memberof cna
     /// @param {string}   fileContents - Pajek file contents.
     /// @param {object}   properties - Network properties (n, m and directed).
-    /// @return {object}  A JSON containing the network..
+    /// @return {object}  A JSON containing the network.
     ///
     function pajekFileToJson(fileContents, properties) {
         if (core.type(properties) == "undefined") {
@@ -398,6 +398,29 @@ namespace cna {
             }
         }
         return(network)
+    }
+
+    ///
+    /// Create a Pajek file from JSON.
+    /// @method jsonToPajekFile
+    /// @memberof cna
+    /// @param {object}   network - JSON containing the network.
+    /// @return {object}  A Pajek file.
+    ///
+    function jsonToPajekFile(network) {
+        n = network.nodes.length
+        m = network.edges.length
+        fileContents = "*Vertices " + core.toString(n) + "\r\n"
+        for (i = 0; i < n; i = i + 1) {
+            node = network.nodes[i]
+            fileContents = fileContents + core.toString(i + 1) + " \"" + node.label + "\" " + core.toString(node.x) + " " + core.toString(node.y) + " " + core.toString(node.size) + "\r\n"
+        }
+        fileContents = fileContents + "*Arcs\r\n"
+        for (i = 0; i < m; i = i + 1) {
+            edge = network.edges[i]
+            fileContents = fileContents + core.replace(core.toString(edge.source), "n", "") + " " + core.replace(core.toString(edge.target), "n", "") + " " + core.toString(edge.size) + "\r\n"
+        }
+        return(fileContents)
     }
 
     ///
