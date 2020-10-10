@@ -88,13 +88,17 @@
                   <option value="noverlap">No Overlap</option>
                </select>
             </li>
+            <li class="item">
+               <label class="label" for="directedGraph">Directed Graph:</label>
+               <input id="directedGraph" nome="directedGraph" type="checkbox" value="directed" onchange="updateProperties()">
+            </li>
          </ul>
       </div>
       <div class="split right">
          <div id="container"></div>
       </div>
    </div>
-   <script type="text/maiascript" src="./maia/cna.maia"></script>
+   <script type="text/maiascript" src="./maia/cna/cna.maia"></script>
    <script type="text/javascript">
       var graph;
 
@@ -190,13 +194,17 @@
       networkCentrality = []
       networkVertexEfficiency = []
       
+      function updateProperties() {
+         directedGraph = document.getElementById("directedGraph")
+
+         property.directed = directedGraph.checked
+         showProperties(adj, property)
+      }
+
       function showProperties(adj, property) {
          networkVertices = property.n
-         if (property.directed) {
-            networkEdges = property.m
-         } else {
-            networkEdges = property.m / 2
-         }
+         networkEdges = property.m
+         
          networkLabel = cna.getLabels(adj)
          networkDegree = cna.getDegrees(adj, property.directed)
          networkAverageDegree = cna.getAverageDegree(networkDegree)
@@ -231,6 +239,7 @@
       function newFile() {
          win = window.open("index.html", "", "")
       }
+
       function newComplete() {
          n = core.toNumber(system.showInputDialog("Number of vertices:", "0"))
          
@@ -252,11 +261,15 @@
          fileData = cna.pajekFileToJson(fileObject.fileData, property)
          showGraph(fileData)
 
+         directedGraph = document.getElementById("directedGraph")
+         directedGraph.checked = property.directed
+
          showProperties(adj, property)
          
          algorithm = document.getElementById("algorithm")
          algorithm.onchange()
       }
+
       function newRandom() {
          n = core.toNumber(system.showInputDialog("Number of vertices:", "0"))
          m = core.toNumber(system.showInputDialog("Number of edges:", "0"))
@@ -288,11 +301,15 @@
          fileData = cna.pajekFileToJson(fileObject.fileData, property)
          showGraph(fileData)
 
+         directedGraph = document.getElementById("directedGraph")
+         directedGraph.checked = property.directed
+
          showProperties(adj, property)
 
          algorithm = document.getElementById("algorithm")
          algorithm.onchange()
       }
+
       function newScaleFree() {
          n = core.toNumber(system.showInputDialog("Number of vertices:", "0"))
          m = 0
@@ -317,11 +334,15 @@
          fileData = cna.pajekFileToJson(fileObject.fileData, property)
          showGraph(fileData)
 
+         directedGraph = document.getElementById("directedGraph")
+         directedGraph.checked = property.directed
+
          showProperties(adj, property)
 
          algorithm = document.getElementById("algorithm")
          algorithm.onchange()
       }
+
       function newSmallWorld() {
          n = core.toNumber(system.showInputDialog("Number of vertices:", "0"))
          m = 0
@@ -346,11 +367,15 @@
          fileData = cna.pajekFileToJson(fileObject.fileData, property)
          showGraph(fileData)
 
+         directedGraph = document.getElementById("directedGraph")
+         directedGraph.checked = property.directed
+
          showProperties(adj, property)
 
          algorithm = document.getElementById("algorithm")
          algorithm.onchange()
       }
+
       function newHybrid() {
          n = core.toNumber(system.showInputDialog("Number of vertices:", "0"))
          m = 0
@@ -375,11 +400,15 @@
          fileData = cna.pajekFileToJson(fileObject.fileData, property)
          showGraph(fileData)
 
+         directedGraph = document.getElementById("directedGraph")
+         directedGraph.checked = property.directed
+
          showProperties(adj, property)
 
          algorithm = document.getElementById("algorithm")
          algorithm.onchange()
       }
+
       function openFile() {
          function callBack(fileObject) {
             property = {
@@ -392,6 +421,10 @@
             showGraph(fileData)
 
             adj = cna.parsePajekFile(fileObject.fileData, property)
+
+            directedGraph = document.getElementById("directedGraph")
+            directedGraph.checked = property.directed
+
             showProperties(adj, property)
          }
 
@@ -429,25 +462,25 @@
          dimNetworkDegreeDistribution = core.dim(networkDegreeDistribution)
 
          html = "<!DOCTYPE html>"
-         html = html + "<html lang=\"en\"><head><meta charset=\"UTF-8\"></head>"
+         html = html + "<html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Network Properties</title></head>"
          html = html + "<body>"
-         html = html + "<table>"
-         html = html + "<caption>Network Properties</caption>"
-         html = html + "<tr><td>Vertices:</td><td style=\"text-align: right;\">" + vertices.innerHTML + "</td></tr>"
-         html = html + "<tr><td>Edges:</td><td style=\"text-align: right;\">" + edges.innerHTML + "</td></tr>"
-         html = html + "<tr><td>Density:</td></td><td style=\"text-align: right;\">" + density.innerHTML + "</td></tr>"
-         html = html + "<tr><td>Avg. Degree:</td></td><td style=\"text-align: right;\">" + averageDegree.innerHTML + "</td></tr>"
-         html = html + "<tr><td>Avg. Clustering Coef.:</td></td><td style=\"text-align: right;\">" + averageClusteringCoefficient.innerHTML + "</td></tr>"
-         html = html + "<tr><td>Avg. Shortest Path:</td></td><td style=\"text-align: right;\">" + averageShortestPath.innerHTML + "</td></tr>"
-         html = html + "<tr><td>Diameter:</td></td><td style=\"text-align: right;\">" + diameter.innerHTML + "</td></tr>"
-         html = html + "<tr><td>Global Efficiency:</td></td><td style=\"text-align: right;\">" + globalEfficiency.innerHTML + "</td></tr>"
+         html = html + "<table style=\"margin-left: auto; margin-right: auto; border: 1px solid black;\">"
+         html = html + "<caption style=\"text-align: center; font-family: Arial; font-weight: bold;\">Network Properties</caption>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Vertices:</th><td style=\"text-align: right; padding: 2px;\">" + vertices.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Edges:</th><td style=\"text-align: right; padding: 2px;\">" + edges.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Density:</th><td style=\"text-align: right; padding: 2px;\">" + density.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Degree:</th><td style=\"text-align: right; padding: 2px;\">" + averageDegree.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Clustering Coef.:</th><td style=\"text-align: right; padding: 2px;\">" + averageClusteringCoefficient.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Shortest Path:</th><td style=\"text-align: right; padding: 2px;\">" + averageShortestPath.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Diameter:</th><td style=\"text-align: right; padding: 2px;\">" + diameter.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Global Efficiency:</th><td style=\"text-align: right; padding: 2px;\">" + globalEfficiency.innerHTML + "</td></tr>"
          html = html + "</table>"
          html = html + "<br />"
-         html = html + "<table>"
-         html = html + "<caption>Degree Disribuion</caption>"
-         html = html + "<tr><td style=\"text-align: right;\">Cluster</td><td style=\"text-align: right;\">Frequency</td><td style=\"text-align: right;\">Frequency(%)</td></tr>"
+         html = html + "<table style=\"margin-left: auto; margin-right: auto; border: 1px solid black;\">"
+         html = html + "<caption style=\"text-align: center; font-family: Arial; font-weight: bold;\">Degree Disribuion</caption>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Cluster</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Frequency</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Frequency(%)</th></tr>"
          for (i = 0; i < dimNetworkDegreeDistribution[0]; i = i + 1) {
-            html = html + "<tr><td style=\"text-align: right;\">" + core.toString(networkDegreeDistribution[i, 0]) + "</td><td style=\"text-align: right;\">" + core.toString(networkDegreeDistribution[i, 1]) + "</td><td style=\"text-align: right;\">" + core.toString(networkDegreeDistribution[i, 2]) + "</td></tr>"
+            html = html + "<tr><td style=\"text-align: right; padding: 2px;\">" + core.toString(networkDegreeDistribution[i, 0]) + "</td><td style=\"text-align: right; padding: 2px;\">" + core.toString(networkDegreeDistribution[i, 1]) + "</td><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.2f", networkDegreeDistribution[i, 2]) + "</td></tr>"
          }
          html = html + "</table>"
          html = html + "</body>"
@@ -468,27 +501,27 @@
          
          networkDegreeDistribution = cna.getDegreeDistribution(networkDegree)
          dimNetworkDegreeDistribution = core.dim(networkDegreeDistribution)
-
+         
          html = "<!DOCTYPE html>"
-         html = html + "<html lang=\"en\"><head><meta charset=\"UTF-8\"></head>"
+         html = html + "<html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Network Properties</title></head>"
          html = html + "<body>"
-         html = html + "<table>"
-         html = html + "<caption>Network Properties</caption>"
-         html = html + "<tr><td>Vertices:</td><td style=\"text-align: right;\">" + vertices.innerHTML + "</td></tr>"
-         html = html + "<tr><td>Edges:</td><td style=\"text-align: right;\">" + edges.innerHTML + "</td></tr>"
-         html = html + "<tr><td>Density:</td></td><td style=\"text-align: right;\">" + density.innerHTML + "</td></tr>"
-         html = html + "<tr><td>Avg. Degree:</td></td><td style=\"text-align: right;\">" + averageDegree.innerHTML + "</td></tr>"
-         html = html + "<tr><td>Avg. Clustering Coef.:</td></td><td style=\"text-align: right;\">" + averageClusteringCoefficient.innerHTML + "</td></tr>"
-         html = html + "<tr><td>Avg. Shortest Path:</td></td><td style=\"text-align: right;\">" + averageShortestPath.innerHTML + "</td></tr>"
-         html = html + "<tr><td>Diameter:</td></td><td style=\"text-align: right;\">" + diameter.innerHTML + "</td></tr>"
-         html = html + "<tr><td>Global Efficiency:</td></td><td style=\"text-align: right;\">" + globalEfficiency.innerHTML + "</td></tr>"
+         html = html + "<table style=\"margin-left: auto; margin-right: auto; border: 1px solid black;\">"
+         html = html + "<caption style=\"text-align: center; font-family: Arial; font-weight: bold;\">Network Properties</caption>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Vertices:</th><td style=\"text-align: right; padding: 2px;\">" + vertices.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Edges:</th><td style=\"text-align: right; padding: 2px;\">" + edges.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Density:</th><td style=\"text-align: right; padding: 2px;\">" + density.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Degree:</th><td style=\"text-align: right; padding: 2px;\">" + averageDegree.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Clustering Coef.:</th><td style=\"text-align: right; padding: 2px;\">" + averageClusteringCoefficient.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Shortest Path:</th><td style=\"text-align: right; padding: 2px;\">" + averageShortestPath.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Diameter:</th><td style=\"text-align: right; padding: 2px;\">" + diameter.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Global Efficiency:</th><td style=\"text-align: right; padding: 2px;\">" + globalEfficiency.innerHTML + "</td></tr>"
          html = html + "</table>"
          html = html + "<br />"
-         html = html + "<table>"
-         html = html + "<caption>Degree Disribuion</caption>"
-         html = html + "<tr><td style=\"text-align: right;\">Cluster</td><td style=\"text-align: right;\">Frequency</td><td style=\"text-align: right;\">Frequency(%)</td></tr>"
+         html = html + "<table style=\"margin-left: auto; margin-right: auto; border: 1px solid black;\">"
+         html = html + "<caption style=\"text-align: center; font-family: Arial; font-weight: bold;\">Degree Disribuion</caption>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Cluster</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Frequency</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Frequency(%)</th></tr>"
          for (i = 0; i < dimNetworkDegreeDistribution[0]; i = i + 1) {
-            html = html + "<tr><td style=\"text-align: right;\">" + core.toString(networkDegreeDistribution[i, 0]) + "</td><td style=\"text-align: right;\">" + core.toString(networkDegreeDistribution[i, 1]) + "</td><td style=\"text-align: right;\">" + string.sprintf("%.2f", networkDegreeDistribution[i, 2]) + "</td></tr>"
+            html = html + "<tr><td style=\"text-align: right; padding: 2px;\">" + core.toString(networkDegreeDistribution[i, 0]) + "</td><td style=\"text-align: right; padding: 2px;\">" + core.toString(networkDegreeDistribution[i, 1]) + "</td><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.2f", networkDegreeDistribution[i, 2]) + "</td></tr>"
          }
          html = html + "</table>"
          html = html + "</body>"
@@ -508,13 +541,13 @@
          dimNetworkLabel = core.dim(networkLabel)
 
          html = "<!DOCTYPE html>"
-         html = html + "<html lang=\"en\"><head><meta charset=\"UTF-8\"></head>"
+         html = html + "<html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Vertices Degrees</title></head>"
          html = html + "<body>"
-         html = html + "<table>"
-         html = html + "<caption>Vertices Degrees</caption>"
-         html = html + "<tr><td style=\"text-align: right;\">Vertex</td><td style=\"text-align: right;\">Out-degree</td><td style=\"text-align: right;\">In-degree</td><td style=\"text-align: right;\">Degree</td></tr>"
+         html = html + "<table style=\"margin-left: auto; margin-right: auto; border: 1px solid black;\">"
+         html = html + "<caption style=\"text-align: center; font-family: Arial; font-weight: bold;\">Vertices Degrees</caption>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Vertex</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Out-degree</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">In-degree</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Degree</th></tr>"
          for (i = 1; i < dimNetworkLabel[0]; i = i + 1) {
-            html = html + "<tr><td style=\"text-align: right;\">" + networkLabel[i] + "</td><td style=\"text-align: right;\">" + core.toString(networkDegree[i, 0]) + "</td><td style=\"text-align: right;\">" + core.toString(networkDegree[i, 1]) + "</td><td style=\"text-align: right;\">" + core.toString(networkDegree[i, 2]) + "</td></tr>"
+            html = html + "<tr><td style=\"text-align: right; padding: 2px;\">" + networkLabel[i] + "</td><td style=\"text-align: right; padding: 2px;\">" + core.toString(networkDegree[i, 0]) + "</td><td style=\"text-align: right; padding: 2px;\">" + core.toString(networkDegree[i, 1]) + "</td><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.4f", networkDegree[i, 2]) + "</td></tr>"
          }
          html = html + "</table>"
          html = html + "</body>"
@@ -534,13 +567,13 @@
          dimNetworkLabel = core.dim(networkLabel)
 
          html = "<!DOCTYPE html>"
-         html = html + "<html lang=\"en\"><head><meta charset=\"UTF-8\"></head>"
+         html = html + "<html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Vertices Clustering</title></head>"
          html = html + "<body>"
-         html = html + "<table>"
-         html = html + "<caption>Vertices Clustering</caption>"
-         html = html + "<tr><td style=\"text-align: right;\">Vertex</td><td style=\"text-align: right;\">Clustering</td></tr>"
+         html = html + "<table style=\"margin-left: auto; margin-right: auto; border: 1px solid black;\">"
+         html = html + "<caption style=\"text-align: center; font-family: Arial; font-weight: bold;\">Vertices Clustering</caption>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Vertex</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Clustering</th></tr>"
          for (i = 1; i < dimNetworkLabel[0]; i = i + 1) {
-            html = html + "<tr><td style=\"text-align: right;\">" + networkLabel[i] + "</td><td style=\"text-align: right;\">" + string.sprintf("%.4f", networkClustering[i, 0]) + "</td></tr>"
+            html = html + "<tr><td style=\"text-align: right; padding: 2px;\">" + networkLabel[i] + "</td><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.4f", networkClustering[i, 0]) + "</td></tr>"
          }
          html = html + "</table>"
          html = html + "</body>"
@@ -562,13 +595,13 @@
          networkCentrality = cna.getCentrality(adj, networkShortestPath, property.directed)
          
          html = "<!DOCTYPE html>"
-         html = html + "<html lang=\"en\"><head><meta charset=\"UTF-8\"></head>"
+         html = html + "<html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Vertices Clustering</title></head>"
          html = html + "<body>"
-         html = html + "<table>"
-         html = html + "<caption>Vertices Centralities</caption>"
-         html = html + "<tr><td style=\"text-align: right;\">Vertex</td><td style=\"text-align: right;\">Geodesics</td><td style=\"text-align: right;\">Closeness</td><td style=\"text-align: right;\">Betweenness</td><td style=\"text-align: right;\">nCloseness</td><td style=\"text-align: right;\">nBetweenness</td></tr>"
+         html = html + "<table style=\"margin-left: auto; margin-right: auto; border: 1px solid black;\">"
+         html = html + "<caption style=\"text-align: center; font-family: Arial; font-weight: bold;\">Vertices Centralities</caption>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Vertex</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Geodesics</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Closeness</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Betweenness</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">nCloseness</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">nBetweenness</th></tr>"
          for (i = 1; i < dimNetworkLabel[0]; i = i + 1) {
-            html = html + "<tr><td style=\"text-align: right;\">" + networkLabel[i] + "</td><td style=\"text-align: right;\">" + core.toString(networkCentrality[i, 4]) + "</td><td style=\"text-align: right;\">" + string.sprintf("%.4f", networkCentrality[i, 0]) + "</td><td style=\"text-align: right;\">" + string.sprintf("%.4f", networkCentrality[i, 1]) + "</td><td style=\"text-align: right;\">" + string.sprintf("%.4f", networkCentrality[i, 2]) + "</td><td style=\"text-align: right;\">" + string.sprintf("%.4f", networkCentrality[i, 3]) + "</td></tr>"
+            html = html + "<tr><td style=\"text-align: right; padding: 2px;\">" + networkLabel[i] + "</td><td style=\"text-align: right; padding: 2px;\">" + core.toString(networkCentrality[i, 4]) + "</td><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.4f", networkCentrality[i, 0]) + "</td><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.4f", networkCentrality[i, 1]) + "</td><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.4f", networkCentrality[i, 2]) + "</td><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.4f", networkCentrality[i, 3]) + "</td></tr>"
          }
          html = html + "</table>"
          html = html + "</body>"

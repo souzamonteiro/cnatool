@@ -1,0 +1,20 @@
+{
+  "name": "cna",
+  "version": "1.2.3",
+  "description": "Complex Network Analysis Library.",
+  "keywords": [
+    "maia",
+    "maiascript",
+    "programming language",
+    "scientific computing",
+    "complex network",
+    "complex network analysis",
+    "smallword",
+    "scale-free",
+    "clustering",
+    "shortest path"
+  ],
+  "author": "The MaiaScript Team (https://www.maiascript.com)",
+  "license": "Apache-2.0",
+  "homepage": "https://www.maiascript.com"
+}
