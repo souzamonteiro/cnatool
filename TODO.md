@@ -1,3 +1,4 @@
-- [x] Add Wiew/Graph summary
-- [x] Save graph updates
-- [x] Generate documentation
+- [ ] Fix cna.getCentrality
+- [ ] Implement cnatool.js
+- [ ] Prepare binary distributions for macOS, Windows and Linux
+- [ ] Prepare binary distributions for iOS and Android
