@@ -5523,7 +5523,7 @@ function Core() {
      * This property needs to be updated
      * with each new version of MaiaStudio.
      */
-    this.version = "1.8.0";
+    this.version = "1.8.2";
 
     this.testResult = {
         "expected": {},
@@ -9642,7 +9642,7 @@ function MaiaVM() {
                     compiledCode.js = compiler.compile(xml);
                     if (justCompile) {
                         if (typeof outputFile == 'undefined') {
-                            fileName = inputFile.split('.').shift();
+                            var fileName = inputFile.split('.').shift();
                             outputFile = fileName + '.js';
                         }
                         fs.writeFile(outputFile, compiledCode.js, function (err) {

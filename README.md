@@ -44,3 +44,21 @@ Or, download the latest zipped version:
 `cd cnatool-main`
 
 `npm install -g .`
+
+## USING THE COMMAND LINE INTERFACE (CLI) AND CNATool:
+
+To run the command line tool, use the command:
+
+`cnatool [options] [script.maia] [--] [arguments]`
+
+To see the command line tool options run the command:
+
+`cnatool --help`
+
+To launch CNATool open the file `index.html`, in the main directory of the package, in a browser.
+
+To try CNATool on-line go to [http://www.maiascript.com/cnatool]
+
+Lauro de Freitas, October 2020.
+
+Roberto Luiz Souza Monteiro
