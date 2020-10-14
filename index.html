@@ -13,8 +13,8 @@
    <script src="js/plugins/sigma.plugins.animate.min.js"></script>
    <script src="js/plugins/sigma.layout.forceAtlas2.min.js"></script>
    <script src="js/plugins/sigma.layout.noverlap.min.js"></script>
-   <script src="js/plugins/sigma.parsers.json.min.js"></script>
    <script src="js/plugins/sigma.parsers.gexf.min.js"></script>
+   <script src="js/plugins/sigma.parsers.json.min.js"></script>
    <script src="js/plugins/sigma.exporters.svg.min.js"></script>
    <script src="js/plugins/sigma.plugins.dragNodes.min.js"></script>
    <script src="js/maiascript.js"></script>
@@ -47,6 +47,7 @@
                <li><a id="#">Save</a>
                   <ul>
                      <li><a id="saveFile" onclick="saveFile()">Pajek file</a></li>
+                     <li><a id="saveFile" onclick="saveJsonFile()">JSON file</a></li>
                      <li><a id="saveGraph" onclick="saveGraph()">Graph file</a></li>
                      <li><a id="saveReport" onclick="saveReport()">Report file</a></li>
                   </ul>
@@ -424,10 +425,36 @@
                "directed": false
             }
 
-            fileData = cna.pajekFileToJson(fileObject.fileData)
-            showGraph(fileData)
-
-            adj = cna.parsePajekFile(fileObject.fileData, property)
+            if (fileObject.fileExtension == "gexf") {
+               sigmaConfig = {
+                  "container": "container"
+               }
+               sigma.parsers.gexf(fileObject.fullFileName, sigmaConfig)
+               network = {
+                  "nodes": graph.graph.nodes(),
+                  "edges": graph.graph.edges()
+               }
+               fileObject.fileData = cna.jsonToPajekFile(network)
+               adj = cna.parsePajekFile(fileObject.fileData, property)
+            } elseif (fileObject.fileExtension == "json") {
+               sigmaConfig = {
+                  "container": "container"
+               }
+               sigma.parsers.json(fileObject.fullFileName, sigmaConfig)
+               network = {
+                  "nodes": graph.graph.nodes(),
+                  "edges": graph.graph.edges()
+               }
+               fileObject.fileData = cna.jsonToPajekFile(network)
+               adj = cna.parsePajekFile(fileObject.fileData, property)
+            } elseif (fileObject.fileExtension == "net") {
+               fileData = cna.pajekFileToJson(fileObject.fileData)
+               adj = cna.parsePajekFile(fileObject.fileData, property)
+               showGraph(fileData)
+            } else {
+               system.showMessageDialog("File format not supported!")
+               return()
+            }
 
             directedGraph = document.getElementById("directedGraph")
             directedGraph.checked = property.directed
@@ -444,6 +471,17 @@
             "edges": graph.graph.edges()
          }
          fileObject.fileData = cna.jsonToPajekFile(network)
+         system.downloadFile(fileObject.fullFileName, fileObject.fileData, "text/" + fileObject.fileExtension)
+      }
+
+      function saveJsonFile() {
+         fileObject.fileExtension = "json"
+         fileObject.fullFileName = fileObject.fileName + "." + fileObject.fileExtension
+         network = {
+            "nodes": graph.graph.nodes(),
+            "edges": graph.graph.edges()
+         }
+         fileObject.fileData = JSON.stringify(network)
          system.downloadFile(fileObject.fullFileName, fileObject.fileData, "text/" + fileObject.fileExtension)
       }
 
