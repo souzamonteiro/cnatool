@@ -159,7 +159,7 @@ namespace cna {
                             continue
                         }
                         if (label == "") {
-                            label = core.replace(record[j], "\"", "")
+                            label = core.replace(record[j], core.regExp("\"", "g"), "")
                             continue
                         }
                     }
@@ -295,7 +295,7 @@ namespace cna {
                             continue
                         }
                         if (label == "") {
-                            label = core.replace(record[j], "\"", "")
+                            label = core.replace(record[j], core.regExp("\"", "g"), "")
                             continue
                         }
                         if (x == "") {

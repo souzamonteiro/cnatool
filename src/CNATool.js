@@ -60,27 +60,27 @@ function CNATool() {
         property.networkDegreeDistribution = cna.getDegreeDistribution(property.networkDegree)
         dimNetworkDegreeDistribution = core.dim(property.networkDegreeDistribution)
 
-        var html = "";
-        html = html + "<table style=\"margin-left: auto; margin-right: auto; border: 1px solid black;\">"
-        html = html + "<caption style=\"text-align: center; font-family: Arial; font-weight: bold;\">Network Properties</caption>"
-        html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Vertices:</th><td style=\"text-align: right; padding: 2px;\">" + core.toString(property.n) + "</td></tr>"
-        html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Edges:</th><td style=\"text-align: right; padding: 2px;\">" + core.toString(property.m) + "</td></tr>"
-        html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Density:</th><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.4f", property.networkDensity) + "</td></tr>"
-        html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Degree:</th><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.4f", property.networkAverageDegree) + "</td></tr>"
-        html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Clustering Coef.:</th><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.4f", property.networkAverageClustering) + "</td></tr>"
-        html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Shortest Path:</th><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.4f", property.networkAverageShortestPath) + "</td></tr>"
-        html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Diameter:</th><td style=\"text-align: right; padding: 2px;\">" + core.toString(property.networkDiameter) + "</td></tr>"
-        html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Global Efficiency:</th><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.4f", property.networkGlobalEfficiency) + "</td></tr>"
-        html = html + "</table>"
-        html = html + "<br />"
-        html = html + "<table style=\"margin-left: auto; margin-right: auto; border: 1px solid black;\">"
-        html = html + "<caption style=\"text-align: center; font-family: Arial; font-weight: bold;\">Degree Disribuion</caption>"
-        html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Cluster</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Frequency</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Frequency(%)</th></tr>"
+        var html = '';
+        html = html + '<table style="margin-left: auto; margin-right: auto; border: 1px solid black;">'
+        html = html + '<caption style="text-align: center; font-family: Arial; font-weight: bold;">Network Properties</caption>'
+        html = html + '<tr><th style="text-align: left; font-family: Arial; font-weight: bold;">Vertices:</th><td style="text-align: right; padding: 2px;">' + core.toString(property.n) + '</td></tr>'
+        html = html + '<tr><th style="text-align: left; font-family: Arial; font-weight: bold;">Edges:</th><td style="text-align: right; padding: 2px;">' + core.toString(property.m) + '</td></tr>'
+        html = html + '<tr><th style="text-align: left; font-family: Arial; font-weight: bold;">Density:</th><td style="text-align: right; padding: 2px;">' + string.sprintf('%.4f', property.networkDensity) + '</td></tr>'
+        html = html + '<tr><th style="text-align: left; font-family: Arial; font-weight: bold;">Avg. Degree:</th><td style="text-align: right; padding: 2px;">' + string.sprintf('%.4f', property.networkAverageDegree) + '</td></tr>'
+        html = html + '<tr><th style="text-align: left; font-family: Arial; font-weight: bold;">Avg. Clustering Coef.:</th><td style="text-align: right; padding: 2px;">' + string.sprintf('%.4f', property.networkAverageClustering) + '</td></tr>'
+        html = html + '<tr><th style="text-align: left; font-family: Arial; font-weight: bold;">Avg. Shortest Path:</th><td style="text-align: right; padding: 2px;">' + string.sprintf('%.4f', property.networkAverageShortestPath) + '</td></tr>'
+        html = html + '<tr><th style="text-align: left; font-family: Arial; font-weight: bold;">Diameter:</th><td style="text-align: right; padding: 2px;">' + core.toString(property.networkDiameter) + '</td></tr>'
+        html = html + '<tr><th style="text-align: left; font-family: Arial; font-weight: bold;">Global Efficiency:</th><td style="text-align: right; padding: 2px;">' + string.sprintf('%.4f', property.networkGlobalEfficiency) + '</td></tr>'
+        html = html + '</table>'
+        html = html + '<br />'
+        html = html + '<table style="margin-left: auto; margin-right: auto; border: 1px solid black;">'
+        html = html + '<caption style="text-align: center; font-family: Arial; font-weight: bold;">Degree Disribuion</caption>'
+        html = html + '<tr><th style="text-align: left; font-family: Arial; font-weight: bold;">Cluster</th><th style="text-align: left; font-family: Arial; font-weight: bold;">Frequency</th><th style="text-align: left; font-family: Arial; font-weight: bold;">Frequency(%)</th></tr>'
         for (i = 0; i < dimNetworkDegreeDistribution[0]; i = i + 1) {
-           html = html + "<tr><td style=\"text-align: right; padding: 2px;\">" + core.toString(property.networkDegreeDistribution[i][0]) + "</td><td style=\"text-align: right; padding: 2px;\">" + core.toString(property.networkDegreeDistribution[i][1]) + "</td><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.2f", property.networkDegreeDistribution[i][2]) + "</td></tr>"
+           html = html + '<tr><td style="text-align: right; padding: 2px;">' + core.toString(property.networkDegreeDistribution[i][0]) + '</td><td style="text-align: right; padding: 2px;">' + core.toString(property.networkDegreeDistribution[i][1]) + '</td><td style="text-align: right; padding: 2px;">' + string.sprintf('%.2f', property.networkDegreeDistribution[i][2]) + '</td></tr>'
         }
-        html = html + "</table>"
-        html = html + "<br />"
+        html = html + '</table>'
+        html = html + '<br />'
 
         return html;
      }
@@ -93,15 +93,15 @@ function CNATool() {
     this.getDegreesReport = function(property) {
         dimNetworkLabel = core.dim(property.networkLabel)
 
-        var html = "";
-        html = html + "<table style=\"margin-left: auto; margin-right: auto; border: 1px solid black;\">"
-        html = html + "<caption style=\"text-align: center; font-family: Arial; font-weight: bold;\">Vertices Degrees</caption>"
-        html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Vertex</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Out-degree</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">In-degree</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Degree</th></tr>"
+        var html = '';
+        html = html + '<table style="margin-left: auto; margin-right: auto; border: 1px solid black;">'
+        html = html + '<caption style="text-align: center; font-family: Arial; font-weight: bold;">Vertices Degrees</caption>'
+        html = html + '<tr><th style="text-align: left; font-family: Arial; font-weight: bold;">Vertex</th><th style="text-align: left; font-family: Arial; font-weight: bold;">Out-degree</th><th style="text-align: left; font-family: Arial; font-weight: bold;">In-degree</th><th style="text-align: left; font-family: Arial; font-weight: bold;">Degree</th></tr>'
         for (i = 1; i < dimNetworkLabel[0]; i = i + 1) {
-            html = html + "<tr><td style=\"text-align: right; padding: 2px;\">" + property.networkLabel[i] + "</td><td style=\"text-align: right; padding: 2px;\">" + core.toString(property.networkDegree[i][0]) + "</td><td style=\"text-align: right; padding: 2px;\">" + core.toString(property.networkDegree[i][1]) + "</td><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.4f", property.networkDegree[i][2]) + "</td></tr>"
+            html = html + '<tr><td style="text-align: right; padding: 2px;">' + property.networkLabel[i] + '</td><td style="text-align: right; padding: 2px;">' + core.toString(property.networkDegree[i][0]) + '</td><td style="text-align: right; padding: 2px;">' + core.toString(property.networkDegree[i][1]) + '</td><td style="text-align: right; padding: 2px;">' + string.sprintf('%.4f', property.networkDegree[i][2]) + '</td></tr>'
         }
-        html = html + "</table>"
-        html = html + "<br />"
+        html = html + '</table>'
+        html = html + '<br />'
 
         return html;
     }
@@ -114,15 +114,15 @@ function CNATool() {
     this.getClusteringReport = function(property) {
         dimNetworkLabel = core.dim(property.networkLabel)
 
-        var html = "";
-        html = html + "<table style=\"margin-left: auto; margin-right: auto; border: 1px solid black;\">"
-        html = html + "<caption style=\"text-align: center; font-family: Arial; font-weight: bold;\">Vertices Clustering</caption>"
-        html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Vertex</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Clustering</th></tr>"
+        var html = '';
+        html = html + '<table style="margin-left: auto; margin-right: auto; border: 1px solid black;">'
+        html = html + '<caption style="text-align: center; font-family: Arial; font-weight: bold;">Vertices Clustering</caption>'
+        html = html + '<tr><th style="text-align: left; font-family: Arial; font-weight: bold;">Vertex</th><th style="text-align: left; font-family: Arial; font-weight: bold;">Clustering</th></tr>'
         for (i = 1; i < dimNetworkLabel[0]; i = i + 1) {
-            html = html + "<tr><td style=\"text-align: right; padding: 2px;\">" + property.networkLabel[i] + "</td><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.4f", property.networkClustering[i][0]) + "</td></tr>"
+            html = html + '<tr><td style="text-align: right; padding: 2px;">' + property.networkLabel[i] + '</td><td style="text-align: right; padding: 2px;">' + string.sprintf('%.4f', property.networkClustering[i][0]) + '</td></tr>'
         }
-        html = html + "</table>"
-        html = html + "<br />"
+        html = html + '</table>'
+        html = html + '<br />'
 
         return html;
     }
@@ -138,15 +138,15 @@ function CNATool() {
 
         property.networkCentrality = cna.getCentrality(adj, property.networkShortestPath, property.directed)
          
-        var html = "";
-        html = html + "<table style=\"margin-left: auto; margin-right: auto; border: 1px solid black;\">"
-        html = html + "<caption style=\"text-align: center; font-family: Arial; font-weight: bold;\">Vertices Centralities</caption>"
-        html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Vertex</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Geodesics</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Closeness</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Betweenness</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">nCloseness</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">nBetweenness</th></tr>"
+        var html = '';
+        html = html + '<table style="margin-left: auto; margin-right: auto; border: 1px solid black;">'
+        html = html + '<caption style="text-align: center; font-family: Arial; font-weight: bold;">Vertices Centralities</caption>'
+        html = html + '<tr><th style="text-align: left; font-family: Arial; font-weight: bold;">Vertex</th><th style="text-align: left; font-family: Arial; font-weight: bold;">Geodesics</th><th style="text-align: left; font-family: Arial; font-weight: bold;">Closeness</th><th style="text-align: left; font-family: Arial; font-weight: bold;">Betweenness</th><th style="text-align: left; font-family: Arial; font-weight: bold;">nCloseness</th><th style="text-align: left; font-family: Arial; font-weight: bold;">nBetweenness</th></tr>'
         for (i = 1; i < dimNetworkLabel[0]; i = i + 1) {
-            html = html + "<tr><td style=\"text-align: right; padding: 2px;\">" + property.networkLabel[i] + "</td><td style=\"text-align: right; padding: 2px;\">" + core.toString(property.networkCentrality[i][4]) + "</td><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.4f", property.networkCentrality[i][0]) + "</td><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.4f", property.networkCentrality[i][1]) + "</td><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.4f", property.networkCentrality[i][2]) + "</td><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.4f", property.networkCentrality[i][3]) + "</td></tr>"
+            html = html + '<tr><td style="text-align: right; padding: 2px;">' + property.networkLabel[i] + '</td><td style="text-align: right; padding: 2px;">' + core.toString(property.networkCentrality[i][4]) + '</td><td style="text-align: right; padding: 2px;">' + string.sprintf('%.4f', property.networkCentrality[i][0]) + '</td><td style="text-align: right; padding: 2px;">' + string.sprintf('%.4f', property.networkCentrality[i][1]) + '</td><td style="text-align: right; padding: 2px;">' + string.sprintf('%.4f', property.networkCentrality[i][2]) + '</td><td style="text-align: right; padding: 2px;">' + string.sprintf('%.4f', property.networkCentrality[i][3]) + '</td></tr>'
         }
-        html = html + "</table>"
-        html = html + "<br />"
+        html = html + '</table>'
+        html = html + '<br />'
 
         return html;
     }
@@ -188,6 +188,7 @@ function CNATool() {
             var includeDegrees = false;
             var isDirected = false;
             var createGraph = false;
+            var saveInJson = false;
             var topology = 'random';
             var prefix = '';
             var vertices = 0;
@@ -216,8 +217,9 @@ function CNATool() {
                         system.log('       --deg                Include vertices degrees in report;');
                         system.log('       --d                  Network is a directed graph;');
                         system.log('-h     --help               Displays this help message;');
-                        system.log('-o     <report.html>        Output report file name;');
-                        system.log('       --create             Create a graph file;');
+                        system.log('-o     [report.html]        Output report file name;');
+                        system.log('       --create             Creates a network file in Pajet format;');
+                        system.log('       --json               Save the network file in JSON format;');
                         system.log('       --topology           Graph topology (complete, random, scalefree, smallworld, hybrid);');
                         system.log('       --prefix             File name prefix for multiple file creation;');
                         system.log('       --vertices           Number of vertices;');
@@ -228,6 +230,7 @@ function CNATool() {
                         system.log('       --vinc               increment to number of vertices;');
                         system.log('       --einc               increment to number of edges;');
                         system.log('       --dinc               increment to average degree.');
+                        process.exit(0);
                     } else if (argv[i] == '--all') {
                         includeAll = true;
                     } else if (argv[i] == '-j') {
@@ -246,6 +249,8 @@ function CNATool() {
                         outputFile = argv[i];
                     } else if (argv[i] == '--create') {
                         createGraph = true;
+                    } else if (argv[i] == '--json') {
+                        saveInJson = true;
                     } else if (argv[i] == '--topology') {
                         i++;
                         topology = argv[i];
@@ -291,9 +296,16 @@ function CNATool() {
                     }
                     for (var i = 1; i <= nfiles; i++) {
                         var adj = cna.createNetwork(topology, vertices, edges, probability, avgdegree);
-                        var fileIndex = string.sprintf("%0" + core.toString(core.length(core.toString(nfiles))) + "." + core.toString(core.length(core.toString(nfiles))) + "d", i);
-                        var outputFileName = prefix + "-" + fileIndex + ".net";
-                        var outputFileContents = cna.createPajekFile(adj, "edges");
+                        var fileIndex = string.sprintf('%0' + core.toString(core.length(core.toString(nfiles))) + '.' + core.toString(core.length(core.toString(nfiles))) + 'd', i);
+                        var pajekFileContents = cna.createPajekFile(adj, 'edges');
+                        if (saveInJson) {
+                            var outputFileName = prefix + '-' + fileIndex + '.json';
+                            var jsonContents = cna.pajekFileToJson(pajekFileContents);
+                            var outputFileContents = JSON.stringify(jsonContents);
+                        } else {
+                            var outputFileName = prefix + '-' + fileIndex + '.net';
+                            var outputFileContents = pajekFileContents;
+                        }
                         fs.writeFile(outputFileName, outputFileContents, function (err) {
                             if (err) {
                                 throw err;
@@ -323,6 +335,8 @@ function CNATool() {
                             for (var i = 0; i < files.length; i++) {
                                 file = files[i];
                                 var fileName = file.split('.').shift();
+                                var fileExtension = file.split('.').pop();
+
                                 if (outputFile == '') {
                                     outputFile = fileName + '.html';
                                 }
@@ -330,26 +344,34 @@ function CNATool() {
                                 var fileContents = read(String(file));
                                 
                                 var property = {
-                                    "n": 0,
-                                    "m": 0,
-                                    "directed": false,
-                                    "density": 0,
-                                    "networkLabel": [],
-                                    "networkDegree": [],
-                                    "networkAverageDegree": 0,
-                                    "networkDegreeDistribution": [],
-                                    "networkDensity": 0,
-                                    "networkClustering": [],
-                                    "networkAverageClustering": 0,
-                                    "networkShortestPath": [],
-                                    "networkAverageShortestPath": 0,
-                                    "networkDiameter": 0,
-                                    "networkCentrality": [],
-                                    "networkVertexEfficiency": [],
-                                    "networkGlobalEfficiency": 0
+                                    'n': 0,
+                                    'm': 0,
+                                    'directed': false,
+                                    'density': 0,
+                                    'networkLabel': [],
+                                    'networkDegree': [],
+                                    'networkAverageDegree': 0,
+                                    'networkDegreeDistribution': [],
+                                    'networkDensity': 0,
+                                    'networkClustering': [],
+                                    'networkAverageClustering': 0,
+                                    'networkShortestPath': [],
+                                    'networkAverageShortestPath': 0,
+                                    'networkDiameter': 0,
+                                    'networkCentrality': [],
+                                    'networkVertexEfficiency': [],
+                                    'networkGlobalEfficiency': 0
                                 };
 
-                                var adj = cna.parsePajekFile(fileContents, property);
+                                if (fileExtension == 'json') {
+                                    var network = JSON.parse(fileContents);
+                                    var pajekFileContents = cna.jsonToPajekFile(network);
+                                    var adj = cna.parsePajekFile(pajekFileContents, property);
+                                } else if (fileExtension == 'net') {
+                                    var adj = cna.parsePajekFile(fileContents, property);
+                                } else {
+                                    system.log('Unsupported file format when processing file ' + file + '');
+                                }
 
                                 if (isDirected) {
                                     property.directed = true;
@@ -357,9 +379,9 @@ function CNATool() {
 
                                 cnatool.calculateProperties(adj, property);
 
-                                var html = "<!DOCTYPE html>";
-                                    html = html + "<html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Network Properties Report" + file + "</title></head>";
-                                    html = html + "<body>";
+                                var html = '<!DOCTYPE html>';
+                                    html = html + '<html lang="en"><head><meta charset="UTF-8"><title>Network Properties Report' + file + '</title></head>';
+                                    html = html + '<body>';
                                     html = html + cnatool.getSummaryReport(property);
                                     if (includeDegrees || includeAll) {
                                         html = html + cnatool.getDegreesReport(property);
@@ -370,8 +392,8 @@ function CNATool() {
                                     if (includeCentralities || includeAll) {
                                         html = html + cnatool.getCentralitiesReport(adj, property);
                                     }
-                                    html = html + "</body>";
-                                    html = html + "</html>";
+                                    html = html + '</body>';
+                                    html = html + '</html>';
                                 fs.writeFile(outputFile, html, function (err) {
                                     if (err) {
                                         throw err;
@@ -382,8 +404,8 @@ function CNATool() {
 
                                 if (jsonFile != '') {
                                     graphProperty = {
-                                        "fileName": file,
-                                        "properties": property
+                                        'fileName': file,
+                                        'properties': property
                                     }
                                     graphsData.push(graphProperty);
                                 }
@@ -424,7 +446,7 @@ cnatool = new CNATool();
  */
 if (typeof process !== 'undefined') {
     // Emulate DOM.
-    const jsdom = require("jsdom");
+    const jsdom = require('jsdom');
     const { JSDOM } = jsdom;
     var doc = new JSDOM();
     var DOMParser = doc.window.DOMParser;
