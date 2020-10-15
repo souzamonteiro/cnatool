@@ -83,7 +83,7 @@
             <li class="item"><div class="label">Global Efficiency:</div><div id="globalEfficiency" class="value"></div></li>
             <li class="item">
                <label class="label" for="algorithm">Algorithm:</label>
-               <select id="algorithm" name="algorithm" class="control" onchange="updateGraph()">
+               <select id="algorithm" name="algorithm" style="float: right;" onchange="updateGraph()">
                   <option value="none" selected="selected">None</option>
                   <option value="forceAtlas2">Force Atlas 2</option>
                   <option value="noverlap">No Overlap</option>
@@ -91,7 +91,9 @@
             </li>
             <li class="item">
                <label class="label" for="directedGraph">Directed Graph:</label>
-               <input id="directedGraph" nome="directedGraph" type="checkbox" value="directed" onchange="updateProperties()">
+               <input id="directedGraph" nome="directedGraph" style="float: right;" type="checkbox" value="directed" onchange="updateProperties()"><br />
+               <label class="label" for="calculateProperties">Calculate Properties:</label>
+               <input id="calculateProperties" nome="calculateProperties" style="float: right;" type="checkbox" value="calculate" onchange="updateProperties()"><br />
             </li>
          </ul>
       </div>
@@ -210,21 +212,14 @@
       }
 
       function showProperties(adj, property) {
+         calculateProperties = document.getElementById("calculateProperties")
+
          networkVertices = property.n
          networkEdges = property.m
          
          networkLabel = cna.getLabels(adj)
-         networkDegree = cna.getDegrees(adj, property.directed)
-         networkAverageDegree = cna.getAverageDegree(networkDegree)
          networkDensity = cna.getDensity(adj, property.directed)
-         networkClustering = cna.getClustering(adj, property.directed)
-         networkAverageClustering = cna.getAverageClustering(networkClustering)
-         networkShortestPath = cna.getShortestPath(adj)
-         networkAverageShortestPath = cna.getAverageShortestPath(networkShortestPath)
-         networkDiameter = cna.getDiameter(networkShortestPath)
-         networkVertexEfficiency = cna.getVertexEfficiency(networkShortestPath)
-         networkGlobalEfficiency = cna.getGlobalEfficiency(networkVertexEfficiency)
-         
+
          vertices = document.getElementById("vertices")
          edges = document.getElementById("edges")
          density = document.getElementById("density")
@@ -237,6 +232,26 @@
          vertices.innerHTML = networkVertices
          edges.innerHTML = networkEdges
          density.innerHTML = string.sprintf("%.4f", networkDensity)
+         
+         if (!calculateProperties.checked) {
+            averageDegree.innerHTML = ""
+            averageClusteringCoefficient.innerHTML = ""
+            averageShortestPath.innerHTML = ""
+            diameter.innerHTML = ""
+            globalEfficiency.innerHTML = ""
+            return()
+         }
+
+         networkDegree = cna.getDegrees(adj, property.directed)
+         networkAverageDegree = cna.getAverageDegree(networkDegree)
+         networkClustering = cna.getClustering(adj, property.directed)
+         networkAverageClustering = cna.getAverageClustering(networkClustering)
+         networkShortestPath = cna.getShortestPath(adj)
+         networkAverageShortestPath = cna.getAverageShortestPath(networkShortestPath)
+         networkDiameter = cna.getDiameter(networkShortestPath)
+         networkVertexEfficiency = cna.getVertexEfficiency(networkShortestPath)
+         networkGlobalEfficiency = cna.getGlobalEfficiency(networkVertexEfficiency)
+         
          averageDegree.innerHTML = string.sprintf("%.4f", networkAverageDegree)
          averageClusteringCoefficient.innerHTML = string.sprintf("%.4f", networkAverageClustering)
          averageShortestPath.innerHTML = string.sprintf("%.4f", networkAverageShortestPath)
@@ -481,6 +496,11 @@
       }
 
       function saveReport() {
+         if (!calculateProperties.checked) {
+            system.showMessageDialog("To generate this report it is necessary to check the option \"Calculate Properties\" in the properties panel.")
+            return()
+         }
+
          vertices = document.getElementById("vertices")
          edges = document.getElementById("edges")
          density = document.getElementById("density")
@@ -522,6 +542,11 @@
       }
 
       function showSummary() {
+         if (!calculateProperties.checked) {
+            system.showMessageDialog("To generate this report it is necessary to check the option \"Calculate Properties\" in the properties panel.")
+            return()
+         }
+
          vertices = document.getElementById("vertices")
          edges = document.getElementById("edges")
          density = document.getElementById("density")
@@ -570,6 +595,11 @@
       }
 
       function showDegrees() {
+         if (!calculateProperties.checked) {
+            system.showMessageDialog("To generate this report it is necessary to check the option \"Calculate Properties\" in the properties panel.")
+            return()
+         }
+
          dimNetworkLabel = core.dim(networkLabel)
 
          html = "<!DOCTYPE html>"
@@ -596,6 +626,11 @@
       }
 
       function showClustering() {
+         if (!calculateProperties.checked) {
+            system.showMessageDialog("To generate this report it is necessary to check the option \"Calculate Properties\" in the properties panel.")
+            return()
+         }
+
          dimNetworkLabel = core.dim(networkLabel)
 
          html = "<!DOCTYPE html>"
@@ -622,6 +657,11 @@
       }
 
       function showCentralities() {
+         if (!calculateProperties.checked) {
+            system.showMessageDialog("To generate this report it is necessary to check the option \"Calculate Properties\" in the properties panel.")
+            return()
+         }
+
          dimNetworkLabel = core.dim(networkLabel)
 
          networkCentrality = cna.getCentrality(adj, networkShortestPath, property.directed)

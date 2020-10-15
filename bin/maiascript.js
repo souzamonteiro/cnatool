@@ -4974,7 +4974,7 @@ function MaiaCompiler() {
                     var returnValue = this.parse(node, nodeInfo);
                     js += 'return (' + returnValue + ')';
                 } else {
-                    js += 'return ()';
+                    js += 'return';
                 }
             }
         } else if ('throw' in mil) {
