@@ -425,22 +425,9 @@
                "directed": false
             }
 
-            if (fileObject.fileExtension == "gexf") {
-               sigmaConfig = {
-                  "container": "container"
-               }
-               sigma.parsers.gexf(fileObject.fullFileName, sigmaConfig)
-               network = {
-                  "nodes": graph.graph.nodes(),
-                  "edges": graph.graph.edges()
-               }
-               fileObject.fileData = cna.jsonToPajekFile(network)
-               adj = cna.parsePajekFile(fileObject.fileData, property)
-            } elseif (fileObject.fileExtension == "json") {
-               sigmaConfig = {
-                  "container": "container"
-               }
-               sigma.parsers.json(fileObject.fullFileName, sigmaConfig)
+            if (fileObject.fileExtension == "json") {
+               fileData = JSON.parse(fileObject.fileData)
+               showGraph(fileData)
                network = {
                   "nodes": graph.graph.nodes(),
                   "edges": graph.graph.edges()
@@ -453,13 +440,13 @@
                showGraph(fileData)
             } else {
                system.showMessageDialog("File format not supported!")
-               return()
             }
+            if (core.includes(["json", "net"], fileObject.fileExtension)) {
+               directedGraph = document.getElementById("directedGraph")
+               directedGraph.checked = property.directed
 
-            directedGraph = document.getElementById("directedGraph")
-            directedGraph.checked = property.directed
-
-            showProperties(adj, property)
+               showProperties(adj, property)
+            }
          }
 
          system.uploadFile(fileObject, callBack)

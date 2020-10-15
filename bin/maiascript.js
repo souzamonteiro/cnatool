@@ -4853,24 +4853,24 @@ function MaiaCompiler() {
                 if ('catch' in node) {
                     nodeInfo.parentNode = 'catch';
                     var nodeCatch = node['catch'];
-                    if ('expression' in node) {
+                    if ('expression' in nodeCatch) {
+                        var nodeExpression = nodeCatch['expression'];
                         if (Array.isArray(nodeExpression)) {
-                            var body = '';
-                            var nodeExpression = nodeCatch['expression'];
+                            var _catch = '';
                             var nodeVar = {
                                 'expression': nodeExpression[0]
                             };
                             var catchVar = this.parse(nodeVar, nodeInfo);
-
+                            
                             for (var i = 1; i < nodeExpression.length; i++) {
                                 var commandLine = nodeExpression[i];
                                 var bodyExpression = {
                                     'expression': commandLine
                                 };
-                                body += this.parse(bodyExpression, nodeInfo) + ';';
+                                _catch += this.parse(bodyExpression, nodeInfo) + ';';
                             }
                         }
-                        js += ' catch (' + catchVar + ') {' + body + '}';
+                        js += ' catch (' + catchVar + ') {' + _catch + '}';
                     }
                 }
             }
@@ -4885,11 +4885,9 @@ function MaiaCompiler() {
 
             if (typeof node != 'undefined') {
                 if ('expression' in node) {
-                    var body = '';
                     var nodeExpression = node['expression'];
                     if (Array.isArray(nodeExpression)) {
                         var _script = '';
-                        var nodeExpression = node['expression'];
                         var nodeTimes = {
                             'expression': nodeExpression[0]
                         };
@@ -4917,10 +4915,10 @@ function MaiaCompiler() {
                 if ('catch' in node) {
                     nodeInfo.parentNode = 'catch';
                     var nodeCatch = node['catch'];
-                    if ('expression' in node) {
+                    if ('expression' in nodeCatch) {
+                        var nodeExpression = nodeCatch['expression'];
                         if (Array.isArray(nodeExpression)) {
                             var _catch = '';
-                            var nodeExpression = nodeCatch['expression'];
                             var nodeVar = {
                                 'expression': nodeExpression[0]
                             };
@@ -5523,7 +5521,7 @@ function Core() {
      * This property needs to be updated
      * with each new version of MaiaStudio.
      */
-    this.version = "1.8.2";
+    this.version = "1.8.3";
 
     this.testResult = {
         "expected": {},
