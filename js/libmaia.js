@@ -5520,7 +5520,7 @@ function Core() {
      * This property needs to be updated
      * with each new version of MaiaStudio.
      */
-    this.version = "1.8.4";
+    this.version = "1.8.5";
 
     this.testResult = {
         "expected": {},
@@ -5544,6 +5544,22 @@ function Core() {
     /*
      * The following functions allow you to manipulate MaiaScript objects.
      */
+
+     /**
+     * Copies a matrix.
+     * @param {array}  obj - Matrix to be copied.
+     * @return {array}  A copy of the matrix.
+     */
+    this.copyMatrix = function(obj)
+    {
+        var newMatrix = [];
+
+        for (var i = 0; i < obj.length; i++) {
+            newMatrix[i] = obj[i].slice();
+        }
+
+        return newMatrix;
+    }
 
     /**
      * Returns the character at the indicated position.
@@ -5636,7 +5652,7 @@ function Core() {
             var m = dim[0];
             var n = dim[1];
             // Convert to the diagonal equivalent matrix.
-            var cpy = obj.slice();
+            var cpy = this.copyMatrix(obj);
             mtx = core.ident(m);
             for (var j = 0; j < m; j++) {
                 if (cpy[j][j] != 0) {
@@ -5681,7 +5697,7 @@ function Core() {
             var m = dim[0];
             var n = dim[1];
             // Convert to the diagonal equivalent matrix.
-            var cpy = obj.slice();
+            var cpy = this.copyMatrix(obj);
             for (var j = 0; j < m; j++) {
                 if (cpy[j][j] != 0) {
                     for (var i = 0; i < m; i++) {
@@ -5836,7 +5852,7 @@ function Core() {
             var m = dim[0];
             var n = dim[1];
             // Convert to the diagonal equivalent matrix.
-            var cpy = obj.slice();
+            var cpy = this.copyMatrix(obj);
             mtx = core.ident(m);
             for (var j = 0; j < m; j++) {
                 if (cpy[j][j] != 0) {
@@ -7682,7 +7698,7 @@ function ANN() {
         if (typeof interval == 'undefined') {
             interval = 0;
         }
-        var ANN = ANNMatrix.slice();
+        var ANN = core.copyMatrix(ANNMatrix);
         var dimIn = core.dim(inMatrix);
         var dimOut = core.dim(outMatrix);
         var input = core.matrix(0.0, 1, dimIn[1]);
@@ -7731,12 +7747,12 @@ function ANN() {
                 correctnessMatrix[epochs][0] = RSS;
                 correctnessMatrix[epochs][1] = correctness;
                 if (hits == dimIn[0]) {
-                    ANNMatrix = ANN.slice();
+                    ANNMatrix = core.copyMatrix(ANN);
                     result = [epochs, RSS, correctnessMatrix];
                     return result;
                 }
                 if (correctness >= minimumCorrectness) {
-                    ANNMatrix = ANN.slice();
+                    ANNMatrix = core.copyMatrix(ANN);
                     result = [epochs, RSS, correctnessMatrix];
                     return result;
                 }
@@ -8880,7 +8896,7 @@ function Matrix() {
             var m = dim[0];
             var n = dim[1];
             // Convert to the triangular equivalent matrix.
-            var cpy = mtx.slice();
+            var cpy = core.copyMatrix(mtx);
             for (k = 0; k < m - 1; k++) {
                 for (i = k + 1; i < m; i++) {
                     var scale = -cpy[i][k] / cpy[k][k]

@@ -746,12 +746,12 @@ namespace cna {
             adj[0, i] = 0
             adj[i, 0] = 0
         } 
-        geodesic = adj.slice()
+        geodesic = core.copyMatrix(adj)
         if ((adj == matrixZero) || (adj == matrixOne)) {
             return(geodesic)
         }
-        old = adj.slice()
-        prod = adj.slice()
+        old = core.copyMatrix(adj)
+        prod = core.copyMatrix(adj)
         order = 1
         while (true) {
             prod = this.getTransitiveClosure(adj, old)
@@ -902,7 +902,7 @@ namespace cna {
         dimGeodesic = core.dim(geodesic)
         dimI = dimGeodesic[0]
         dimJ = dimGeodesic[1]
-        gjk = adj.slice()
+        gjk = core.copyMatrix(adj)
         for (i = 0; i < dimI; i = i + 1) {
             gjk[0, i] = 0
             gjk[i, 0] = 0
