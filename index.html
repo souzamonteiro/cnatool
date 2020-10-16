@@ -220,25 +220,25 @@
          networkLabel = cna.getLabels(adj)
          networkDensity = cna.getDensity(adj, property.directed)
 
-         vertices = document.getElementById("vertices")
-         edges = document.getElementById("edges")
-         density = document.getElementById("density")
-         averageDegree = document.getElementById("averageDegree")
-         averageClusteringCoefficient = document.getElementById("averageClusteringCoefficient")
-         averageShortestPath = document.getElementById("averageShortestPath")
-         diameter = document.getElementById("diameter")
-         globalEfficiency = document.getElementById("globalEfficiency")
+         verticesElement = document.getElementById("vertices")
+         edgesElement = document.getElementById("edges")
+         densityElement = document.getElementById("density")
+         averageDegreeElement = document.getElementById("averageDegree")
+         averageClusteringCoefficientElement = document.getElementById("averageClusteringCoefficient")
+         averageShortestPathElement = document.getElementById("averageShortestPath")
+         diameterElement = document.getElementById("diameter")
+         globalEfficiencyElement = document.getElementById("globalEfficiency")
          
-         vertices.innerHTML = networkVertices
-         edges.innerHTML = networkEdges
-         density.innerHTML = string.sprintf("%.4f", networkDensity)
+         verticesElement.innerHTML = networkVertices
+         edgesElement.innerHTML = networkEdges
+         densityElement.innerHTML = string.sprintf("%.4f", networkDensity)
          
          if (!calculateProperties.checked) {
-            averageDegree.innerHTML = ""
-            averageClusteringCoefficient.innerHTML = ""
-            averageShortestPath.innerHTML = ""
-            diameter.innerHTML = ""
-            globalEfficiency.innerHTML = ""
+            averageDegreeElement.innerHTML = ""
+            averageClusteringCoefficientElement.innerHTML = ""
+            averageShortestPathElement.innerHTML = ""
+            diameterElement.innerHTML = ""
+            globalEfficiencyElement.innerHTML = ""
             return()
          }
 
@@ -252,11 +252,11 @@
          networkVertexEfficiency = cna.getVertexEfficiency(networkShortestPath)
          networkGlobalEfficiency = cna.getGlobalEfficiency(networkVertexEfficiency)
          
-         averageDegree.innerHTML = string.sprintf("%.4f", networkAverageDegree)
-         averageClusteringCoefficient.innerHTML = string.sprintf("%.4f", networkAverageClustering)
-         averageShortestPath.innerHTML = string.sprintf("%.4f", networkAverageShortestPath)
-         diameter.innerHTML = networkDiameter
-         globalEfficiency.innerHTML = string.sprintf("%.4f", networkGlobalEfficiency)
+         averageDegreeElement.innerHTML = string.sprintf("%.4f", networkAverageDegree)
+         averageClusteringCoefficientElement.innerHTML = string.sprintf("%.4f", networkAverageClustering)
+         averageShortestPathElement.innerHTML = string.sprintf("%.4f", networkAverageShortestPath)
+         diameterElement.innerHTML = networkDiameter
+         globalEfficiencyElement.innerHTML = string.sprintf("%.4f", networkGlobalEfficiency)
       }
 
       function newFile() {
@@ -501,14 +501,14 @@
             return()
          }
 
-         vertices = document.getElementById("vertices")
-         edges = document.getElementById("edges")
-         density = document.getElementById("density")
-         averageDegree = document.getElementById("averageDegree")
-         averageClusteringCoefficient = document.getElementById("averageClusteringCoefficient")
-         averageShortestPath = document.getElementById("averageShortestPath")
-         diameter = document.getElementById("diameter")
-         globalEfficiency = document.getElementById("globalEfficiency")
+         verticesElement = document.getElementById("vertices")
+         edgesElement = document.getElementById("edges")
+         densityElement = document.getElementById("density")
+         averageDegreeElement = document.getElementById("averageDegree")
+         averageClusteringCoefficientElement = document.getElementById("averageClusteringCoefficient")
+         averageShortestPathElement = document.getElementById("averageShortestPath")
+         diameterElement = document.getElementById("diameter")
+         globalEfficiencyElement = document.getElementById("globalEfficiency")
          
          networkDegreeDistribution = cna.getDegreeDistribution(networkDegree)
          dimNetworkDegreeDistribution = core.dim(networkDegreeDistribution)
@@ -518,14 +518,14 @@
          html = html + "<body>"
          html = html + "<table style=\"margin-left: auto; margin-right: auto; border: 1px solid black;\">"
          html = html + "<caption style=\"text-align: center; font-family: Arial; font-weight: bold;\">Network Properties</caption>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Vertices:</th><td style=\"text-align: right; padding: 2px;\">" + vertices.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Edges:</th><td style=\"text-align: right; padding: 2px;\">" + edges.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Density:</th><td style=\"text-align: right; padding: 2px;\">" + density.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Degree:</th><td style=\"text-align: right; padding: 2px;\">" + averageDegree.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Clustering Coef.:</th><td style=\"text-align: right; padding: 2px;\">" + averageClusteringCoefficient.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Shortest Path:</th><td style=\"text-align: right; padding: 2px;\">" + averageShortestPath.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Diameter:</th><td style=\"text-align: right; padding: 2px;\">" + diameter.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Global Efficiency:</th><td style=\"text-align: right; padding: 2px;\">" + globalEfficiency.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Vertices:</th><td style=\"text-align: right; padding: 2px;\">" + verticesElement.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Edges:</th><td style=\"text-align: right; padding: 2px;\">" + edgesElement.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Density:</th><td style=\"text-align: right; padding: 2px;\">" + densityElement.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Degree:</th><td style=\"text-align: right; padding: 2px;\">" + averageDegreeElement.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Clustering Coef.:</th><td style=\"text-align: right; padding: 2px;\">" + averageClusteringCoefficientElement.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Shortest Path:</th><td style=\"text-align: right; padding: 2px;\">" + averageShortestPathElement.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Diameter:</th><td style=\"text-align: right; padding: 2px;\">" + diameterElement.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Global Efficiency:</th><td style=\"text-align: right; padding: 2px;\">" + globalEfficiencyElement.innerHTML + "</td></tr>"
          html = html + "</table>"
          html = html + "<br />"
          html = html + "<table style=\"margin-left: auto; margin-right: auto; border: 1px solid black;\">"
@@ -547,14 +547,14 @@
             return()
          }
 
-         vertices = document.getElementById("vertices")
-         edges = document.getElementById("edges")
-         density = document.getElementById("density")
-         averageDegree = document.getElementById("averageDegree")
-         averageClusteringCoefficient = document.getElementById("averageClusteringCoefficient")
-         averageShortestPath = document.getElementById("averageShortestPath")
-         diameter = document.getElementById("diameter")
-         globalEfficiency = document.getElementById("globalEfficiency")
+         verticesElement = document.getElementById("vertices")
+         edgesElement = document.getElementById("edges")
+         densityElement = document.getElementById("density")
+         averageDegreeElement = document.getElementById("averageDegree")
+         averageClusteringCoefficientElement = document.getElementById("averageClusteringCoefficient")
+         averageShortestPathElement = document.getElementById("averageShortestPath")
+         diameterElement = document.getElementById("diameter")
+         globalEfficiencyElement = document.getElementById("globalEfficiency")
          
          networkDegreeDistribution = cna.getDegreeDistribution(networkDegree)
          dimNetworkDegreeDistribution = core.dim(networkDegreeDistribution)
@@ -564,14 +564,14 @@
          html = html + "<body>"
          html = html + "<table style=\"margin-left: auto; margin-right: auto; border: 1px solid black;\">"
          html = html + "<caption style=\"text-align: center; font-family: Arial; font-weight: bold;\">Network Properties</caption>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Vertices:</th><td style=\"text-align: right; padding: 2px;\">" + vertices.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Edges:</th><td style=\"text-align: right; padding: 2px;\">" + edges.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Density:</th><td style=\"text-align: right; padding: 2px;\">" + density.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Degree:</th><td style=\"text-align: right; padding: 2px;\">" + averageDegree.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Clustering Coef.:</th><td style=\"text-align: right; padding: 2px;\">" + averageClusteringCoefficient.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Shortest Path:</th><td style=\"text-align: right; padding: 2px;\">" + averageShortestPath.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Diameter:</th><td style=\"text-align: right; padding: 2px;\">" + diameter.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Global Efficiency:</th><td style=\"text-align: right; padding: 2px;\">" + globalEfficiency.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Vertices:</th><td style=\"text-align: right; padding: 2px;\">" + verticesElement.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Edges:</th><td style=\"text-align: right; padding: 2px;\">" + edgesElement.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Density:</th><td style=\"text-align: right; padding: 2px;\">" + densityElement.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Degree:</th><td style=\"text-align: right; padding: 2px;\">" + averageDegreeElement.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Clustering Coef.:</th><td style=\"text-align: right; padding: 2px;\">" + averageClusteringCoefficientElement.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Shortest Path:</th><td style=\"text-align: right; padding: 2px;\">" + averageShortestPathElement.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Diameter:</th><td style=\"text-align: right; padding: 2px;\">" + diameterElement.innerHTML + "</td></tr>"
+         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Global Efficiency:</th><td style=\"text-align: right; padding: 2px;\">" + globalEfficiencyElement.innerHTML + "</td></tr>"
          html = html + "</table>"
          html = html + "<br />"
          html = html + "<table style=\"margin-left: auto; margin-right: auto; border: 1px solid black;\">"
