@@ -9,6 +9,7 @@ cp build/cna.js js/
 
 cat src/Shebang.js js/libmaia.js src/cna.js src/CNATool.js > build/cnatool.js
 
+cp build/cnatool.js js/
 cp build/cnatool.js bin/
 
 chmod 755 bin/*

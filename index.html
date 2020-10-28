@@ -18,6 +18,7 @@
    <script src="js/plugins/sigma.exporters.svg.min.js"></script>
    <script src="js/plugins/sigma.plugins.dragNodes.min.js"></script>
    <script src="js/maiascript.js"></script>
+   <script src="js/cnatool.js"></script>
    <title>Complex Network Analysis Tool</title>
    <style type="text/css">
       #container {
@@ -101,13 +102,6 @@
          <div id="container"></div>
       </div>
    </div>
-   <!--
-      It is only possible to load MaiaScript code using the HTTP protocol,
-      as the browser does not allow reading local files.
-      Then we use the compiled version of the library.
-   -->
-   <!-- <script type="text/maiascript" src="./maia/cna/cna.maia"></script> -->
-   <script type="text/javascript" src="js/cna.js"></script>
    <script type="text/javascript">
       var graph;
 
@@ -180,7 +174,7 @@
          }
       }
    </script>
-   <!-- However, we can compile MaiaScript code while running the scripts on the page. -->
+   <!-- We can compile MaiaScript code while running the scripts on the page. -->
    <script type="text/maiascript">
       fileObject = {
          "fullFileName": "",
@@ -190,35 +184,39 @@
       }
       
       property = {
+         "adj": [],
          "n": 0,
          "m": 0,
-         "directed": false
+         "directed": false,
+         "density": 0,
+         "networkLabel": [],
+         "networkDegree": [],
+         "networkAverageDegree": 0,
+         "networkDegreeDistribution": [],
+         "networkDensity": 0,
+         "networkClustering": [],
+         "networkAverageClustering": 0,
+         "networkShortestPath": [],
+         "networkAverageShortestPath": 0,
+         "networkDiameter": 0,
+         "networkCentrality": [],
+         "networkVertexEfficiency": [],
+         "networkGlobalEfficiency": 0
       }
-      
-      adj = []
-      networkLabel = []
-      networkDegree = []
-      networkDegreeDistribution = []
-      networkClustering = []
-      networkShortestPath = []
-      networkCentrality = []
-      networkVertexEfficiency = []
-      
+
       function updateProperties() {
          directedGraph = document.getElementById("directedGraph")
 
          property.directed = directedGraph.checked
-         showProperties(adj, property)
+         
+         showProperties(property)
       }
 
-      function showProperties(adj, property) {
+      function showProperties(property) {
          calculateProperties = document.getElementById("calculateProperties")
 
-         networkVertices = property.n
-         networkEdges = property.m
-         
-         networkLabel = cna.getLabels(adj)
-         networkDensity = cna.getDensity(adj, property.directed)
+         property.networkLabel = cna.getLabels(property.adj)
+         property.networkDensity = cna.getDensity(property.adj, property.directed)
 
          verticesElement = document.getElementById("vertices")
          edgesElement = document.getElementById("edges")
@@ -229,9 +227,9 @@
          diameterElement = document.getElementById("diameter")
          globalEfficiencyElement = document.getElementById("globalEfficiency")
          
-         verticesElement.innerHTML = networkVertices
-         edgesElement.innerHTML = networkEdges
-         densityElement.innerHTML = string.sprintf("%.4f", networkDensity)
+         verticesElement.innerHTML = property.n
+         edgesElement.innerHTML = property.m
+         densityElement.innerHTML = string.sprintf("%.4f", property.networkDensity)
          
          if (!calculateProperties.checked) {
             averageDegreeElement.innerHTML = ""
@@ -242,21 +240,13 @@
             return()
          }
 
-         networkDegree = cna.getDegrees(adj, property.directed)
-         networkAverageDegree = cna.getAverageDegree(networkDegree)
-         networkClustering = cna.getClustering(adj, property.directed)
-         networkAverageClustering = cna.getAverageClustering(networkClustering)
-         networkShortestPath = cna.getShortestPath(adj)
-         networkAverageShortestPath = cna.getAverageShortestPath(networkShortestPath)
-         networkDiameter = cna.getDiameter(networkShortestPath)
-         networkVertexEfficiency = cna.getVertexEfficiency(networkShortestPath)
-         networkGlobalEfficiency = cna.getGlobalEfficiency(networkVertexEfficiency)
-         
-         averageDegreeElement.innerHTML = string.sprintf("%.4f", networkAverageDegree)
-         averageClusteringCoefficientElement.innerHTML = string.sprintf("%.4f", networkAverageClustering)
-         averageShortestPathElement.innerHTML = string.sprintf("%.4f", networkAverageShortestPath)
-         diameterElement.innerHTML = networkDiameter
-         globalEfficiencyElement.innerHTML = string.sprintf("%.4f", networkGlobalEfficiency)
+         cnatool.calculateProperties(property)
+
+         averageDegreeElement.innerHTML = string.sprintf("%.4f", property.networkAverageDegree)
+         averageClusteringCoefficientElement.innerHTML = string.sprintf("%.4f", property.networkAverageClustering)
+         averageShortestPathElement.innerHTML = string.sprintf("%.4f", property.networkAverageShortestPath)
+         diameterElement.innerHTML = property.networkDiameter
+         globalEfficiencyElement.innerHTML = string.sprintf("%.4f", property.networkGlobalEfficiency)
       }
 
       function newFile() {
@@ -267,18 +257,33 @@
          n = core.toNumber(system.showInputDialog("Number of vertices:", "0"))
          
          property = {
+            "adj": [],
             "n": 0,
             "m": 0,
-            "directed": false
+            "directed": false,
+            "density": 0,
+            "networkLabel": [],
+            "networkDegree": [],
+            "networkAverageDegree": 0,
+            "networkDegreeDistribution": [],
+            "networkDensity": 0,
+            "networkClustering": [],
+            "networkAverageClustering": 0,
+            "networkShortestPath": [],
+            "networkAverageShortestPath": 0,
+            "networkDiameter": 0,
+            "networkCentrality": [],
+            "networkVertexEfficiency": [],
+            "networkGlobalEfficiency": 0
          }
-         
-         adj = cna.createNetwork("complete", n)
+
+         property.adj = cna.createNetwork("complete", n)
          
          fileObject = {
             "fullFileName": "complete.net",
             "fileName": "complete",
             "fileExtension": "net",
-            "fileData": cna.createPajekFile(adj, "edges")
+            "fileData": cna.createPajekFile(property.adj, "edges")
          }
          
          fileData = cna.pajekFileToJson(fileObject.fileData, property)
@@ -287,7 +292,7 @@
          directedGraph = document.getElementById("directedGraph")
          directedGraph.checked = property.directed
 
-         showProperties(adj, property)
+         showProperties(property)
          
          algorithm = document.getElementById("algorithm")
          algorithm.onchange()
@@ -300,9 +305,24 @@
          d = 0
          
          property = {
+            "adj": [],
             "n": 0,
             "m": 0,
-            "directed": false
+            "directed": false,
+            "density": 0,
+            "networkLabel": [],
+            "networkDegree": [],
+            "networkAverageDegree": 0,
+            "networkDegreeDistribution": [],
+            "networkDensity": 0,
+            "networkClustering": [],
+            "networkAverageClustering": 0,
+            "networkShortestPath": [],
+            "networkAverageShortestPath": 0,
+            "networkDiameter": 0,
+            "networkCentrality": [],
+            "networkVertexEfficiency": [],
+            "networkGlobalEfficiency": 0
          }
          
          if (m == 0) {
@@ -312,13 +332,13 @@
             }
          }
 
-         adj = cna.createNetwork("random", n, m, p, d)
+         property.adj = cna.createNetwork("random", n, m, p, d)
          
          fileObject = {
             "fullFileName": "random.net",
             "fileName": "random",
             "fileExtension": "net",
-            "fileData": cna.createPajekFile(adj, "edges")
+            "fileData": cna.createPajekFile(property.adj, "edges")
          }
          
          fileData = cna.pajekFileToJson(fileObject.fileData, property)
@@ -327,7 +347,7 @@
          directedGraph = document.getElementById("directedGraph")
          directedGraph.checked = property.directed
 
-         showProperties(adj, property)
+         showProperties(property)
 
          algorithm = document.getElementById("algorithm")
          algorithm.onchange()
@@ -340,18 +360,33 @@
          p = core.toNumber(system.showInputDialog("Edge probability:", "0"))
          
          property = {
+            "adj": [],
             "n": 0,
             "m": 0,
-            "directed": false
+            "directed": false,
+            "density": 0,
+            "networkLabel": [],
+            "networkDegree": [],
+            "networkAverageDegree": 0,
+            "networkDegreeDistribution": [],
+            "networkDensity": 0,
+            "networkClustering": [],
+            "networkAverageClustering": 0,
+            "networkShortestPath": [],
+            "networkAverageShortestPath": 0,
+            "networkDiameter": 0,
+            "networkCentrality": [],
+            "networkVertexEfficiency": [],
+            "networkGlobalEfficiency": 0
          }
          
-         adj = cna.createNetwork("scalefree", n, m, p, d)
+         property.adj = cna.createNetwork("scalefree", n, m, p, d)
          
          fileObject = {
             "fullFileName": "scalefree.net",
             "fileName": "scalefree",
             "fileExtension": "net",
-            "fileData": cna.createPajekFile(adj, "edges")
+            "fileData": cna.createPajekFile(property.adj, "edges")
          }
          
          fileData = cna.pajekFileToJson(fileObject.fileData, property)
@@ -360,7 +395,7 @@
          directedGraph = document.getElementById("directedGraph")
          directedGraph.checked = property.directed
 
-         showProperties(adj, property)
+         showProperties(property)
 
          algorithm = document.getElementById("algorithm")
          algorithm.onchange()
@@ -373,18 +408,33 @@
          p = core.toNumber(system.showInputDialog("Edge probability:", "0"))
          
          property = {
+            "adj": [],
             "n": 0,
             "m": 0,
-            "directed": false
+            "directed": false,
+            "density": 0,
+            "networkLabel": [],
+            "networkDegree": [],
+            "networkAverageDegree": 0,
+            "networkDegreeDistribution": [],
+            "networkDensity": 0,
+            "networkClustering": [],
+            "networkAverageClustering": 0,
+            "networkShortestPath": [],
+            "networkAverageShortestPath": 0,
+            "networkDiameter": 0,
+            "networkCentrality": [],
+            "networkVertexEfficiency": [],
+            "networkGlobalEfficiency": 0
          }
          
-         adj = cna.createNetwork("smallworld", n, m, p, d)
+         property.adj = cna.createNetwork("smallworld", n, m, p, d)
          
          fileObject = {
             "fullFileName": "smallworld.net",
             "fileName": "smallworld",
             "fileExtension": "net",
-            "fileData": cna.createPajekFile(adj, "edges")
+            "fileData": cna.createPajekFile(property.adj, "edges")
          }
          
          fileData = cna.pajekFileToJson(fileObject.fileData, property)
@@ -393,7 +443,7 @@
          directedGraph = document.getElementById("directedGraph")
          directedGraph.checked = property.directed
 
-         showProperties(adj, property)
+         showProperties(property)
 
          algorithm = document.getElementById("algorithm")
          algorithm.onchange()
@@ -406,18 +456,33 @@
          p = core.toNumber(system.showInputDialog("Edge probability:", "0"))
          
          property = {
+            "adj": [],
             "n": 0,
             "m": 0,
-            "directed": false
+            "directed": false,
+            "density": 0,
+            "networkLabel": [],
+            "networkDegree": [],
+            "networkAverageDegree": 0,
+            "networkDegreeDistribution": [],
+            "networkDensity": 0,
+            "networkClustering": [],
+            "networkAverageClustering": 0,
+            "networkShortestPath": [],
+            "networkAverageShortestPath": 0,
+            "networkDiameter": 0,
+            "networkCentrality": [],
+            "networkVertexEfficiency": [],
+            "networkGlobalEfficiency": 0
          }
          
-         adj = cna.createNetwork("hybrid", n, m, p, d)
+         property.adj = cna.createNetwork("hybrid", n, m, p, d)
          
          fileObject = {
             "fullFileName": "hybrid.net",
             "fileName": "hybrid",
             "fileExtension": "net",
-            "fileData": cna.createPajekFile(adj, "edges")
+            "fileData": cna.createPajekFile(property.adj, "edges")
          }
          
          fileData = cna.pajekFileToJson(fileObject.fileData, property)
@@ -426,7 +491,7 @@
          directedGraph = document.getElementById("directedGraph")
          directedGraph.checked = property.directed
 
-         showProperties(adj, property)
+         showProperties(property)
 
          algorithm = document.getElementById("algorithm")
          algorithm.onchange()
@@ -435,9 +500,24 @@
       function openFile() {
          function callBack(fileObject) {
             property = {
+               "adj": [],
                "n": 0,
                "m": 0,
-               "directed": false
+               "directed": false,
+               "density": 0,
+               "networkLabel": [],
+               "networkDegree": [],
+               "networkAverageDegree": 0,
+               "networkDegreeDistribution": [],
+               "networkDensity": 0,
+               "networkClustering": [],
+               "networkAverageClustering": 0,
+               "networkShortestPath": [],
+               "networkAverageShortestPath": 0,
+               "networkDiameter": 0,
+               "networkCentrality": [],
+               "networkVertexEfficiency": [],
+               "networkGlobalEfficiency": 0
             }
 
             if (fileObject.fileExtension == "json") {
@@ -448,10 +528,10 @@
                   "edges": graph.graph.edges()
                }
                fileObject.fileData = cna.jsonToPajekFile(network)
-               adj = cna.parsePajekFile(fileObject.fileData, property)
+               property.adj = cna.parsePajekFile(fileObject.fileData, property)
             } elseif (fileObject.fileExtension == "net") {
                fileData = cna.pajekFileToJson(fileObject.fileData)
-               adj = cna.parsePajekFile(fileObject.fileData, property)
+               property.adj = cna.parsePajekFile(fileObject.fileData, property)
                showGraph(fileData)
             } else {
                system.showMessageDialog("File format not supported!")
@@ -460,7 +540,7 @@
                directedGraph = document.getElementById("directedGraph")
                directedGraph.checked = property.directed
 
-               showProperties(adj, property)
+               showProperties(property)
             }
          }
 
@@ -501,40 +581,10 @@
             return()
          }
 
-         verticesElement = document.getElementById("vertices")
-         edgesElement = document.getElementById("edges")
-         densityElement = document.getElementById("density")
-         averageDegreeElement = document.getElementById("averageDegree")
-         averageClusteringCoefficientElement = document.getElementById("averageClusteringCoefficient")
-         averageShortestPathElement = document.getElementById("averageShortestPath")
-         diameterElement = document.getElementById("diameter")
-         globalEfficiencyElement = document.getElementById("globalEfficiency")
-         
-         networkDegreeDistribution = cna.getDegreeDistribution(networkDegree)
-         dimNetworkDegreeDistribution = core.dim(networkDegreeDistribution)
-
          html = "<!DOCTYPE html>"
          html = html + "<html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Network Properties</title></head>"
          html = html + "<body>"
-         html = html + "<table style=\"margin-left: auto; margin-right: auto; border: 1px solid black;\">"
-         html = html + "<caption style=\"text-align: center; font-family: Arial; font-weight: bold;\">Network Properties</caption>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Vertices:</th><td style=\"text-align: right; padding: 2px;\">" + verticesElement.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Edges:</th><td style=\"text-align: right; padding: 2px;\">" + edgesElement.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Density:</th><td style=\"text-align: right; padding: 2px;\">" + densityElement.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Degree:</th><td style=\"text-align: right; padding: 2px;\">" + averageDegreeElement.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Clustering Coef.:</th><td style=\"text-align: right; padding: 2px;\">" + averageClusteringCoefficientElement.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Shortest Path:</th><td style=\"text-align: right; padding: 2px;\">" + averageShortestPathElement.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Diameter:</th><td style=\"text-align: right; padding: 2px;\">" + diameterElement.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Global Efficiency:</th><td style=\"text-align: right; padding: 2px;\">" + globalEfficiencyElement.innerHTML + "</td></tr>"
-         html = html + "</table>"
-         html = html + "<br />"
-         html = html + "<table style=\"margin-left: auto; margin-right: auto; border: 1px solid black;\">"
-         html = html + "<caption style=\"text-align: center; font-family: Arial; font-weight: bold;\">Degree Disribuion</caption>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Cluster</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Frequency</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Frequency(%)</th></tr>"
-         for (i = 0; i < dimNetworkDegreeDistribution[0]; i = i + 1) {
-            html = html + "<tr><td style=\"text-align: right; padding: 2px;\">" + core.toString(networkDegreeDistribution[i, 0]) + "</td><td style=\"text-align: right; padding: 2px;\">" + core.toString(networkDegreeDistribution[i, 1]) + "</td><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.2f", networkDegreeDistribution[i, 2]) + "</td></tr>"
-         }
-         html = html + "</table>"
+         html = html + cnatool.getSummaryReport(property)
          html = html + "</body>"
          html = html + "</html>"
 
@@ -547,40 +597,10 @@
             return()
          }
 
-         verticesElement = document.getElementById("vertices")
-         edgesElement = document.getElementById("edges")
-         densityElement = document.getElementById("density")
-         averageDegreeElement = document.getElementById("averageDegree")
-         averageClusteringCoefficientElement = document.getElementById("averageClusteringCoefficient")
-         averageShortestPathElement = document.getElementById("averageShortestPath")
-         diameterElement = document.getElementById("diameter")
-         globalEfficiencyElement = document.getElementById("globalEfficiency")
-         
-         networkDegreeDistribution = cna.getDegreeDistribution(networkDegree)
-         dimNetworkDegreeDistribution = core.dim(networkDegreeDistribution)
-         
          html = "<!DOCTYPE html>"
          html = html + "<html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Network Properties</title></head>"
          html = html + "<body>"
-         html = html + "<table style=\"margin-left: auto; margin-right: auto; border: 1px solid black;\">"
-         html = html + "<caption style=\"text-align: center; font-family: Arial; font-weight: bold;\">Network Properties</caption>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Vertices:</th><td style=\"text-align: right; padding: 2px;\">" + verticesElement.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Edges:</th><td style=\"text-align: right; padding: 2px;\">" + edgesElement.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Density:</th><td style=\"text-align: right; padding: 2px;\">" + densityElement.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Degree:</th><td style=\"text-align: right; padding: 2px;\">" + averageDegreeElement.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Clustering Coef.:</th><td style=\"text-align: right; padding: 2px;\">" + averageClusteringCoefficientElement.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Avg. Shortest Path:</th><td style=\"text-align: right; padding: 2px;\">" + averageShortestPathElement.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Diameter:</th><td style=\"text-align: right; padding: 2px;\">" + diameterElement.innerHTML + "</td></tr>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Global Efficiency:</th><td style=\"text-align: right; padding: 2px;\">" + globalEfficiencyElement.innerHTML + "</td></tr>"
-         html = html + "</table>"
-         html = html + "<br />"
-         html = html + "<table style=\"margin-left: auto; margin-right: auto; border: 1px solid black;\">"
-         html = html + "<caption style=\"text-align: center; font-family: Arial; font-weight: bold;\">Degree Disribuion</caption>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Cluster</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Frequency</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Frequency(%)</th></tr>"
-         for (i = 0; i < dimNetworkDegreeDistribution[0]; i = i + 1) {
-            html = html + "<tr><td style=\"text-align: right; padding: 2px;\">" + core.toString(networkDegreeDistribution[i, 0]) + "</td><td style=\"text-align: right; padding: 2px;\">" + core.toString(networkDegreeDistribution[i, 1]) + "</td><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.2f", networkDegreeDistribution[i, 2]) + "</td></tr>"
-         }
-         html = html + "</table>"
+         html = html + cnatool.getSummaryReport(property)
          html = html + "</body>"
          html = html + "</html>"
          
@@ -599,19 +619,11 @@
             system.showMessageDialog("To generate this report it is necessary to check the option \"Calculate Properties\" in the properties panel.")
             return()
          }
-
-         dimNetworkLabel = core.dim(networkLabel)
-
+         
          html = "<!DOCTYPE html>"
          html = html + "<html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Vertices Degrees</title></head>"
          html = html + "<body>"
-         html = html + "<table style=\"margin-left: auto; margin-right: auto; border: 1px solid black;\">"
-         html = html + "<caption style=\"text-align: center; font-family: Arial; font-weight: bold;\">Vertices Degrees</caption>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Vertex</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Out-degree</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">In-degree</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Degree</th></tr>"
-         for (i = 1; i < dimNetworkLabel[0]; i = i + 1) {
-            html = html + "<tr><td style=\"text-align: right; padding: 2px;\">" + networkLabel[i] + "</td><td style=\"text-align: right; padding: 2px;\">" + core.toString(networkDegree[i, 0]) + "</td><td style=\"text-align: right; padding: 2px;\">" + core.toString(networkDegree[i, 1]) + "</td><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.4f", networkDegree[i, 2]) + "</td></tr>"
-         }
-         html = html + "</table>"
+         html = html + cnatool.getDegreesReport(property)
          html = html + "</body>"
          html = html + "</html>"
          
@@ -631,18 +643,10 @@
             return()
          }
 
-         dimNetworkLabel = core.dim(networkLabel)
-
          html = "<!DOCTYPE html>"
          html = html + "<html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Vertices Clustering</title></head>"
          html = html + "<body>"
-         html = html + "<table style=\"margin-left: auto; margin-right: auto; border: 1px solid black;\">"
-         html = html + "<caption style=\"text-align: center; font-family: Arial; font-weight: bold;\">Vertices Clustering</caption>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Vertex</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Clustering</th></tr>"
-         for (i = 1; i < dimNetworkLabel[0]; i = i + 1) {
-            html = html + "<tr><td style=\"text-align: right; padding: 2px;\">" + networkLabel[i] + "</td><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.4f", networkClustering[i, 0]) + "</td></tr>"
-         }
-         html = html + "</table>"
+         html = html + cnatool.getClusteringReport(property)
          html = html + "</body>"
          html = html + "</html>"
          
@@ -662,20 +666,10 @@
             return()
          }
 
-         dimNetworkLabel = core.dim(networkLabel)
-
-         networkCentrality = cna.getCentrality(adj, networkShortestPath, property.directed)
-         
          html = "<!DOCTYPE html>"
          html = html + "<html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Vertices Centralities</title></head>"
          html = html + "<body>"
-         html = html + "<table style=\"margin-left: auto; margin-right: auto; border: 1px solid black;\">"
-         html = html + "<caption style=\"text-align: center; font-family: Arial; font-weight: bold;\">Vertices Centralities</caption>"
-         html = html + "<tr><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Vertex</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Geodesics</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Closeness</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">Betweenness</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">nCloseness</th><th style=\"text-align: left; font-family: Arial; font-weight: bold;\">nBetweenness</th></tr>"
-         for (i = 1; i < dimNetworkLabel[0]; i = i + 1) {
-            html = html + "<tr><td style=\"text-align: right; padding: 2px;\">" + networkLabel[i] + "</td><td style=\"text-align: right; padding: 2px;\">" + core.toString(networkCentrality[i, 4]) + "</td><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.4f", networkCentrality[i, 0]) + "</td><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.4f", networkCentrality[i, 1]) + "</td><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.4f", networkCentrality[i, 2]) + "</td><td style=\"text-align: right; padding: 2px;\">" + string.sprintf("%.4f", networkCentrality[i, 3]) + "</td></tr>"
-         }
-         html = html + "</table>"
+         html = html + cnatool.getCentralitiesReport(property)
          html = html + "</body>"
          html = html + "</html>"
          
