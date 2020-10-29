@@ -1,3 +1,10 @@
+.panel {
+    position: relative;
+    width: 100%;
+    height: auto;
+    float: left;
+}
+
 /* Split the screen in half. */
 .split {
   height: 100%;
