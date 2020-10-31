@@ -27,76 +27,97 @@
 </head>
 <body style="background-color: black;" onload="maiavm.compile();">
    <div>
-      <div class="menu">
-         <ul>
-            <li class="parent"><a href="http://maia.maiascript.com">&#9729; Maia</a></li>
-            <li class="parent"><a href="#">File <span class="expand">&#9660;</span></a>
-               <ul class="child">
-                  <li class="parent"><a href="#">New <span class="expand">&#9658;</span></a>
-                     <ul class="child" style="min-width: 15em;">
-                        <li><a id="newFile" onclick="newFile()">Blank workspace</a></li>
-                        <li><a id="newComplete" onclick="newComplete()">Complete graph</a></li>
-                        <li><a id="newRandom" onclick="newRandom()">Random graph</a></li>
-                        <li><a id="newScaleFree" onclick="newScaleFree()">Scale-free graph</a></li>
-                        <li><a id="newSmallWorld" onclick="newSmallWorld()">Small-world graph</a></li>
-                        <li><a id="newHybrid" onclick="newHybrid()">Hybrid graph</a></li>
-                        
-                     </ul>
-                  </li>
-                  <li><a id="openFile" onclick="openFile()">Open</a></li>
-                  <li class="parent"><a href="#">Save <span class="expand">&#9658;</span></a>
-                     <ul class="child">
-                        <li><a id="saveFile" onclick="saveFile()">Pajek file</a></li>
-                        <li><a id="saveFile" onclick="saveJsonFile()">JSON file</a></li>
-                        <li><a id="saveGraph" onclick="saveGraph()">Graph file</a></li>
-                        <li><a id="saveReport" onclick="saveReport()">Report file</a></li>
-                     </ul>
-                  </li>
-               </ul>
-            </li>
-            <li class="parent"><a href="#">View <span class="expand">&#9660;</span></a>
-               <ul class="child" style="min-width: 15em;">
-                  <li><a id="showSummary" onclick="showSummary()">Properties summary</a></li>
-                  <li><a id="showDegrees" onclick="showDegrees()">Vertices degrees</a></li>
-                  <li><a id="showClustering" onclick="showClustering()">Vertices clustering</a></li>
-                  <li><a id="showCentralities" onclick="showCentralities()">Vertices centralities</a></li>
-               </ul>
-            </li>
-            <li class="parent"><a href="#">Help <span class="expand">&#9660;</span></a>
-               <ul class="child">
-                  <li><a id="showAboutDialog" onclick="showAboutDialog()">About</a></li>
-                  <li><a href="mailto:roberto@souzamonteiro.com">Contact</a></li>
-               </ul>
-            </li>
-         </ul>
+      <div class="menu-bar">
+         <nav class="menu">
+            <label class="toggle-menu" for="toggle-menu-checkbox" id="toggle-menu">Menu <span class="nav-icon">&#9776;</span></label>
+            <input class="toggle-menu" type="checkbox" id="toggle-menu-checkbox">
+            <ul class="main-menu">
+               <li><a href="http://maia.maiascript.com">Maia</a></li>
+               <li><a href="#">File <span class="drop-icon">&#9662;</span>
+                     <label title="Toggle Drop-down" class="drop-icon" for="sub-menu-1">&#9662;</label>
+                  </a>
+                  <input type="checkbox" id="sub-menu-1">
+                  <ul class="sub-menu">
+                     <li><a href="#">New <span class="drop-icon">&#9658;</span>
+                           <label title="Toggle Drop-down" class="drop-icon" for="sub-menu-2">&#9662;</label>
+                        </a>
+                        <input type="checkbox" id="sub-menu-2">
+                        <ul class="sub-menu">
+                           <li><a id="newFile" onclick="newFile()">Blank workspace</a></li>
+                           <li><a id="newComplete" onclick="newComplete()">Complete graph</a></li>
+                           <li><a id="newRandom" onclick="newRandom()">Random graph</a></li>
+                           <li><a id="newScaleFree" onclick="newScaleFree()">Scale-free graph</a></li>
+                           <li><a id="newSmallWorld" onclick="newSmallWorld()">Small-world graph</a></li>
+                           <li><a id="newHybrid" onclick="newHybrid()">Hybrid graph</a></li>
+                        </ul>
+                     </li>
+                     <li><a id="openFile" onclick="openFile()">Open</a></li>
+                     <li><a href="#">Save <span class="drop-icon">&#9658;</span>
+                           <label title="Toggle Drop-down" class="drop-icon" for="sub-menu-3">&#9662;</label>
+                        </a>
+                        <input type="checkbox" id="sub-menu-3">
+                        <ul class="sub-menu">
+                           <li><a id="saveFile" onclick="saveFile()">Pajek file</a></li>
+                           <li><a id="saveFile" onclick="saveJsonFile()">JSON file</a></li>
+                           <li><a id="saveGraph" onclick="saveGraph()">Graph file</a></li>
+                           <li><a id="saveReport" onclick="saveReport()">Report file</a></li>
+                        </ul>
+                     </li>
+                  </ul>
+               </li>
+               <li><a href="#">View <span class="drop-icon">&#9662;</span>
+                     <label title="Toggle Drop-down" class="drop-icon" for="sub-menu-4">&#9662;</label>
+                  </a>
+                  <input type="checkbox" id="sub-menu-4">
+                  <ul class="sub-menu">
+                     <li><a id="showSummary" onclick="showSummary()">Properties summary</a></li>
+                     <li><a id="showDegrees" onclick="showDegrees()">Vertices degrees</a></li>
+                     <li><a id="showClustering" onclick="showClustering()">Vertices clustering</a></li>
+                     <li><a id="showCentralities" onclick="showCentralities()">Vertices centralities</a></li>
+                  </ul>
+               </li>
+               <li><a href="#">Help <span class="drop-icon">&#9662;</span>
+                     <label title="Toggle Drop-down" class="drop-icon" for="sub-menu-5">&#9662;</label>
+                  </a>
+                  <input type="checkbox" id="sub-menu-5">
+                  <ul class="sub-menu">
+                     <li><a id="showAboutDialog" onclick="showAboutDialog()">About</a></li>
+                     <li><a href="mailto:roberto@souzamonteiro.com">Contact</a></li>
+                  </ul>
+               </li>
+            </ul>
+         </nav>
       </div>
 
       <div class="panel">
          <div class="split left">
             <ul class="list">
-               <li class="item"><div class="label">Vertices:</div><div id="vertices" class="value"></div></li>
-               <li class="item"><div class="label">Edges:</div><div id="edges" class="value"></div></li>
-               <li class="item"><div class="label">Density:</div><div id="density" class="value"></div></li>
-               <li class="item"><div class="label">Avg. Degree:</div><div id="averageDegree" class="value"></div></li>
-               <li class="item"><div class="label">Avg. Clustering Coef.:</div><div id="averageClusteringCoefficient" class="value"></div></li>
-               <li class="item"><div class="label">Avg. Shortest Path:</div><div id="averageShortestPath" class="value"></div></li>
-               <li class="item"><div class="label">Diameter:</div><div id="diameter" class="value"></div></li>
-               <li class="item"><div class="label">Global Efficiency:</div><div id="globalEfficiency" class="value"></div></li>
-               <li class="item">
-                  <label class="label" for="algorithm">Algorithm:</label>
-                  <select id="algorithm" name="algorithm" style="float: right;" onchange="updateGraph()">
-                     <option value="none" selected="selected">None</option>
-                     <option value="forceAtlas2">Force Atlas 2</option>
-                     <option value="noverlap">No Overlap</option>
-                  </select>
+               <li><div class="item"><div class="label">Vertices:</div><div id="vertices" class="value"></div></div></li>
+               <li><div class="item"><div class="label">Edges:</div><div id="edges" class="value"></div></div></li>
+               <li><div class="item"><div class="label">Density:</div><div id="density" class="value"></div></div></li>
+               <li><div class="item"><div class="label">Avg. Degree:</div><div id="averageDegree" class="value"></div></div></li>
+               <li><div class="item"><div class="label">Avg. Clustering Coef.:</div><div id="averageClusteringCoefficient" class="value"></div></div></li>
+               <li><div class="item"><div class="label">Avg. Shortest Path:</div><div id="averageShortestPath" class="value"></div></div></li>
+               <li><div class="item"><div class="label">Diameter:</div><div id="diameter" class="value"></div></div></li>
+               <li><div class="item"><div class="label">Global Efficiency:</div><div id="globalEfficiency" class="value"></div></div></li>
+               <li><div class="item">
+                     <label class="label" for="algorithm">Algorithm:</label>
+                     <select id="algorithm" name="algorithm" style="float: right;" onchange="updateGraph()">
+                        <option value="none" selected="selected">None</option>
+                        <option value="forceAtlas2">Force Atlas 2</option>
+                        <option value="noverlap">No Overlap</option>
+                     </select>
+                  </div>
                </li>
-               <li class="item">
-                  <label class="label" for="directedGraph">Directed Graph:</label>
-                  <input id="directedGraph" nome="directedGraph" style="float: right;" type="checkbox" value="directed" onchange="updateProperties()"><br />
+               <li><div class="item">
+                     <label class="label" for="directedGraph">Directed Graph:</label>
+                     <input id="directedGraph" nome="directedGraph" style="float: right;" type="checkbox" value="directed" onchange="updateProperties()">
+                  </div>
                </li>
-               <li class="item">
-                  <label class="label" for="calculateProperties">Calculate Properties:</label>
-                  <input id="calculateProperties" nome="calculateProperties" style="float: right;" type="checkbox" value="calculate" onchange="updateProperties()"><br />
+               <li><div class="item">
+                     <label class="label" for="calculateProperties">Calculate Properties:</label>
+                     <input id="calculateProperties" nome="calculateProperties" style="float: right;" type="checkbox" value="calculate" onchange="updateProperties()">
+                  </div>
                </li>
             </ul>
          </div>

@@ -1,30 +1,36 @@
 @import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
 
 .list {
+    margin: 10px;
     list-style-type: none;
     font-family: Montserrat, sans-serif;
     font-weight: bold;
 }
 .item {
+    display: inline-block;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 1px;
+    margin-bottom: 1px;
     color: white;
     background: gray;
-    margin-left: 0px;
-    margin-right: 20px;
-    margin-top: 5px;
-    margin-bottom: 5px;
 }
 /* Control the left side. */
 .label {
-    left: 0;
+    float: left;
     text-align: left;
 }
 /* Control the right side. */
 .value {
+    float: right;
     color: lightgray;
     text-align: right;
 }
 /* Control the right side. */
 .control {
+    float: right;
     color: black;
     font-family: Montserrat, sans-serif;
     font-weight: bold;
