@@ -229,6 +229,8 @@
          "networkGlobalEfficiency": 0
       }
 
+      networkLabel = []
+
       function updateProperties() {
          directedGraph = document.getElementById("directedGraph")
 
@@ -240,7 +242,6 @@
       function showProperties(property) {
          calculateProperties = document.getElementById("calculateProperties")
 
-         property.networkLabel = cna.getLabels(property.adj)
          property.networkDensity = cna.getDensity(property.adj, property.directed)
 
          verticesElement = document.getElementById("vertices")
@@ -264,8 +265,10 @@
             globalEfficiencyElement.innerHTML = ""
             return()
          }
-
+         
          cnatool.calculateProperties(property)
+         
+         property.networkLabel = networkLabel
 
          averageDegreeElement.innerHTML = string.sprintf("%.4f", property.networkAverageDegree)
          averageClusteringCoefficientElement.innerHTML = string.sprintf("%.4f", property.networkAverageClustering)
@@ -304,13 +307,15 @@
 
          property.adj = cna.createNetwork("complete", n)
          
+         networkLabel = cna.getLabels(property.adj)
+
          fileObject = {
             "fullFileName": "complete.net",
             "fileName": "complete",
             "fileExtension": "net",
             "fileData": cna.createPajekFile(property.adj, "edges")
          }
-         
+
          fileData = cna.pajekFileToJson(fileObject.fileData, property)
          showGraph(fileData)
 
@@ -358,6 +363,8 @@
          }
 
          property.adj = cna.createNetwork("random", n, m, p, d)
+         
+         networkLabel = cna.getLabels(property.adj)
          
          fileObject = {
             "fullFileName": "random.net",
@@ -407,6 +414,8 @@
          
          property.adj = cna.createNetwork("scalefree", n, m, p, d)
          
+         networkLabel = cna.getLabels(property.adj)
+         
          fileObject = {
             "fullFileName": "scalefree.net",
             "fileName": "scalefree",
@@ -455,6 +464,8 @@
          
          property.adj = cna.createNetwork("smallworld", n, m, p, d)
          
+         networkLabel = cna.getLabels(property.adj)
+         
          fileObject = {
             "fullFileName": "smallworld.net",
             "fileName": "smallworld",
@@ -502,6 +513,8 @@
          }
          
          property.adj = cna.createNetwork("hybrid", n, m, p, d)
+         
+         networkLabel = cna.getLabels(property.adj)
          
          fileObject = {
             "fullFileName": "hybrid.net",
@@ -561,6 +574,9 @@
             } else {
                system.showMessageDialog("File format not supported!")
             }
+            
+            networkLabel = cna.getLabels(property.adj)
+            
             if (core.includes(["json", "net"], fileObject.fileExtension)) {
                directedGraph = document.getElementById("directedGraph")
                directedGraph.checked = property.directed
@@ -644,6 +660,8 @@
             system.showMessageDialog("To generate this report it is necessary to check the option \"Calculate Properties\" in the properties panel.")
             return()
          }
+
+         property.networkLabel = networkLabel
          
          html = "<!DOCTYPE html>"
          html = html + "<html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Vertices Degrees</title></head>"
@@ -668,6 +686,8 @@
             return()
          }
 
+         property.networkLabel = networkLabel
+
          html = "<!DOCTYPE html>"
          html = html + "<html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Vertices Clustering</title></head>"
          html = html + "<body>"
@@ -690,6 +710,8 @@
             system.showMessageDialog("To generate this report it is necessary to check the option \"Calculate Properties\" in the properties panel.")
             return()
          }
+
+         property.networkLabel = networkLabel
 
          html = "<!DOCTYPE html>"
          html = html + "<html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Vertices Centralities</title></head>"
