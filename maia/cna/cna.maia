@@ -405,7 +405,7 @@ namespace cna {
     /// @method jsonToPajekFile
     /// @memberof cna
     /// @param {object}   network - JSON containing the network.
-    /// @return {object}  A Pajek file.
+    /// @return {string}  A Pajek file.
     ///
     function jsonToPajekFile(network) {
         n = network.nodes.length
@@ -700,14 +700,10 @@ namespace cna {
                     }
                 }
                 // Calculate the clustering coefficient to this vertex.
-                if (ki == n) {
-                    clustering[i, 0] = 1
+                if ((ki == 0) || (ki == 1)) {
+                    clustering[i, 0] = 0
                 } else {
-                    if ((ki == 0) || (ki == 1)) {
-                        clustering[i, 0] = 0
-                    } else {
-                        clustering[i, 0] = n / (ki * (ki - 1))
-                    }
+                    clustering[i, 0] = n / (ki * (ki - 1))
                 }
             }
         }
@@ -1030,7 +1026,7 @@ namespace cna {
     
     ///
     /// Sets the network vertices labels.
-    /// @method getLabels
+    /// @method setLabels
     /// @memberof cna
     /// @param {object}  adj - Adjascence matrix.
     /// @param {object}  labels - Array containing the vertices labels.
