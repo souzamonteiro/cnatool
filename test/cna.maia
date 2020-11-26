@@ -1,0 +1,136 @@
+#!/usr/bin/env maiascript
+
+system.source("maia/cna/cna.maia")
+
+tries = 10
+
+if (system.argc == 2) {
+    tries = system.argv[1]
+}
+
+fileContents = ""
+fileContents = fileContents + "*Vertices 10" + "\r\n"
+fileContents = fileContents + "1 \"v1\" -13.53320569881955 15.024369378567805 1" + "\r\n"
+fileContents = fileContents + "2 \"v2\" 138.57890381783866 -149.73844730901712 1" + "\r\n"
+fileContents = fileContents + "3 \"v3\" -195.0525404708813 294.7061191626409 1" + "\r\n"
+fileContents = fileContents + "4 \"v4\" -4.710077309561689 -119.03537285786881 1" + "\r\n"
+fileContents = fileContents + "5 \"v5\" 276.72724773173434 -241.1655959044472 1" + "\r\n"
+fileContents = fileContents + "6 \"v6\" 218.72444256014836 -294.7061191626409 1" + "\r\n"
+fileContents = fileContents + "7 \"v7\" 119.53996984903722 -4.504246484231039 1" + "\r\n"
+fileContents = fileContents + "8 \"v8\" -276.72724773173434 219.58638008091668 1" + "\r\n"
+fileContents = fileContents + "9 \"v9\" -80.8765683805954 206.98274428233245 1" + "\r\n"
+fileContents = fileContents + "10 \"v10\" -198.91296298859544 98.42821322326704 1" + "\r\n"
+fileContents = fileContents + "*Arcs" + "\r\n"
+fileContents = fileContents + "1 2 1" + "\r\n"
+fileContents = fileContents + "1 4 1" + "\r\n"
+fileContents = fileContents + "1 7 1" + "\r\n"
+fileContents = fileContents + "1 9 1" + "\r\n"
+fileContents = fileContents + "1 10 1" + "\r\n"
+fileContents = fileContents + "2 1 1" + "\r\n"
+fileContents = fileContents + "2 4 1" + "\r\n"
+fileContents = fileContents + "2 5 1" + "\r\n"
+fileContents = fileContents + "2 6 1" + "\r\n"
+fileContents = fileContents + "2 7 1" + "\r\n"
+fileContents = fileContents + "3 8 1" + "\r\n"
+fileContents = fileContents + "3 9 1" + "\r\n"
+fileContents = fileContents + "4 1 1" + "\r\n"
+fileContents = fileContents + "4 2 1" + "\r\n"
+fileContents = fileContents + "5 2 1" + "\r\n"
+fileContents = fileContents + "5 6 1" + "\r\n"
+fileContents = fileContents + "6 2 1" + "\r\n"
+fileContents = fileContents + "6 5 1" + "\r\n"
+fileContents = fileContents + "7 1 1" + "\r\n"
+fileContents = fileContents + "7 2 1" + "\r\n"
+fileContents = fileContents + "8 3 1" + "\r\n"
+fileContents = fileContents + "8 10 1" + "\r\n"
+fileContents = fileContents + "9 1 1" + "\r\n"
+fileContents = fileContents + "9 3 1" + "\r\n"
+fileContents = fileContents + "10 1 1" + "\r\n"
+fileContents = fileContents + "10 8 1" + "\r\n"
+
+// Properties object.
+property = {
+    "adj": [],
+    "n": 0,
+    "m": 0,
+    "directed": false,
+    "density": 0,
+    "networkLabel": [],
+    "networkDegree": [],
+    "networkAverageDegree": 0,
+    "networkDegreeDistribution": [],
+    "networkDensity": 0,
+    "networkClustering": [],
+    "networkAverageClustering": 0,
+    "networkShortestPath": [],
+    "networkAverageShortestPath": 0,
+    "networkDiameter": 0,
+    "networkCentrality": [],
+    "networkVertexEfficiency": [],
+    "networkGlobalEfficiency": 0
+}
+
+// Parses the network file and create the adjascence matrix.
+property.adj = cna.parsePajekFile(fileContents, property)
+
+system.println("Testing the CNA functions " + tries + " times.")
+
+system.println("cna.networkDensity...")
+test (tries; 0.2889; 0.0001) { 
+    property.networkDensity = cna.getDensity(property.adj, property.directed)
+} catch (v) {
+    system.print("TEST: Fail testing function cna.networkDensity.")
+    system.print("      Expected result " + core.testResult.expected)
+    system.print("      But got " + core.testResult.obtained)
+}
+
+system.println("cna.networkDegree...")
+test (tries; 2.6; 0.1) { 
+    property.networkDegree = cna.getDegrees(property.adj, property.directed)
+    property.networkAverageDegree = cna.getAverageDegree(property.networkDegree)
+} catch (v) {
+    system.print("TEST: Fail testing function cna.networkDegree.")
+    system.print("      Expected result " + core.testResult.expected)
+    system.print("      But got " + core.testResult.obtained)
+}
+
+system.println("cna.networkAverageClustering...")
+test (tries; 0.45; 0.01) { 
+    property.networkClustering = cna.getClustering(property.adj, property.directed)
+    property.networkAverageClustering = cna.getAverageClustering(property.networkClustering)
+} catch (v) {
+    system.print("TEST: Fail testing function cna.networkAverageClustering.")
+    system.print("      Expected result " + core.testResult.expected)
+    system.print("      But got " + core.testResult.obtained)
+}
+
+system.println("cna.networkAverageShortestPath...")
+test (tries; 2.1111; 0.0001) { 
+    property.networkShortestPath = cna.getShortestPath(property.adj)
+    property.networkAverageShortestPath = cna.getAverageShortestPath(property.networkShortestPath)
+} catch (v) {
+    system.print("TEST: Fail testing function cna.networkAverageShortestPath.")
+    system.print("      Expected result " + core.testResult.expected)
+    system.print("      But got " + core.testResult.obtained)
+}
+
+system.println("cna.networkDiameter...")
+test (tries; 4; 0) { 
+    property.networkShortestPath = cna.getShortestPath(property.adj)
+    property.networkDiameter = cna.getDiameter(property.networkShortestPath)
+} catch (v) {
+    system.print("TEST: Fail testing function cna.networkDiameter.")
+    system.print("      Expected result " + core.testResult.expected)
+    system.print("      But got " + core.testResult.obtained)
+}
+
+system.println("cna.networkGlobalEfficiency...")
+test (tries; 0.5852; 0.0001) { 
+    property.networkShortestPath = cna.getShortestPath(property.adj)
+    property.networkVertexEfficiency = cna.getVertexEfficiency(property.networkShortestPath)
+    property.networkGlobalEfficiency = cna.getGlobalEfficiency(property.networkVertexEfficiency)
+} catch (v) {
+    system.print("TEST: Fail testing function cna.networkGlobalEfficiency.")
+    system.print("      Expected result " + core.testResult.expected)
+    system.print("      But got " + core.testResult.obtained)
+}

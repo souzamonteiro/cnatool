@@ -45,6 +45,12 @@ Or, download the latest zipped version:
 
 `npm install -g .`
 
+## RUN TESTS:
+
+To run the test scripts execute:
+
+`./test.sh`
+
 ## USING THE COMMAND LINE INTERFACE (CLI) AND CNATool:
 
 To run the command line tool, use the command:
