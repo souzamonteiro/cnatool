@@ -16,3 +16,5 @@ chmod 755 bin/*
 
 jsdoc -d ./docs ./package.json ./src
 jsdoc -c ./jsdoc.json -d ./docs ./maia/cna/package.json ./maia/cna
+
+cp manual/* docs/
