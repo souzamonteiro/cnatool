@@ -6498,7 +6498,7 @@ function Core() {
      * This property needs to be updated
      * with each new version of MaiaStudio.
      */
-    this.version = "2.0.2";
+    this.version = "2.0.4";
 
     this.testResult = {
         "expected": {},
@@ -9374,6 +9374,20 @@ function System() {
         if (typeof callBack != 'undefined') {
             callBack();
         }
+    }
+
+    /**
+     * Imports a native module.
+     * @param {string}   moduleName - Module name.
+     * @return {object}  The native module reference.
+     */
+    this.require = function(moduleName)
+    {
+        var moduleReference;
+        if (typeof process !== 'undefined') {
+            var moduleReference = require(moduleName);
+        }
+        return moduleReference;
     }
 
     /**
