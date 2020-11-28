@@ -55,7 +55,7 @@ To run the test scripts execute:
 
 To run the command line tool, use the command:
 
-`cnatool [options] [script.maia] [--] [arguments]`
+`cnatool [options] [network.net] [--] [arguments]`
 
 To see the command line tool options run the command:
 
