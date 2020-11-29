@@ -9652,15 +9652,15 @@ function CNATool() {
         html = html + '<caption style="text-align: center; font-family: Arial; font-weight: bold;">Degree Disribuion</caption>'
         html = html + '<tr><th style="text-align: left; font-family: Arial; font-weight: bold;">Cluster</th><th style="text-align: left; font-family: Arial; font-weight: bold;">Frequency</th><th style="text-align: left; font-family: Arial; font-weight: bold;">Frequency(%)</th></tr>'
         for (i = 0; i < dimNetworkDegreeDistribution[0]; i = i + 1) {
-           html = html + '<tr><td style="text-align: right; padding: 2px;">' + core.toString(property.networkDegreeDistribution[i][0]) + '</td><td style="text-align: right; padding: 2px;">' + core.toString(property.networkDegreeDistribution[i][1]) + '</td><td style="text-align: right; padding: 2px;">' + string.sprintf('%.2f', property.networkDegreeDistribution[i][2]) + '</td></tr>'
+            html = html + '<tr><td style="text-align: right; padding: 2px;">' + core.toString(property.networkDegreeDistribution[i][0]) + '</td><td style="text-align: right; padding: 2px;">' + core.toString(property.networkDegreeDistribution[i][1]) + '</td><td style="text-align: right; padding: 2px;">' + string.sprintf('%.2f', property.networkDegreeDistribution[i][2]) + '</td></tr>'
         }
         html = html + '</table>'
         html = html + '<br />'
 
         return html;
-     }
+    }
 
-     /**
+    /**
      * Create vertices degrees report.
      * @param {object}   property - Network properties (n, m and directed).
      * @return           Vertices degrees report in HTML format.
@@ -9711,7 +9711,7 @@ function CNATool() {
         dimNetworkLabel = core.dim(property.networkLabel)
 
         property.networkCentrality = cna.getCentrality(property.adj, property.networkShortestPath, property.directed)
-         
+
         var html = '';
         html = html + '<table style="margin-left: auto; margin-right: auto; border: 1px solid black;">'
         html = html + '<caption style="text-align: center; font-family: Arial; font-weight: bold;">Vertices Centralities</caption>'
@@ -9729,8 +9729,7 @@ function CNATool() {
      * Interpret the options passed on the command line,
      * process the files and generate the requested reports.
      */
-    this.run = function()
-    {
+    this.run = function() {
         // Supports only the Node.js interpreter.
         if (typeof process !== 'undefined') {
             var command = 'node';
@@ -9747,7 +9746,7 @@ function CNATool() {
                     return content.length > 0 && content.charCodeAt(0) == 0xFEFF ? content.substring(1) : content;
                 }
             }
-            
+
             // Command line arguments.
             system.argv = argv.slice();
             system.argc = argv.length;
@@ -9755,6 +9754,7 @@ function CNATool() {
             // Command line options.
             var inputFile = '';
             var outputFile = '';
+            var propertiesFile = '';
             var jsonFile = '';
             var includeAll = false;
             var includeClustering = false;
@@ -9780,7 +9780,6 @@ function CNATool() {
                 'n': 0,
                 'm': 0,
                 'directed': false,
-                'density': 0,
                 'networkLabel': [],
                 'networkDegree': [],
                 'networkAverageDegree': 0,
@@ -9811,9 +9810,10 @@ function CNATool() {
                         system.log('       --clu                Include vertices clustering in report;');
                         system.log('       --cen                Include vertices centralities in report;');
                         system.log('       --deg                Include vertices degrees in report;');
-                        system.log('       --d                  Network is a directed graph;');
+                        system.log('-d                          Network is a directed graph;');
                         system.log('-h     --help               Displays this help message;');
                         system.log('-o     [report.html]        Output report file name;');
+                        system.log('-p     [properties.json]    Properties file name;');
                         system.log('       --create             Creates a network file in Pajet format;');
                         system.log('       --json               Save the network file in JSON format;');
                         system.log('       --topology           Graph topology (complete, random, scalefree, smallworld, hybrid);');
@@ -9843,6 +9843,9 @@ function CNATool() {
                     } else if (argv[i] == '-o') {
                         i++;
                         outputFile = argv[i];
+                    } else if (argv[i] == '-p') {
+                        i++;
+                        propertiesFile = argv[i];
                     } else if (argv[i] == '--create') {
                         createGraph = true;
                     } else if (argv[i] == '--json') {
@@ -9896,7 +9899,6 @@ function CNATool() {
                             'n': 0,
                             'm': 0,
                             'directed': false,
-                            'density': 0,
                             'networkLabel': [],
                             'networkDegree': [],
                             'networkAverageDegree': 0,
@@ -9923,7 +9925,7 @@ function CNATool() {
                             var outputFileName = prefix + '-' + fileIndex + '.net';
                             var outputFileContents = pajekFileContents;
                         }
-                        fs.writeFile(outputFileName, outputFileContents, function (err) {
+                        fs.writeFile(outputFileName, outputFileContents, function(err) {
                             if (err) {
                                 throw err;
                             }
@@ -9957,6 +9959,9 @@ function CNATool() {
                                 if (outputFile == '') {
                                     outputFile = fileName + '.html';
                                 }
+                                if (propertiesFile == '') {
+                                    propertiesFile = fileName + '-properties.json';
+                                }
 
                                 var fileContents = read(String(file));
 
@@ -9977,38 +9982,53 @@ function CNATool() {
                                 cnatool.calculateProperties(property);
 
                                 var html = '<!DOCTYPE html>';
-                                    html = html + '<html lang="en"><head><meta charset="UTF-8"><title>Network Properties Report' + file + '</title></head>';
-                                    html = html + '<body>';
-                                    html = html + cnatool.getSummaryReport(property);
-                                    if (includeDegrees || includeAll) {
-                                        html = html + cnatool.getDegreesReport(property);
-                                    }
-                                    if (includeClustering || includeAll) {
-                                        html = html + cnatool.getClusteringReport(property);
-                                    }
-                                    if (includeCentralities || includeAll) {
-                                        html = html + cnatool.getCentralitiesReport(property);
-                                    }
-                                    html = html + '</body>';
-                                    html = html + '</html>';
-                                fs.writeFile(outputFile, html, function (err) {
+                                html = html + '<html lang="en"><head><meta charset="UTF-8"><title>Network Properties Report' + file + '</title></head>';
+                                html = html + '<body>';
+                                html = html + cnatool.getSummaryReport(property);
+                                if (includeDegrees || includeAll) {
+                                    html = html + cnatool.getDegreesReport(property);
+                                }
+                                if (includeClustering || includeAll) {
+                                    html = html + cnatool.getClusteringReport(property);
+                                }
+                                if (includeCentralities || includeAll) {
+                                    html = html + cnatool.getCentralitiesReport(property);
+                                }
+                                html = html + '</body>';
+                                html = html + '</html>';
+                                fs.writeFile(outputFile, html, function(err) {
                                     if (err) {
                                         throw err;
                                     }
                                 });
-                                
+                                fs.writeFile(propertiesFile, JSON.stringify(property), function(err) {
+                                    if (err) {
+                                        throw err;
+                                    }
+                                });
+
                                 outputFile = '';
+                                propertiesFile = '';
 
                                 if (jsonFile != '') {
                                     graphProperty = {
                                         'fileName': file,
-                                        'properties': property
-                                    }
+                                        'properties': {
+                                            'n': property.n,
+                                            'm': property.m,
+                                            'networkAverageDegree': property.networkAverageDegree,
+                                            'networkDensity': property.networkDensity,
+                                            'networkAverageClustering': property.networkAverageClustering,
+                                            'networkAverageShortestPath': property.networkAverageShortestPath,
+                                            'networkDiameter': property.networkDiameter,
+                                            'networkGlobalEfficiency': property.networkGlobalEfficiency
+                                        }
+                                    };
                                     graphsData.push(graphProperty);
                                 }
                             }
                             if (jsonFile != '') {
-                                fs.writeFile(jsonFile, JSON.stringify(graphsData), function (err) {
+                                fs.writeFile(jsonFile, JSON.stringify(graphsData), function(err) {
                                     if (err) {
                                         throw err;
                                     }
@@ -10044,10 +10064,12 @@ cnatool = new CNATool();
 if (typeof process !== 'undefined') {
     // Emulate DOM.
     const jsdom = require('jsdom');
-    const { JSDOM } = jsdom;
+    const {
+        JSDOM
+    } = jsdom;
     var doc = new JSDOM();
     var DOMParser = doc.window.DOMParser;
-    
+
     var alert = system.log;
 
     cnatool.run();
