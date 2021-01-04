@@ -6498,7 +6498,7 @@ function Core() {
      * This property needs to be updated
      * with each new version of MaiaStudio.
      */
-    this.version = "2.0.5";
+    this.version = "2.0.6";
 
     this.testResult = {
         "expected": {},
@@ -6518,18 +6518,17 @@ function Core() {
             "js": ""
         }
     }
-    
+
     /*
      * The following functions allow you to manipulate MaiaScript objects.
      */
 
-     /**
+    /**
      * Copies a matrix.
      * @param {array}  obj - Matrix to be copied.
      * @return {array}  A copy of the matrix.
      */
-    this.copyMatrix = function(obj)
-    {
+    this.copyMatrix = function(obj) {
         var newMatrix = [];
 
         for (var i = 0; i < obj.length; i++) {
@@ -6545,8 +6544,7 @@ function Core() {
      * @param {number}   pos - The character position.
      * @return {string}  The character at the indicated position.
      */
-    this.charAt = function(str, pos)
-    {
+    this.charAt = function(str, pos) {
         return str.charAt(pos);
     }
 
@@ -6556,8 +6554,7 @@ function Core() {
      * @param {number}   pos - The character position.
      * @return {string}  The character code at the indicated position.
      */
-    this.charCodeAt = function(str, pos)
-    {
+    this.charCodeAt = function(str, pos) {
         return str.charCodeAt(pos);
     }
 
@@ -6567,8 +6564,7 @@ function Core() {
      * @param {array}   mtx2 - The second matrix.
      * @return {array}  Matrix containing the two indicated matrices.
      */
-    this.concat = function(mtx1, mtx2)
-    {
+    this.concat = function(mtx1, mtx2) {
         return mtx.concat(mtx1, mtx2);
     }
 
@@ -6577,8 +6573,7 @@ function Core() {
      * @param {number}   num - The complex number.
      * @return {number}  the conjugate of a complex number.
      */
-    this.conj = function(num)
-    {
+    this.conj = function(num) {
         var res;
         if (core.type(num) == 'complex') {
             res = core.complex(core.toNumber(num.real), -core.toNumber(num.imaginary));
@@ -6594,8 +6589,7 @@ function Core() {
      * @param {number}   img - The imaginary part of the complex number.
      * @return {number}  A complex complex number.
      */
-    this.complex = function(real, img)
-    {
+    this.complex = function(real, img) {
         var num;
         if ((typeof real == 'number') && (typeof img == 'number')) {
             num = {
@@ -6612,8 +6606,7 @@ function Core() {
      * Returns a Date object.
      * @return {object}  A Date object.
      */
-    this.date = function()
-    {
+    this.date = function() {
         return new Date();
     }
 
@@ -6622,8 +6615,7 @@ function Core() {
      * @param {object}  obj - The matrix to calculate the determinant.
      * @return {array}  A (rows x columns) matrix.
      */
-    this.det = function(obj)
-    {
+    this.det = function(obj) {
         var mtx = [];
         if (core.type(obj) == 'matrix') {
             var dim = core.dim(obj);
@@ -6668,8 +6660,7 @@ function Core() {
      * @param {object}  obj - The matrix to calculate the diagonal equivalent matrix.
      * @return {array}  A (rows x columns) matrix.
      */
-    this.diag = function(obj)
-    {
+    this.diag = function(obj) {
         if (core.type(obj) == 'matrix') {
             var dim = core.dim(obj);
             var m = dim[0];
@@ -6726,12 +6717,12 @@ function Core() {
      * @param {string}   stript - The object that will be used as a template.
      * @return {number}  Result of the evaluated script..
      */
-    this.eval = function(script)
-    {
+    this.eval = function(script) {
         var result;
 
         compiledCode.xml = "";
-        function getXml (data) {
+
+        function getXml(data) {
             compiledCode.xml += data;
         }
         var s = new MaiaScript.XmlSerializer(getXml, true);
@@ -6748,8 +6739,8 @@ function Core() {
             }
         }
         var parser = new DOMParser();
-        var xml = parser.parseFromString(compiledCode.xml,"text/xml");
-        
+        var xml = parser.parseFromString(compiledCode.xml, "text/xml");
+
         var compiler = new MaiaCompiler();
         compiledCode.js = compiler.compile(xml);
         try {
@@ -6766,22 +6757,20 @@ function Core() {
      * @param {number}  rows - Number of rows in the matrix.
      * @return {array}  A (rows x rows) identity matrix.
      */
-    this.ident = function(rows)
-    {
+    this.ident = function(rows) {
         var mtx = core.matrix(0, rows, rows);
         for (var i = 0; i < rows; i++) {
             mtx[i][i] = 1;
         }
         return mtx;
     }
-    
+
     /**
      * Returns the imaginary part of a complex number.
      * @param {object}   obj - The complex number.
      * @return {number}  The imaginary part of a complex number.
      */
-    this.imaginary = function(obj)
-    {
+    this.imaginary = function(obj) {
         var num;
         if (typeof obj == 'object') {
             if ('imaginary' in obj) {
@@ -6801,8 +6790,7 @@ function Core() {
      * @param {string}    text - Search string.
      * @return {boolean}  True if one string is contained in another or in an array.
      */
-    this.includes = function(obj, text)
-    {
+    this.includes = function(obj, text) {
         return obj.includes(text);
     }
 
@@ -6812,8 +6800,7 @@ function Core() {
      * @param {string}   text - Search string.
      * @return {number}  The position of one string in the other.
      */
-    this.indexOf = function(str, text)
-    {
+    this.indexOf = function(str, text) {
         return str.indexOf(text);
     }
 
@@ -6822,8 +6809,7 @@ function Core() {
      * @param {object}  obj - The matrix to calculate the inverse.
      * @return {array}  A (rows x columns) matrix.
      */
-    this.inv = function(obj)
-    {
+    this.inv = function(obj) {
         var mtx = [];
         if (core.type(obj) == 'matrix') {
             var dim = core.dim(obj);
@@ -6872,8 +6858,7 @@ function Core() {
      * @param {string}   char - The separator character.
      * @return {string}  The string containing the parts of the array.
      */
-    this.join = function(mtx, char)
-    {
+    this.join = function(mtx, char) {
         return mtx.split(char);
     }
 
@@ -6883,8 +6868,7 @@ function Core() {
      * @param {string}   text - Search string.
      * @return {number}  The position of last occurrence of string in the other.
      */
-    this.lastIndexOf = function(str, text)
-    {
+    this.lastIndexOf = function(str, text) {
         return str.lastIndexOf(text);
     }
 
@@ -6893,8 +6877,7 @@ function Core() {
      * @param {string}   obj - Object to be measured.
      * @return {number}  Object size.
      */
-    this.length = function(obj)
-    {
+    this.length = function(obj) {
         return obj.length;
     }
 
@@ -6905,8 +6888,7 @@ function Core() {
      * @param {number}  columns - Number of columns in the matrix.
      * @return {array}  A (rows x columns) matrix.
      */
-    this.matrix = function(obj, rows, columns)
-    {
+    this.matrix = function(obj, rows, columns) {
         var mtx = [];
         if (rows > 1) {
             for (var i = 0; i < rows; i++) {
@@ -6932,8 +6914,7 @@ function Core() {
      * @param {object}   properties - The object properties.
      * @return {number}  A new instance of an object.
      */
-    this.new = function(obj)
-    {
+    this.new = function(obj) {
         if (typeof properties == 'undefined') {
             var newObject = Object.create(obj);
         } else {
@@ -6948,8 +6929,7 @@ function Core() {
      * @param {number}  columns - Number of columns in the matrix.
      * @return {array}  A (rows x columns) matrix.
      */
-    this.one = function(rows, columns)
-    {
+    this.one = function(rows, columns) {
         return core.matrix(1, rows, columns);
     }
 
@@ -6961,8 +6941,7 @@ function Core() {
      * @param {string}   estimatedSize - Estimated maximum size.
      * @return {object}  Reference to the open or created database.
      */
-    this.openSQLDatabase = function(name, version, displayName, estimatedSize)
-    {
+    this.openSQLDatabase = function(name, version, displayName, estimatedSize) {
         var db;
 
         try {
@@ -6981,8 +6960,7 @@ function Core() {
      * @param {object}  obj - The separator character.
      * @return {array}  The array with the object removed.
      */
-    this.pop = function(mtx, obj)
-    {
+    this.pop = function(mtx, obj) {
         return mtx.pop(obj);
     }
 
@@ -6992,8 +6970,7 @@ function Core() {
      * @param {object}  obj - The separator character.
      * @return {array}  The array with the added object.
      */
-    this.push = function(mtx, obj)
-    {
+    this.push = function(mtx, obj) {
         return mtx.push(obj);
     }
 
@@ -7002,8 +6979,7 @@ function Core() {
      * @param {object}   obj - The complex number.
      * @return {number}  The real part of a complex number.
      */
-    this.real = function(obj)
-    {
+    this.real = function(obj) {
         var num;
         if (typeof obj == 'object') {
             if ('imaginary' in obj) {
@@ -7023,8 +6999,7 @@ function Core() {
      * @param {string}   flags - Indicates the marks that can be added.
      * @return {object}  A RegExp object.
      */
-    this.regExp = function(pattern, flags)
-    {
+    this.regExp = function(pattern, flags) {
         var regexp = new RegExp(pattern, flags);
         return regexp;
     }
@@ -7035,8 +7010,7 @@ function Core() {
      * @param {number}   count - Number of copies.
      * @return {string}  A new string with a specified number of copies of the string.
      */
-    this.repeat = function(str, count)
-    {
+    this.repeat = function(str, count) {
         return str.repeat(count);
     }
 
@@ -7047,8 +7021,7 @@ function Core() {
      * @param {string}   string2 - The replacement string.
      * @return {string}  A new string.
      */
-    this.replace = function(str, string1, string2)
-    {
+    this.replace = function(str, string1, string2) {
         return str.replace(string1, string2);
     }
 
@@ -7058,8 +7031,7 @@ function Core() {
      * @param {string}   text - Search string.
      * @return {number}  The position of the match.
      */
-    this.search = function(str, text)
-    {
+    this.search = function(str, text) {
         return str.search(text);
     }
 
@@ -7069,8 +7041,7 @@ function Core() {
      * @param {object}  obj - The separator character.
      * @return {array}  The array with the added object.
      */
-    this.shift = function(mtx, obj)
-    {
+    this.shift = function(mtx, obj) {
         return mtx.shift(obj);
     }
 
@@ -7081,8 +7052,7 @@ function Core() {
      * @param {number}   end - The final position.
      * @return {string}  The selected part of the string or array.
      */
-    this.slice = function(obj, start, end)
-    {
+    this.slice = function(obj, start, end) {
         if (typeof end != 'undefined') {
             return obj.slice(start, end);
         } else {
@@ -7098,8 +7068,7 @@ function Core() {
      * @param {object}  obj - Object to be inserted in the specified location.
      * @return {array}  The array with the objects removed.
      */
-    this.splice = function(mtx, pos, count, obj)
-    {
+    this.splice = function(mtx, pos, count, obj) {
         if (typeof obj != 'undefined') {
             return mtx.splice(pos, count, obj);
         } else {
@@ -7113,8 +7082,7 @@ function Core() {
      * @param {string}   char - The separator character.
      * @return {array}   The array containing the parts of the string.
      */
-    this.split = function(str, char)
-    {
+    this.split = function(str, char) {
         return str.split(char);
     }
 
@@ -7125,8 +7093,7 @@ function Core() {
      * @param {number}   size - The the size of the slice.
      * @return {string}  The selected part of the string.
      */
-    this.substr = function(str, start, size)
-    {
+    this.substr = function(str, start, size) {
         return str.substr(start, size);
     }
 
@@ -7139,8 +7106,7 @@ function Core() {
      * @param {string}    _catchScript - Script to be evaluated if the test fails.
      * @return {boolean}  True if the test was successful or false, otherwise.
      */
-    this.testScript = function(_script, _times, _value, _tolerance, _catchScript)
-    {
+    this.testScript = function(_script, _times, _value, _tolerance, _catchScript) {
         if (typeof _times == 'undefined') {
             _times = 1;
         }
@@ -7149,7 +7115,7 @@ function Core() {
         }
         var _successfulTest = true;
         var _i = 0;
-         while (_i < _times) {
+        while (_i < _times) {
             this.testResult.obtained = eval(_script);
             if (typeof _value != 'undefined') {
                 if (_tolerance > 0) {
@@ -7186,8 +7152,7 @@ function Core() {
      * @param {string}   text - The string to convert.
      * @return {string}  A new string.
      */
-    this.toLowerCase = function(text)
-    {
+    this.toLowerCase = function(text) {
         return text.toLowerCase();
     }
 
@@ -7196,8 +7161,7 @@ function Core() {
      * @param {string}   text - The string representing a number.
      * @return {number}  The string coverted to number.
      */
-    this.toNumber = function(text)
-    {
+    this.toNumber = function(text) {
         var num;
         if (core.type(text) == 'string') {
             if (text.includes('i')) {
@@ -7218,12 +7182,11 @@ function Core() {
      * @param {number}   base - Numerical base for conversion.
      * @return {string}  The object coverted for string.
      */
-    this.toString = function(obj, base)
-    {
+    this.toString = function(obj, base) {
         var str = '';
         if (typeof obj == 'object') {
             if ('imaginary' in obj) {
-                var signal = Math.sign(obj.imaginary) > 0 ? '+': '-';
+                var signal = Math.sign(obj.imaginary) > 0 ? '+' : '-';
                 str = (obj.real).toString() + signal + Math.abs(obj.imaginary).toString() + '*i';
             } else {
                 str = JSON.stringify(obj);
@@ -7243,12 +7206,11 @@ function Core() {
      * @param {string}   text - The string to convert.
      * @return {string}  A new string.
      */
-    this.toUpperCase = function(text)
-    {
+    this.toUpperCase = function(text) {
         return text.toUpperCase();
     }
 
-   /**
+    /**
      * Removes characters from the beginning and end of a string.
      * @param {string}   str - The string to be trimmed
      * @param {string}   chars - The characters to remove.
@@ -7267,7 +7229,7 @@ function Core() {
         return str.replace(new RegExp('^[' + chars + ']+|[' + chars + ']+$', 'g'), '');
     }
 
-       /**
+    /**
      * Removes characters from the beginning and end of a string.
      * @param {string}   str - The string to be trimmed
      * @param {string}   chars - The characters to remove.
@@ -7310,8 +7272,7 @@ function Core() {
      * @param {object}   obj - A MaiaScript object .
      * @return {string}  The class of a MaiaScript object.
      */
-    this.type = function(obj)
-    {
+    this.type = function(obj) {
         var classType;
         if (typeof obj == 'boolean') {
             classType = 'boolean';
@@ -7343,8 +7304,7 @@ function Core() {
      * @param {object}  obj - The separator character.
      * @return {array}  The array with the object removed.
      */
-    this.unshift = function(mtx, obj)
-    {
+    this.unshift = function(mtx, obj) {
         return mtx.unshift(obj);
     }
 
@@ -7354,8 +7314,7 @@ function Core() {
      * @param {number}  columns - Number of columns in the matrix.
      * @return {array}  A (rows x columns) matrix.
      */
-    this.zero = function(rows, columns)
-    {
+    this.zero = function(rows, columns) {
         return core.matrix(0, rows, columns);
     }
 
@@ -7369,8 +7328,7 @@ function Core() {
      * @param {object}   right - The right operand.
      * @return {string}  An string represening the result of the operation.
      */
-    this.logicalOR = function(left, right)
-    {
+    this.logicalOR = function(left, right) {
         return left || right;
     }
 
@@ -7380,8 +7338,7 @@ function Core() {
      * @param {object}   right - The right operand.
      * @return {string}  An string represening the result of the operation.
      */
-    this.logicalXOR = function(left, right)
-    {
+    this.logicalXOR = function(left, right) {
         return left ? !right : right;
     }
 
@@ -7391,8 +7348,7 @@ function Core() {
      * @param {object}   right - The right operand.
      * @return {string}  An string represening the result of the operation.
      */
-    this.logicalAND = function(left, right)
-    {
+    this.logicalAND = function(left, right) {
         return left && right;
     }
 
@@ -7402,8 +7358,7 @@ function Core() {
      * @param {object}   right - The right operand.
      * @return {string}  An string represening the result of the operation.
      */
-    this.bitwiseOR = function(left, right)
-    {
+    this.bitwiseOR = function(left, right) {
         return left | right;
     }
 
@@ -7413,8 +7368,7 @@ function Core() {
      * @param {object}   right - The right operand.
      * @return {string}  An string represening the result of the operation.
      */
-    this.bitwiseXOR = function(left, right)
-    {
+    this.bitwiseXOR = function(left, right) {
         return left ^ right;
     }
 
@@ -7424,8 +7378,7 @@ function Core() {
      * @param {object}   right - The right operand.
      * @return {string}  An string represening the result of the operation.
      */
-    this.bitwiseAND = function(left, right)
-    {
+    this.bitwiseAND = function(left, right) {
         return left & right;
     }
 
@@ -7435,8 +7388,7 @@ function Core() {
      * @param {object}   right - The right operand.
      * @return {string}  An string represening the result of the operation.
      */
-    this.equal = function(left, right)
-    {
+    this.equal = function(left, right) {
         var res;
 
         Array.prototype.equals = function(array) {
@@ -7452,12 +7404,14 @@ function Core() {
                         return false;
                     }
                 } else if (this[i] != array[i]) {
-                     return false;
+                    return false;
                 }
             }
             return true;
         }
-        Object.defineProperty(Array.prototype, "equals", {enumerable: false});
+        Object.defineProperty(Array.prototype, "equals", {
+            enumerable: false
+        });
 
         isEquivalent = function(a, b) {
             var aProperties = Object.getOwnPropertyNames(a);
@@ -7492,8 +7446,7 @@ function Core() {
      * @param {object}   right - The right operand.
      * @return {string}  An string represening the result of the operation.
      */
-    this.different = function(left, right)
-    {
+    this.different = function(left, right) {
         return left != right;
     }
 
@@ -7503,8 +7456,7 @@ function Core() {
      * @param {object}   right - The right operand.
      * @return {string}  An string represening the result of the operation.
      */
-    this.LT = function(left, right)
-    {
+    this.LT = function(left, right) {
         return left < right;
     }
 
@@ -7514,8 +7466,7 @@ function Core() {
      * @param {object}   right - The right operand.
      * @return {string}  An string represening the result of the operation.
      */
-    this.LE = function(left, right)
-    {
+    this.LE = function(left, right) {
         return left <= right;
     }
 
@@ -7525,8 +7476,7 @@ function Core() {
      * @param {object}   right - The right operand.
      * @return {string}  An string represening the result of the operation.
      */
-    this.GE = function(left, right)
-    {
+    this.GE = function(left, right) {
         return left >= right;
     }
 
@@ -7536,8 +7486,7 @@ function Core() {
      * @param {object}   right - The right operand.
      * @return {string}  An string represening the result of the operation.
      */
-    this.GT = function(left, right)
-    {
+    this.GT = function(left, right) {
         return left > right;
     }
 
@@ -7547,8 +7496,7 @@ function Core() {
      * @param {object}   right - The right operand.
      * @return {string}  An string represening the result of the operation.
      */
-    this.leftShift = function(left, right)
-    {
+    this.leftShift = function(left, right) {
         return left << right;
     }
 
@@ -7558,8 +7506,7 @@ function Core() {
      * @param {object}   right - The right operand.
      * @return {string}  An string represening the result of the operation.
      */
-    this.rightShift = function(left, right)
-    {
+    this.rightShift = function(left, right) {
         return left >> right;
     }
 
@@ -7569,8 +7516,7 @@ function Core() {
      * @param {object}   right - The right operand.
      * @return {string}  An string represening the result of the operation.
      */
-    this.add = function(left, right)
-    {
+    this.add = function(left, right) {
         var res;
         if (core.type(left) == 'complex') {
             if (core.type(right) == 'complex') {
@@ -7640,8 +7586,7 @@ function Core() {
      * @param {object}   right - The right operand.
      * @return {string}  An string represening the result of the operation.
      */
-    this.sub = function(left, right)
-    {
+    this.sub = function(left, right) {
         var res;
         if (core.type(left) == 'complex') {
             if (core.type(right) == 'complex') {
@@ -7711,8 +7656,7 @@ function Core() {
      * @param {object}   right - The right operand.
      * @return {string}  An string represening the result of the operation.
      */
-    this.power = function(left, right)
-    {
+    this.power = function(left, right) {
         // r=abs(a+b*i)=sqrt(a*a+b*b)
         // t=arg(a+b*i)=atan(b/a)
         // pow(a+b*i,n)=pow(r,n)*cos(n*t)+i*pow(r,n)*sin(n*t)
@@ -7757,8 +7701,7 @@ function Core() {
      * @param {object}   right - The right operand.
      * @return {string}  An string represening the result of the operation.
      */
-    this.mul = function(left, right)
-    {
+    this.mul = function(left, right) {
         var res;
         if (core.type(left) == 'complex') {
             if (core.type(right) == 'complex') {
@@ -7829,8 +7772,7 @@ function Core() {
      * @param {object}   right - The right operand.
      * @return {string}  An string represening the result of the operation.
      */
-    this.div = function(left, right)
-    {
+    this.div = function(left, right) {
         // (a+b*i)/(c+d*i)=(a*c+b*d)/(c*c+d*d)+i*(b*c-a*d)/(c*c+d*d)
         var res;
         if (core.type(left) == 'complex') {
@@ -7867,8 +7809,7 @@ function Core() {
      * @param {object}   right - The right operand.
      * @return {string}  An string represening the result of the operation.
      */
-    this.mod = function(left, right)
-    {
+    this.mod = function(left, right) {
         return left % right;
     }
 
@@ -7877,8 +7818,7 @@ function Core() {
      * @param {object}   right - The right operand.
      * @return {string}  An string represening the result of the operation.
      */
-    this.bitwiseNot = function(right)
-    {
+    this.bitwiseNot = function(right) {
         return ~right;
     }
 
@@ -7887,14 +7827,12 @@ function Core() {
      * @param {object}   right - The right operand.
      * @return {string}  An string represening the result of the operation.
      */
-    this.logicalNot = function(right)
-    {
+    this.logicalNot = function(right) {
         return !right;
     }
 }
 
-core = new Core();
-/**
+core = new Core();/**
  * @license
  * Copyright 2020 Roberto Luiz Souza Monteiro,
  *                Renata Souza Barreto,
