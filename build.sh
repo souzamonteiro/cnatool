@@ -3,7 +3,8 @@
 rm -rf build/*
 rm -rf docs/*
 
-bin/maiascript.js -c -o build/cna.js ./maia/cna/cna.maia
+#bin/maiascript.js -c -o build/cna.js ./maia/cna/cna.maia
+cp ./maia/cna/cna.js build/
 cp build/cna.js src/
 cp build/cna.js js/
 
