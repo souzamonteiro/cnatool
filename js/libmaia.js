@@ -6901,7 +6901,7 @@ function Core() {
      * This property needs to be updated
      * with each new version of MaiaStudio.
      */
-    this.version = "3.1.0";
+    this.version = "3.1.1";
 
     this.testResult = {
         "expected": {},
@@ -8289,8 +8289,17 @@ function MaiaGPU() {
     this.new = function() {
         var device;
 
-        if (typeof(GPU) != "undefined") {
-            device = new GPU();
+        if (typeof process !== 'undefined') {
+            try {
+                const {GPU} = require('gpu.js');
+                device = new GPU();
+            } catch (e) {
+                system.log(e.message);
+            }
+        } else {
+            if (typeof(GPU) != "undefined") {
+                device = new GPU();
+            }
         }
         
         return device;
