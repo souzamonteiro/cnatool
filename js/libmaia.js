@@ -9810,14 +9810,6 @@ ann = new ANN();/**
   * @class 
   */
 function CAS() {
-    if (typeof process !== 'undefined') {
-        try {
-            var Algebrite = require('algebrite');
-        } catch (e) {
-            console.error(e.message);
-        }
-    }
-    
     init();
 
     /**
@@ -9847,6 +9839,14 @@ function CAS() {
 }
 
 cas = new CAS();
+
+if (typeof process !== 'undefined') {
+    try {
+        var Algebrite = require('algebrite');
+    } catch (e) {
+        console.error(e.message);
+    }
+}
 /**
  * @license
  * Copyright 2020 Roberto Luiz Souza Monteiro,
@@ -9871,14 +9871,6 @@ cas = new CAS();
  * @class
  */
 function MaiaGPU() {
-    if (typeof process !== 'undefined') {
-        try {
-            var {GPU} = require('gpu.js');
-        } catch (e) {
-            console.error(e.message);
-        }
-    }
-
     init();
     
     /**
@@ -9914,6 +9906,14 @@ function MaiaGPU() {
 }
 
 gpu = new MaiaGPU();
+
+if (typeof process !== 'undefined') {
+    try {
+        var {GPU} = require('gpu.js');
+    } catch (e) {
+        console.error(e.message);
+    }
+}
 /**
  * @license
  * Copyright 2020 Roberto Luiz Souza Monteiro,
@@ -9938,19 +9938,6 @@ gpu = new MaiaGPU();
  * @class
  */
 function Task() {
-    if (typeof process !== 'undefined') {
-        try {
-            var Worker = require('web-worker');
-        } catch (e) {
-            console.error(e.message);
-        }
-        try {
-            var Blob = require('cross-blob');
-        } catch (e) {
-            console.error(e.message);
-        }
-    }
-    
     init();
 
     /**
@@ -9998,3 +9985,16 @@ function Task() {
 }
 
 task = new Task();
+
+if (typeof process !== 'undefined') {
+    try {
+        var Worker = require('web-worker');
+    } catch (e) {
+        console.error(e.message);
+    }
+    try {
+        var Blob = require('cross-blob');
+    } catch (e) {
+        console.error(e.message);
+    }
+}
