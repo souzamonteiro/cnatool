@@ -9873,8 +9873,7 @@ cas = new CAS();
 function MaiaGPU() {
     if (typeof process !== 'undefined') {
         try {
-            const {GPU} = require('gpu.js');
-            device = new GPU();
+            var {GPU} = require('gpu.js');
         } catch (e) {
             console.error(e.message);
         }
