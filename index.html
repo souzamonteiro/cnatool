@@ -613,13 +613,18 @@
                fileData = cna.pajekFileToJson(fileObject.fileData)
                property.adj = cna.parsePajekFile(fileObject.fileData, property)
                showGraph(fileData)
+            } elseif (core.toLowerCase(fileObject.fileExtension) == "csv") {
+               property.adj = cna.parseMatrixFile(fileObject.fileData, property, ",", true)
+               fileObject.fileData = cna.createPajekFile(property.adj, "arcs")
+               fileData = cna.pajekFileToJson(fileObject.fileData)
+               showGraph(fileData)
             } else {
                system.showMessageDialog("File format not supported!")
             }
             
             networkLabel = cna.getLabels(property.adj)
             
-            if (core.includes(["json", "net"], core.toLowerCase(fileObject.fileExtension))) {
+            if (core.includes(["json", "net", "csv"], core.toLowerCase(fileObject.fileExtension))) {
                directedGraph = document.getElementById("directedGraph")
                directedGraph.checked = property.directed
 
