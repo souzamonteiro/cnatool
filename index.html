@@ -609,7 +609,7 @@
                }
                fileObject.fileData = cna.jsonToPajekFile(network)
                property.adj = cna.parsePajekFile(fileObject.fileData, property)
-            } elseif (fileObject.fileExtension == "net") {
+            } elseif (core.toLowerCase(fileObject.fileExtension) == "net") {
                fileData = cna.pajekFileToJson(fileObject.fileData)
                property.adj = cna.parsePajekFile(fileObject.fileData, property)
                showGraph(fileData)
@@ -619,7 +619,7 @@
             
             networkLabel = cna.getLabels(property.adj)
             
-            if (core.includes(["json", "net"], fileObject.fileExtension)) {
+            if (core.includes(["json", "net"], core.toLowerCase(fileObject.fileExtension))) {
                directedGraph = document.getElementById("directedGraph")
                directedGraph.checked = property.directed
 

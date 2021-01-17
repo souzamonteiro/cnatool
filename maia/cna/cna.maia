@@ -118,10 +118,10 @@ namespace cna {
 
         adj = []
         fileSection = "none"
-        fileLines = core.split(fileContents, "\r\n")
+        fileLines = core.split(core.replace(fileContents, "\r\n", "\n"), "\n")
         for (l = 0; l < fileLines.length; l = l + 1) {
             line = fileLines[l]
-            record = core.split(line.trim(), " ")
+            record = core.splitCSV(line.trim(), " ", true)
             if ((core.toLowerCase(record[0]) == "*vertices") || (core.toLowerCase(record[0]) == "*edges") || (core.toLowerCase(record[0]) == "*arcs") || (core.toLowerCase(record[0]) == "*matrix")) {
                 fileSection = core.toLowerCase(record[0])
                 if (fileSection == "*vertices") {
@@ -251,10 +251,10 @@ namespace cna {
         }
 
         fileSection = "none"
-        fileLines = core.split(fileContents, "\r\n")
+        fileLines = core.split(core.replace(fileContents, "\r\n", "\n"), "\n")
         for (l = 0; l < fileLines.length; l = l + 1) {
             line = fileLines[l]
-            record = core.split(line.trim(), " ")
+            record = core.splitCSV(line.trim(), " ", true)
             if ((core.toLowerCase(record[0]) == "*vertices") || (core.toLowerCase(record[0]) == "*edges") || (core.toLowerCase(record[0]) == "*arcs") || (core.toLowerCase(record[0]) == "*matrix")) {
                 fileSection = core.toLowerCase(record[0])
                 if (fileSection == "*vertices") {
@@ -298,6 +298,7 @@ namespace cna {
                             label = core.replace(record[j], core.regExp("\"", "g"), "")
                             continue
                         }
+                        console.log(record[j])
                         if (x == "") {
                             x = core.toNumber(record[j])
                             continue
