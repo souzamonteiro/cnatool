@@ -179,13 +179,17 @@ function CNATool() {
             var inputFile = '';
             var outputFile = '';
             var propertiesFile = '';
+            var csvFile = '';
             var jsonFile = '';
+            var columnSeparator = ',';
+            var replaceCommas = false;
             var includeAll = false;
             var includeClustering = false;
             var includeCentralities = false;
             var includeDegrees = false;
             var isDirected = false;
             var createGraph = false;
+            var exportGraph = false;
             var saveInJson = false;
             var topology = 'random';
             var prefix = '';
@@ -193,6 +197,7 @@ function CNATool() {
             var edges = 0;
             var probability = 0
             var avgdegree = 0;
+            var minw;
             var nfiles = 1;
             var vinc = 0;
             var einc = 0;
@@ -230,7 +235,10 @@ function CNATool() {
                         system.log('Usage: cnatool [options] [network.net] [--] [arguments]');
                         system.log('Options:');
                         system.log('       --all                Include all properties in report;');
+                        system.log('       --csv                CSV output file name;');
                         system.log('-j                          JSON output file name;');
+                        system.log('-r                          Replace commas by dots in CSV numeric columns;');
+                        system.log('-s                          CSV column separator;');
                         system.log('       --clu                Include vertices clustering in report;');
                         system.log('       --cen                Include vertices centralities in report;');
                         system.log('       --deg                Include vertices degrees in report;');
@@ -239,6 +247,7 @@ function CNATool() {
                         system.log('-o     [report.html]        Output report file name;');
                         system.log('-p     [properties.json]    Properties file name;');
                         system.log('       --create             Creates a network file in Pajet format;');
+                        system.log('       --export             Exports the network file in Pajet format;');
                         system.log('       --json               Save the network file in JSON format;');
                         system.log('       --topology           Graph topology (complete, random, scalefree, smallworld, hybrid);');
                         system.log('       --prefix             File name prefix for multiple file creation;');
@@ -246,6 +255,7 @@ function CNATool() {
                         system.log('       --edges              Number of edges;');
                         system.log('       --probability        Edge probability;');
                         system.log('       --avgdeg             Average degree;');
+                        system.log('       --minw               Minimum weight;');
                         system.log('       --nfiles             number of files to create;');
                         system.log('       --vinc               increment to number of vertices;');
                         system.log('       --einc               increment to number of edges;');
@@ -253,9 +263,17 @@ function CNATool() {
                         process.exit(0);
                     } else if (argv[i] == '--all') {
                         includeAll = true;
+                    } else if (argv[i] == '--csv') {
+                        i++;
+                        csvFile = argv[i];
                     } else if (argv[i] == '-j') {
                         i++;
                         jsonFile = argv[i];
+                    } else if (argv[i] == '-r') {
+                        replaceCommas = true;
+                    } else if (argv[i] == '-s') {
+                        i++;
+                        columnSeparator = argv[i];
                     } else if (argv[i] == '--clu') {
                         includeClustering = true;
                     } else if (argv[i] == '--cen') {
@@ -272,6 +290,8 @@ function CNATool() {
                         propertiesFile = argv[i];
                     } else if (argv[i] == '--create') {
                         createGraph = true;
+                    } else if (argv[i] == '--export') {
+                        exportGraph = true;
                     } else if (argv[i] == '--json') {
                         saveInJson = true;
                     } else if (argv[i] == '--topology') {
@@ -292,6 +312,9 @@ function CNATool() {
                     } else if (argv[i] == '--avgdeg') {
                         i++;
                         avgdegree = core.toNumber(argv[i]);
+                    } else if (argv[i] == '--minw') {
+                        i++;
+                        minw = core.toNumber(argv[i]);
                     } else if (argv[i] == '--nfiles') {
                         i++;
                         nfiles = core.toNumber(argv[i]);
@@ -375,6 +398,27 @@ function CNATool() {
                             system.log('Usage: cnatool [options] [network.net] [--] [arguments]');
                         } else {
                             var graphsData = [];
+                            var csvData = 'fileName' +
+                                          columnSeparator +
+                                          'properties' +
+                                          columnSeparator +
+                                          'n' +
+                                          columnSeparator +
+                                          'm' +
+                                          columnSeparator +
+                                          'networkAverageDegree' +
+                                          columnSeparator +
+                                          'networkDensity' +
+                                          columnSeparator +
+                                          'networkAverageClustering' +
+                                          columnSeparator +
+                                          'networkAverageShortestPath' +
+                                          columnSeparator +
+                                          'networkDiameter' +
+                                          columnSeparator +
+                                          'networkGlobalEfficiency' +
+                                          '\r\n';
+                                    
                             for (var i = 0; i < files.length; i++) {
                                 file = files[i];
                                 var fileName = file.split('.').shift();
@@ -389,7 +433,9 @@ function CNATool() {
 
                                 var fileContents = read(String(file));
 
-                                if (fileExtension == 'json') {
+                                if (fileExtension == 'csv') {
+                                    property.adj = cna.parseMatrixFile(fileContents, property, columnSeparator, replaceCommas);
+                                } else if (fileExtension == 'json') {
                                     var network = JSON.parse(fileContents);
                                     var pajekFileContents = cna.jsonToPajekFile(network);
                                     property.adj = cna.parsePajekFile(pajekFileContents, property);
@@ -431,8 +477,52 @@ function CNATool() {
                                     }
                                 });
 
+                                if (exportGraph) {
+                                    if (typeof minw != 'undefined') {
+                                        if (typeof minw == 'number') {
+                                            console.log("ok");
+                                            for (var j = 1; j < property.n; j++) {
+                                                for (var k = 1; k < property.m; k++) {
+                                                    if (property.adj[j][k] < minw) {
+                                                        property.adj[j][k] = 0;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    cna.setLabels(property.adj, property.networkLabel);
+                                    var outputFileContents = cna.createPajekFile(property.adj, 'arcs');
+                                    var outputFileName = fileName + '.net';
+                                    fs.writeFile(outputFileName, outputFileContents, function(err) {
+                                        if (err) {
+                                            throw err;
+                                        }
+                                    });
+                                }
+
                                 outputFile = '';
                                 propertiesFile = '';
+
+                                if (csvFile != '') {
+                                    csvData += file +
+                                               columnSeparator +
+                                               property.n +
+                                               columnSeparator +
+                                               property.m +
+                                               columnSeparator +
+                                               property.networkAverageDegree +
+                                               columnSeparator +
+                                               property.networkDensity +
+                                               columnSeparator +
+                                               property.networkAverageClustering +
+                                               columnSeparator +
+                                               property.networkAverageShortestPath +
+                                               columnSeparator +
+                                               property.networkDiameter +
+                                               columnSeparator +
+                                               property.networkGlobalEfficiency +
+                                              '\r\n';
+                                }
 
                                 if (jsonFile != '') {
                                     graphProperty = {
@@ -450,6 +540,13 @@ function CNATool() {
                                     };
                                     graphsData.push(graphProperty);
                                 }
+                            }
+                            if (csvFile != '') {
+                                fs.writeFile(csvFile, csvData, function(err) {
+                                    if (err) {
+                                        throw err;
+                                    }
+                                });
                             }
                             if (jsonFile != '') {
                                 fs.writeFile(jsonFile, JSON.stringify(graphsData), function(err) {
