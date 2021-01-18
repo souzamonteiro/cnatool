@@ -191,6 +191,7 @@ function CNATool() {
             var createGraph = false;
             var exportGraph = false;
             var saveInJson = false;
+            var allowLoops = false;
             var topology = 'random';
             var prefix = '';
             var vertices = 0;
@@ -249,6 +250,7 @@ function CNATool() {
                         system.log('       --create             Creates a network file in Pajet format;');
                         system.log('       --export             Exports the network file in Pajet format;');
                         system.log('       --json               Save the network file in JSON format;');
+                        system.log('       --loops              Allow loops;');
                         system.log('       --topology           Graph topology (complete, random, scalefree, smallworld, hybrid);');
                         system.log('       --prefix             File name prefix for multiple file creation;');
                         system.log('       --vertices           Number of vertices;');
@@ -294,6 +296,8 @@ function CNATool() {
                         exportGraph = true;
                     } else if (argv[i] == '--json') {
                         saveInJson = true;
+                    } else if (argv[i] == '--loops') {
+                        allowLoops = true;
                     } else if (argv[i] == '--topology') {
                         i++;
                         topology = argv[i];
@@ -478,9 +482,17 @@ function CNATool() {
                                 });
 
                                 if (exportGraph) {
+                                    if (!allowLoops) {
+                                        for (var j = 1; j < property.n; j++) {
+                                            for (var k = 1; k < property.m; k++) {
+                                                if (j == k) {
+                                                    property.adj[j][k] = 0;
+                                                }
+                                            }
+                                        }
+                                    }
                                     if (typeof minw != 'undefined') {
                                         if (typeof minw == 'number') {
-                                            console.log("ok");
                                             for (var j = 1; j < property.n; j++) {
                                                 for (var k = 1; k < property.m; k++) {
                                                     if (property.adj[j][k] < minw) {
