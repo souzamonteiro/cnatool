@@ -813,9 +813,12 @@ namespace cna {
             useGPU = false
         }
 
-        // Compute shader for GPU calculations.
+        //
+        // Compute shaders for GPU calculations.
+        //
+
         // This function performs binary multiplication between two matrices a and b.
-        kernel shader(a, b, n) {
+        kernel mulShader(a, b, n) {
             local c = false
             for (local i = 1; i < n; i = i + 1) {
                 c = c || (a[this.thread.y, i] != 0) && (b[i, this.thread.x] != 0)
@@ -827,10 +830,25 @@ namespace cna {
             }
         }
 
+        // This function performs binary OR between two matrices a and b.
+        kernel orShader(a, b) {
+            local c = false
+            c = (a[this.thread.x, this.thread.y] != 0) || (b[this.thread.x, this.thread.y] != 0)
+            if (c) {
+                return(1)
+            } else {
+                return(0)
+            }
+        }
+
         if (useGPU) {
             device = gpu.new()
-            multiplyMatrices = device.createKernel(shader)
-            multiplyMatrices.setOutput([dimI, dimI])
+
+            mulMatrices = device.createKernel(mulShader)
+            mulMatrices.setOutput([dimI, dimI])
+
+            orMatrices = device.createKernel(orShader)
+            orMatrices.setOutput([dimI, dimI])
         }
 
         // Remove vertex data from the matrix.
@@ -847,11 +865,12 @@ namespace cna {
         order = 1
         while (true) {
             if (useGPU) {
-                prod = multiplyMatrices(adj, old, dimI)
+                prod = mulMatrices(adj, old, dimI)
+                path = orMatrices(old, prod)
             } else {
                 prod = this.getTransitiveClosure(adj, old)
+                path = this.getBooleanOr(old, prod)
             }
-            path = this.getBooleanOr(old, prod)
             order = order + 1      
             for (i = 1; i < dimI; i = i + 1) {
                 for (j = 1; j < dimJ; j = j + 1) {
