@@ -16,6 +16,7 @@
     <script src="js/plugins/sigma.parsers.json.min.js"></script>
     <script src="js/plugins/sigma.exporters.svg.min.js"></script>
     <script src="js/plugins/sigma.plugins.dragNodes.min.js"></script>
+    <script src="js/gpu-browser.min.js"></script>
     <script src="js/maiascript.js"></script>
     <script src="js/cnatool.js"></script>
     <title>Complex Network Analysis Tool</title>
@@ -160,11 +161,19 @@
                             <label class="label" for="directedGraph">Directed Graph:</label>
                             <input id="directedGraph" nome="directedGraph" style="float: right;" type="checkbox" value="directed" onchange="updateProperties()">
                         </div>
+                        <div class="item">
+                            <label class="label" for="showLabels">Show labels:</label>
+                            <input id="showLabels" nome="showLabels" style="float: right;" type="checkbox" value="directed" onchange="updateGraph()">
+                        </div>
                     </li>
                     <li>
                         <div class="item">
                             <label class="label" for="calculateProperties">Calculate Properties:</label>
                             <input id="calculateProperties" nome="calculateProperties" style="float: right;" type="checkbox" value="calculate" onchange="updateProperties()">
+                        </div>
+                        <div class="item">
+                            <label class="label" for="useGPU">Use GPU:</label>
+                            <input id="useGPU" nome="useGPU" style="float: right;" type="checkbox" value="directed" onchange="updateGraph()">
                         </div>
                     </li>
                 </ul>
@@ -179,10 +188,13 @@
         var graph;
 
         function showGraph(data) {
+            showLabels = document.getElementById("showLabels");
+
             sigmaConfig = {
                 graph: data,
                 container: "container",
                 settings: {
+                    drawLabels: showLabels.checked,
                     autoResize: true,
                     scalingMode: "inside",
                     defaultNodeColor: "#ec5148"
@@ -200,7 +212,12 @@
 
         function updateGraph() {
             algorithm = document.getElementById("algorithm");
+            showLabels = document.getElementById("showLabels");
+
             try {
+                graph.settings("drawLabels", showLabels.checked);
+                graph.refresh();
+
                 if (algorithm.value == "noverlap") {
                     if (graph.isForceAtlas2Running()) {
                         graph.stopForceAtlas2();
@@ -289,6 +306,7 @@
 
       function showProperties(property) {
          calculateProperties = document.getElementById("calculateProperties")
+         useGPU = document.getElementById("useGPU")
 
          property.networkDensity = cna.getDensity(property.adj, property.directed)
 
@@ -314,7 +332,7 @@
             return()
          }
          
-         cnatool.calculateProperties(property)
+         cnatool.calculateProperties(property, useGPU.checked)
          
          property.networkLabel = networkLabel
 
@@ -656,9 +674,12 @@
       }
 
       function saveGraph() {
+         showLabels = document.getElementById("showLabels")
+
          svgConfig = {
             "download": true,
-            "filename": fileObject.fileName + ".svg"
+            "filename": fileObject.fileName + ".svg",
+            "labels": showLabels.checked
          }
          graph.toSVG(svgConfig)
       }

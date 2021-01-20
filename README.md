@@ -1,6 +1,6 @@
 # CNATool (Complex Network Analysis Tool)
 
-Copyright (C) 2020 Roberto Luiz Souza Monteiro, Renata Souza Barreto, Hernane Borges de Barros Pereira.
+Copyright (C) 2020,2021 Roberto Luiz Souza Monteiro, Renata Souza Barreto, Hernane Borges de Barros Pereira.
 
 This software is distributed under the terms of several open sources licenses.
 
@@ -21,7 +21,8 @@ Currently the tool allows:
 - Display detailed properties of the vertices: Degrees, Clustering, Centrality;
 - Save graph in Pajek format;
 - Export graph in SVG format;
-- Save a summary of graph’s properties in HTML format.
+- Save a summary of graph’s properties in HTML format;
+- Use the GPU when available.
 
 To use the online tool, access:
 

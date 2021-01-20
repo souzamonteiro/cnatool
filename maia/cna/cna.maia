@@ -549,6 +549,7 @@ namespace cna {
     function getTransitiveClosure(a, b) {
         dimA = core.dim(a)
         dimB = core.dim(b)
+
         if (dimA[1] == dimB[0]) {
             c = core.matrix(0, dimA[1], dimB[0])
             for (i = 1; i < dimA[0]; i = i + 1) {
@@ -577,7 +578,8 @@ namespace cna {
     function getBooleanOr(a, b) {
         dimA = core.dim(a)
         dimB = core.dim(b)
-        if (dimA == dimB) {
+
+        if (dimA[0] == dimB[0]) {
             c = core.matrix(0, dimA[0], dimA[1])
             for (i = 1; i < dimA[0]; i = i + 1) {
                 for (j = 1; j < dimA[1]; j = j + 1) {    
@@ -797,14 +799,40 @@ namespace cna {
     /// @method getShortestPath
     /// @memberof cna
     /// @param {object}   adj - Adjascence matrix.
+    /// @param {boolean}  useGPU - Uses the GPU to speed up calculations.
     /// @return {object}  Returns an array containing the shortest parh between each two vetice in the matrix.
     ///
-    function getShortestPath(adj) {
+    function getShortestPath(adj, useGPU) {
         dimAdj = core.dim(adj)
         dimI = dimAdj[0]
         dimJ = dimAdj[1]
         matrixOne = core.one(dimI, dimJ)
-        matrixZero = core.zero(dimI, dimJ)   
+        matrixZero = core.zero(dimI, dimJ)
+
+        if (core.type(useGPU) == "undefined") {
+            useGPU = false
+        }
+
+        // Compute shader for GPU calculations.
+        // This function performs binary multiplication between two matrices a and b.
+        kernel shader(a, b, n) {
+            local c = false
+            for (local i = 1; i < n; i = i + 1) {
+                c = c || (a[this.thread.y, i] != 0) && (b[i, this.thread.x] != 0)
+            }
+            if (c) {
+                return(1)
+            } else {
+                return(0)
+            }
+        }
+
+        if (useGPU) {
+            device = gpu.new()
+            multiplyMatrices = device.createKernel(shader)
+            multiplyMatrices.setOutput([dimI, dimI])
+        }
+
         // Remove vertex data from the matrix.
         for (i = 0; i < dimI; i = i + 1) {
             adj[0, i] = 0
@@ -818,7 +846,11 @@ namespace cna {
         prod = core.copyMatrix(adj)
         order = 1
         while (true) {
-            prod = this.getTransitiveClosure(adj, old)
+            if (useGPU) {
+                prod = multiplyMatrices(adj, old, dimI)
+            } else {
+                prod = this.getTransitiveClosure(adj, old)
+            }
             path = this.getBooleanOr(old, prod)
             order = order + 1      
             for (i = 1; i < dimI; i = i + 1) {

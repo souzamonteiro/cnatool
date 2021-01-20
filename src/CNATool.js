@@ -34,16 +34,20 @@ function CNATool() {
     /**
      * Calculates graph properties.
      * @param {object}   property - Network properties (n, m and directed).
+     * @param {boolean}  useGPU - Uses the GPU to speed up calculations.
      * @return           Graph properties.
      */
-    this.calculateProperties = function(property) {
+    this.calculateProperties = function(property, useGPU) {
+        if (typeof useGPU == 'undefined') {
+            var useGPU = false;
+        }
         property.networkLabel = cna.getLabels(property.adj);
         property.networkDegree = cna.getDegrees(property.adj, property.directed);
         property.networkAverageDegree = cna.getAverageDegree(property.networkDegree);
         property.networkDensity = cna.getDensity(property.adj, property.directed);
         property.networkClustering = cna.getClustering(property.adj, property.directed);
         property.networkAverageClustering = cna.getAverageClustering(property.networkClustering);
-        property.networkShortestPath = cna.getShortestPath(property.adj);
+        property.networkShortestPath = cna.getShortestPath(property.adj, useGPU);
         property.networkAverageShortestPath = cna.getAverageShortestPath(property.networkShortestPath);
         property.networkDiameter = cna.getDiameter(property.networkShortestPath);
         property.networkVertexEfficiency = cna.getVertexEfficiency(property.networkShortestPath);
@@ -187,8 +191,9 @@ function CNATool() {
             var includeClustering = false;
             var includeCentralities = false;
             var includeDegrees = false;
-            var isDirected = false;
+            var useGPU = false;
             var createGraph = false;
+            var isDirected = false;
             var exportGraph = false;
             var saveInJson = false;
             var allowLoops = false;
@@ -235,19 +240,20 @@ function CNATool() {
                         system.log('CNATool Command Line Interface (CLI)');
                         system.log('Usage: cnatool [options] [network.net] [--] [arguments]');
                         system.log('Options:');
+                        system.log('-h     --help               Displays this help message;');
                         system.log('       --all                Include all properties in report;');
+                        system.log('       --cen                Include vertices centralities in report;');
+                        system.log('       --clu                Include vertices clustering in report;');
+                        system.log('       --deg                Include vertices degrees in report;');
+                        system.log('       --gpu                Uses the GPU to speed up calculations;');
                         system.log('       --csv                CSV output file name;');
                         system.log('-j                          JSON output file name;');
-                        system.log('-r                          Replace commas by dots in CSV numeric columns;');
-                        system.log('-s                          CSV column separator;');
-                        system.log('       --clu                Include vertices clustering in report;');
-                        system.log('       --cen                Include vertices centralities in report;');
-                        system.log('       --deg                Include vertices degrees in report;');
-                        system.log('-d                          Network is a directed graph;');
-                        system.log('-h     --help               Displays this help message;');
                         system.log('-o     [report.html]        Output report file name;');
                         system.log('-p     [properties.json]    Properties file name;');
+                        system.log('-r                          Replace commas by dots in CSV numeric columns;');
+                        system.log('-s                          CSV column separator;');
                         system.log('       --create             Creates a network file in Pajet format;');
+                        system.log('       --directed           Network is a directed graph;');
                         system.log('       --export             Exports the network file in Pajet format;');
                         system.log('       --json               Save the network file in JSON format;');
                         system.log('       --loops              Allow loops;');
@@ -265,33 +271,35 @@ function CNATool() {
                         process.exit(0);
                     } else if (argv[i] == '--all') {
                         includeAll = true;
+                    } else if (argv[i] == '--cen') {
+                        includeCentralities = true;
+                    } else if (argv[i] == '--clu') {
+                        includeClustering = true;
+                    } else if (argv[i] == '--deg') {
+                        includeDegrees = true;
+                    } else if (argv[i] == '--gpu') {
+                        useGPU = true;
                     } else if (argv[i] == '--csv') {
                         i++;
                         csvFile = argv[i];
                     } else if (argv[i] == '-j') {
                         i++;
                         jsonFile = argv[i];
-                    } else if (argv[i] == '-r') {
-                        replaceCommas = true;
-                    } else if (argv[i] == '-s') {
-                        i++;
-                        columnSeparator = argv[i];
-                    } else if (argv[i] == '--clu') {
-                        includeClustering = true;
-                    } else if (argv[i] == '--cen') {
-                        includeCentralities = true;
-                    } else if (argv[i] == '--deg') {
-                        includeDegrees = true;
-                    } else if (argv[i] == '-d') {
-                        isDirected = true;
                     } else if (argv[i] == '-o') {
                         i++;
                         outputFile = argv[i];
                     } else if (argv[i] == '-p') {
                         i++;
                         propertiesFile = argv[i];
+                    } else if (argv[i] == '-r') {
+                        replaceCommas = true;
+                    } else if (argv[i] == '-s') {
+                        i++;
+                        columnSeparator = argv[i];
                     } else if (argv[i] == '--create') {
                         createGraph = true;
+                    } else if (argv[i] == '--directed') {
+                        isDirected = true;
                     } else if (argv[i] == '--export') {
                         exportGraph = true;
                     } else if (argv[i] == '--json') {
@@ -453,7 +461,7 @@ function CNATool() {
                                     property.directed = true;
                                 }
 
-                                cnatool.calculateProperties(property);
+                                cnatool.calculateProperties(property, useGPU);
 
                                 var html = '<!DOCTYPE html>';
                                 html = html + '<html lang="en"><head><meta charset="UTF-8"><title>Network Properties Report' + file + '</title></head>';
