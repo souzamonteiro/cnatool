@@ -149,7 +149,7 @@
     
 
     
-    <h4 class="name" id="calculateProperties"><span class="type-signature"></span>calculateProperties<span class="signature">(property, useGPU)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="calculateAverageShortestPath"><span class="type-signature"></span>calculateAverageShortestPath<span class="signature">(property, useGPU)</span><span class="type-signature"></span></h4>
     
 
     
@@ -157,7 +157,7 @@
 
 
 <div class="description">
-    Calculates graph properties.
+    Calculates the average shortest path.
 </div>
 
 
@@ -319,6 +319,176 @@
     
 
     
+    <h4 class="name" id="calculateProperties"><span class="type-signature"></span>calculateProperties<span class="signature">(property, useGPU)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Calculates graph properties.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>property</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Network properties (n, m and directed).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>useGPU</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Uses the GPU to speed up calculations.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="CNATool.js.html">CNATool.js</a>, <a href="CNATool.js.html#line54">line 54</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Graph properties.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="getCentralitiesReport"><span class="type-signature"></span>getCentralitiesReport<span class="signature">(property)</span><span class="type-signature"></span></h4>
     
 
@@ -420,7 +590,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CNATool.js.html">CNATool.js</a>, <a href="CNATool.js.html#line138">line 138</a>
+        <a href="CNATool.js.html">CNATool.js</a>, <a href="CNATool.js.html#line158">line 158</a>
     </li></ul></dd>
     
 
@@ -567,7 +737,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CNATool.js.html">CNATool.js</a>, <a href="CNATool.js.html#line117">line 117</a>
+        <a href="CNATool.js.html">CNATool.js</a>, <a href="CNATool.js.html#line137">line 137</a>
     </li></ul></dd>
     
 
@@ -714,7 +884,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CNATool.js.html">CNATool.js</a>, <a href="CNATool.js.html#line96">line 96</a>
+        <a href="CNATool.js.html">CNATool.js</a>, <a href="CNATool.js.html#line116">line 116</a>
     </li></ul></dd>
     
 
@@ -760,7 +930,7 @@
     
 
     
-    <h4 class="name" id="getSummaryReport"><span class="type-signature"></span>getSummaryReport<span class="signature">(property)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getSummaryReport"><span class="type-signature"></span>getSummaryReport<span class="signature">(property, includeDegDist)</span><span class="type-signature"></span></h4>
     
 
     
@@ -824,6 +994,29 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>includeDegDist</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Include degree distribution in report.</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -861,7 +1054,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CNATool.js.html">CNATool.js</a>, <a href="CNATool.js.html#line62">line 62</a>
+        <a href="CNATool.js.html">CNATool.js</a>, <a href="CNATool.js.html#line77">line 77</a>
     </li></ul></dd>
     
 
@@ -960,7 +1153,7 @@ process the files and generate the requested reports.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CNATool.js.html">CNATool.js</a>, <a href="CNATool.js.html#line160">line 160</a>
+        <a href="CNATool.js.html">CNATool.js</a>, <a href="CNATool.js.html#line180">line 180</a>
     </li></ul></dd>
     
 
@@ -1100,7 +1293,7 @@ process the files and generate the requested reports.
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Jan 20 2021 19:11:18 GMT-0300 (Horário Padrão de Brasília)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Thu Jan 21 2021 12:13:24 GMT-0300 (Horário Padrão de Brasília)
 </footer>
 
 <script> prettyPrint(); </script>

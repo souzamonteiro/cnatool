@@ -10092,6 +10092,20 @@ function CNATool() {
     }
 
     /**
+     * Calculates the average shortest path.
+     * @param {object}   property - Network properties (n, m and directed).
+     * @param {boolean}  useGPU - Uses the GPU to speed up calculations.
+     * @return           Graph properties.
+     */
+    this.calculateAverageShortestPath = function(property, useGPU) {
+        if (typeof useGPU == 'undefined') {
+            var useGPU = false;
+        }
+        property.networkShortestPath = cna.getShortestPath(property.adj, useGPU);
+        property.networkAverageShortestPath = cna.getAverageShortestPath(property.networkShortestPath);
+    }
+
+    /**
      * Calculates graph properties.
      * @param {object}   property - Network properties (n, m and directed).
      * @param {boolean}  useGPU - Uses the GPU to speed up calculations.
@@ -10117,12 +10131,17 @@ function CNATool() {
     /**
      * Create summary report.
      * @param {object}   property - Network properties (n, m and directed).
+     * @param {boolean}  includeDegDist - Include degree distribution in report.
      * @return           Summary report in HTML format.
      */
-    this.getSummaryReport = function(property) {
-        property.networkDegreeDistribution = cna.getDegreeDistribution(property.networkDegree)
-        dimNetworkDegreeDistribution = core.dim(property.networkDegreeDistribution)
-
+    this.getSummaryReport = function(property, includeDegDist) {
+        if (typeof includeDegDist == 'undefined') {
+            var includeDegDist = true;
+        }
+        if (includeDegDist) {
+            property.networkDegreeDistribution = cna.getDegreeDistribution(property.networkDegree)
+            dimNetworkDegreeDistribution = core.dim(property.networkDegreeDistribution)
+        }
         var html = '';
         html = html + '<table style="margin-left: auto; margin-right: auto; border: 1px solid black;">'
         html = html + '<caption style="text-align: center; font-family: Arial; font-weight: bold;">Network Properties</caption>'
@@ -10136,15 +10155,16 @@ function CNATool() {
         html = html + '<tr><th style="text-align: left; font-family: Arial; font-weight: bold;">Global Efficiency:</th><td style="text-align: right; padding: 2px;">' + string.sprintf('%.4f', property.networkGlobalEfficiency) + '</td></tr>'
         html = html + '</table>'
         html = html + '<br />'
-        html = html + '<table style="margin-left: auto; margin-right: auto; border: 1px solid black;">'
-        html = html + '<caption style="text-align: center; font-family: Arial; font-weight: bold;">Degree Disribuion</caption>'
-        html = html + '<tr><th style="text-align: left; font-family: Arial; font-weight: bold;">Cluster</th><th style="text-align: left; font-family: Arial; font-weight: bold;">Frequency</th><th style="text-align: left; font-family: Arial; font-weight: bold;">Frequency(%)</th></tr>'
-        for (i = 0; i < dimNetworkDegreeDistribution[0]; i = i + 1) {
-            html = html + '<tr><td style="text-align: right; padding: 2px;">' + core.toString(property.networkDegreeDistribution[i][0]) + '</td><td style="text-align: right; padding: 2px;">' + core.toString(property.networkDegreeDistribution[i][1]) + '</td><td style="text-align: right; padding: 2px;">' + string.sprintf('%.2f', property.networkDegreeDistribution[i][2]) + '</td></tr>'
+        if (includeDegDist) {
+            html = html + '<table style="margin-left: auto; margin-right: auto; border: 1px solid black;">'
+            html = html + '<caption style="text-align: center; font-family: Arial; font-weight: bold;">Degree Disribuion</caption>'
+            html = html + '<tr><th style="text-align: left; font-family: Arial; font-weight: bold;">Cluster</th><th style="text-align: left; font-family: Arial; font-weight: bold;">Frequency</th><th style="text-align: left; font-family: Arial; font-weight: bold;">Frequency(%)</th></tr>'
+            for (i = 0; i < dimNetworkDegreeDistribution[0]; i = i + 1) {
+                html = html + '<tr><td style="text-align: right; padding: 2px;">' + core.toString(property.networkDegreeDistribution[i][0]) + '</td><td style="text-align: right; padding: 2px;">' + core.toString(property.networkDegreeDistribution[i][1]) + '</td><td style="text-align: right; padding: 2px;">' + string.sprintf('%.2f', property.networkDegreeDistribution[i][2]) + '</td></tr>'
+            }
+            html = html + '</table>'
+            html = html + '<br />'
         }
-        html = html + '</table>'
-        html = html + '<br />'
-
         return html;
     }
 
@@ -10234,7 +10254,7 @@ function CNATool() {
                     return content.length > 0 && content.charCodeAt(0) == 0xFEFF ? content.substring(1) : content;
                 }
             }
-
+            
             // Command line arguments.
             system.argv = argv.slice();
             system.argc = argv.length;
@@ -10245,12 +10265,14 @@ function CNATool() {
             var propertiesFile = '';
             var csvFile = '';
             var jsonFile = '';
+            var logFile = '';
             var columnSeparator = ',';
             var replaceCommas = false;
             var includeAll = false;
             var includeClustering = false;
             var includeCentralities = false;
             var includeDegrees = false;
+            var onlyAvgShortestpath = false;
             var useGPU = false;
             var createGraph = false;
             var isDirected = false;
@@ -10305,9 +10327,11 @@ function CNATool() {
                         system.log('       --cen                Include vertices centralities in report;');
                         system.log('       --clu                Include vertices clustering in report;');
                         system.log('       --deg                Include vertices degrees in report;');
+                        system.log('       --spath              Include only average shortest path in report;');
                         system.log('       --gpu                Uses the GPU to speed up calculations;');
                         system.log('       --csv                CSV output file name;');
                         system.log('-j                          JSON output file name;');
+                        system.log('-l                          Log output file name;');
                         system.log('-o     [report.html]        Output report file name;');
                         system.log('-p     [properties.json]    Properties file name;');
                         system.log('-r                          Replace commas by dots in CSV numeric columns;');
@@ -10337,6 +10361,8 @@ function CNATool() {
                         includeClustering = true;
                     } else if (argv[i] == '--deg') {
                         includeDegrees = true;
+                    } else if (argv[i] == '--spath') {
+                        onlyAvgShortestpath = true;
                     } else if (argv[i] == '--gpu') {
                         useGPU = true;
                     } else if (argv[i] == '--csv') {
@@ -10345,6 +10371,9 @@ function CNATool() {
                     } else if (argv[i] == '-j') {
                         i++;
                         jsonFile = argv[i];
+                    } else if (argv[i] == '-l') {
+                        i++;
+                        logFile = argv[i];
                     } else if (argv[i] == '-o') {
                         i++;
                         outputFile = argv[i];
@@ -10490,6 +10519,7 @@ function CNATool() {
                                           columnSeparator +
                                           'networkGlobalEfficiency' +
                                           '\r\n';
+                            var logData = 'fileName' + columnSeparator + 'elapsedTime' + '\r\n';
                                     
                             for (var i = 0; i < files.length; i++) {
                                 file = files[i];
@@ -10521,12 +10551,23 @@ function CNATool() {
                                     property.directed = true;
                                 }
 
-                                cnatool.calculateProperties(property, useGPU);
+                                system.log('Processing file: ' + file + ' ...\n');
+                                if (onlyAvgShortestpath) {
+                                    var startTime = new Date();
+                                    cnatool.calculateAverageShortestPath(property, useGPU);
+                                    var endTime = new Date();
+                                } else {
+                                    var startTime = new Date();
+                                    cnatool.calculateProperties(property, useGPU);
+                                    var endTime = new Date();
+                                }
+                                var elapsedTime = endTime - startTime;
+                                system.log('Elapsed time: ' + elapsedTime + ' ms\n');
 
                                 var html = '<!DOCTYPE html>';
                                 html = html + '<html lang="en"><head><meta charset="UTF-8"><title>Network Properties Report' + file + '</title></head>';
                                 html = html + '<body>';
-                                html = html + cnatool.getSummaryReport(property);
+                                html = html + cnatool.getSummaryReport(property, !onlyAvgShortestpath);
                                 if (includeDegrees || includeAll) {
                                     html = html + cnatool.getDegreesReport(property);
                                 }
@@ -10603,7 +10644,6 @@ function CNATool() {
                                                property.networkGlobalEfficiency +
                                               '\r\n';
                                 }
-
                                 if (jsonFile != '') {
                                     graphProperty = {
                                         'fileName': file,
@@ -10620,6 +10660,9 @@ function CNATool() {
                                     };
                                     graphsData.push(graphProperty);
                                 }
+                                if (logFile != '') {
+                                    logData += file + columnSeparator + elapsedTime + '\r\n';
+                                }
                             }
                             if (csvFile != '') {
                                 fs.writeFile(csvFile, csvData, function(err) {
@@ -10635,6 +10678,14 @@ function CNATool() {
                                     }
                                 });
                             }
+                            if (logFile != '') {
+                                fs.writeFile(logFile, logData, function(err) {
+                                    if (err) {
+                                        throw err;
+                                    }
+                                });
+                            }
+                            
                         }
                     }
 
