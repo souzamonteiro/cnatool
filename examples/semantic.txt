@@ -1,0 +1,15 @@
+animal be alive
+mammal be animal
+human be mammal
+alice be human
+home be shelter
+house be human creation
+house be home
+alice have house
+house alice be blue
+pedro be human
+pedro have house
+house pedro be green
+dog be mammal
+bob be dog
+pedro have bob

@@ -281,7 +281,7 @@ function CNATool() {
                         system.log('       --export             Exports the network file in Pajet format;');
                         system.log('       --json               Save the network file in JSON format;');
                         system.log('       --loops              Allow loops;');
-                        system.log('       --topology           Graph topology (complete, random, scalefree, smallworld, hybrid);');
+                        system.log('       --topology           Graph topology (complete, random, scalefree, smallworld, hybrid, semantic);');
                         system.log('       --prefix             File name prefix for multiple file creation;');
                         system.log('       --vertices           Number of vertices;');
                         system.log('       --edges              Number of edges;');
@@ -377,7 +377,7 @@ function CNATool() {
                 system.argv = argv.slice(i);
                 system.argc = system.argv.length;
 
-                if (createGraph) {
+                if (createGraph && (topology != 'semantic')) {
                     if (prefix == '') {
                         prefix = topology;
                     }
@@ -460,148 +460,151 @@ function CNATool() {
                                           'networkGlobalEfficiency' +
                                           '\r\n';
                             var logData = 'fileName' + columnSeparator + 'elapsedTime' + '\r\n';
-                                    
+                                
                             for (var i = 0; i < files.length; i++) {
                                 file = files[i];
                                 var fileName = file.split('.').shift();
                                 var fileExtension = file.split('.').pop();
 
-                                if (outputFile == '') {
-                                    outputFile = fileName + '.html';
-                                }
-                                if (propertiesFile == '') {
-                                    propertiesFile = fileName + '-properties.json';
-                                }
-
                                 var fileContents = read(String(file));
 
-                                if (fileExtension == 'csv') {
-                                    property.adj = cna.parseMatrixFile(fileContents, property, columnSeparator, replaceCommas);
-                                } else if (fileExtension == 'json') {
-                                    var network = JSON.parse(fileContents);
-                                    var pajekFileContents = cna.jsonToPajekFile(network);
-                                    property.adj = cna.parsePajekFile(pajekFileContents, property);
-                                } else if (fileExtension == 'net') {
-                                    property.adj = cna.parsePajekFile(fileContents, property);
+                                if (createGraph && (topology == 'semantic')) {
                                 } else {
-                                    system.log('Unsupported file format when processing file ' + file + '');
-                                }
-
-                                if (isDirected) {
-                                    property.directed = true;
-                                }
-
-                                system.log('Processing file: ' + file + ' ...\n');
-                                if (onlyAvgShortestpath) {
-                                    var startTime = new Date();
-                                    cnatool.calculateAverageShortestPath(property, useGPU);
-                                    var endTime = new Date();
-                                } else {
-                                    var startTime = new Date();
-                                    cnatool.calculateProperties(property, useGPU);
-                                    var endTime = new Date();
-                                }
-                                var elapsedTime = endTime - startTime;
-                                system.log('Elapsed time: ' + elapsedTime + ' ms\n');
-
-                                var html = '<!DOCTYPE html>';
-                                html = html + '<html lang="en"><head><meta charset="UTF-8"><title>Network Properties Report' + file + '</title></head>';
-                                html = html + '<body>';
-                                html = html + cnatool.getSummaryReport(property, !onlyAvgShortestpath);
-                                if (includeDegrees || includeAll) {
-                                    html = html + cnatool.getDegreesReport(property);
-                                }
-                                if (includeClustering || includeAll) {
-                                    html = html + cnatool.getClusteringReport(property);
-                                }
-                                if (includeCentralities || includeAll) {
-                                    html = html + cnatool.getCentralitiesReport(property);
-                                }
-                                html = html + '</body>';
-                                html = html + '</html>';
-                                fs.writeFile(outputFile, html, function(err) {
-                                    if (err) {
-                                        throw err;
+                                    if (outputFile == '') {
+                                        outputFile = fileName + '.html';
                                     }
-                                });
-                                fs.writeFile(propertiesFile, JSON.stringify(property), function(err) {
-                                    if (err) {
-                                        throw err;
+                                    if (propertiesFile == '') {
+                                        propertiesFile = fileName + '-properties.json';
                                     }
-                                });
 
-                                if (exportGraph) {
-                                    if (!allowLoops) {
-                                        for (var j = 1; j < property.n; j++) {
-                                            for (var k = 1; k < property.m; k++) {
-                                                if (j == k) {
-                                                    property.adj[j][k] = 0;
-                                                }
-                                            }
+                                    if (fileExtension == 'csv') {
+                                        property.adj = cna.parseMatrixFile(fileContents, property, columnSeparator, replaceCommas);
+                                    } else if (fileExtension == 'json') {
+                                        var network = JSON.parse(fileContents);
+                                        var pajekFileContents = cna.jsonToPajekFile(network);
+                                        property.adj = cna.parsePajekFile(pajekFileContents, property);
+                                    } else if (fileExtension == 'net') {
+                                        property.adj = cna.parsePajekFile(fileContents, property);
+                                    } else {
+                                        system.log('Unsupported file format when processing file ' + file + '');
+                                    }
+
+                                    if (isDirected) {
+                                        property.directed = true;
+                                    }
+
+                                    system.log('Processing file: ' + file + ' ...\n');
+                                    if (onlyAvgShortestpath) {
+                                        var startTime = new Date();
+                                        cnatool.calculateAverageShortestPath(property, useGPU);
+                                        var endTime = new Date();
+                                    } else {
+                                        var startTime = new Date();
+                                        cnatool.calculateProperties(property, useGPU);
+                                        var endTime = new Date();
+                                    }
+                                    var elapsedTime = endTime - startTime;
+                                    system.log('Elapsed time: ' + elapsedTime + ' ms\n');
+
+                                    var html = '<!DOCTYPE html>';
+                                    html = html + '<html lang="en"><head><meta charset="UTF-8"><title>Network Properties Report' + file + '</title></head>';
+                                    html = html + '<body>';
+                                    html = html + cnatool.getSummaryReport(property, !onlyAvgShortestpath);
+                                    if (includeDegrees || includeAll) {
+                                        html = html + cnatool.getDegreesReport(property);
+                                    }
+                                    if (includeClustering || includeAll) {
+                                        html = html + cnatool.getClusteringReport(property);
+                                    }
+                                    if (includeCentralities || includeAll) {
+                                        html = html + cnatool.getCentralitiesReport(property);
+                                    }
+                                    html = html + '</body>';
+                                    html = html + '</html>';
+                                    fs.writeFile(outputFile, html, function(err) {
+                                        if (err) {
+                                            throw err;
                                         }
-                                    }
-                                    if (typeof minw != 'undefined') {
-                                        if (typeof minw == 'number') {
+                                    });
+                                    fs.writeFile(propertiesFile, JSON.stringify(property), function(err) {
+                                        if (err) {
+                                            throw err;
+                                        }
+                                    });
+
+                                    if (exportGraph) {
+                                        if (!allowLoops) {
                                             for (var j = 1; j < property.n; j++) {
                                                 for (var k = 1; k < property.m; k++) {
-                                                    if (property.adj[j][k] < minw) {
+                                                    if (j == k) {
                                                         property.adj[j][k] = 0;
                                                     }
                                                 }
                                             }
                                         }
+                                        if (typeof minw != 'undefined') {
+                                            if (typeof minw == 'number') {
+                                                for (var j = 1; j < property.n; j++) {
+                                                    for (var k = 1; k < property.m; k++) {
+                                                        if (property.adj[j][k] < minw) {
+                                                            property.adj[j][k] = 0;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        cna.setLabels(property.adj, property.networkLabel);
+                                        var outputFileContents = cna.createPajekFile(property.adj, 'arcs');
+                                        var outputFileName = fileName + '.net';
+                                        fs.writeFile(outputFileName, outputFileContents, function(err) {
+                                            if (err) {
+                                                throw err;
+                                            }
+                                        });
                                     }
-                                    cna.setLabels(property.adj, property.networkLabel);
-                                    var outputFileContents = cna.createPajekFile(property.adj, 'arcs');
-                                    var outputFileName = fileName + '.net';
-                                    fs.writeFile(outputFileName, outputFileContents, function(err) {
-                                        if (err) {
-                                            throw err;
-                                        }
-                                    });
-                                }
 
-                                outputFile = '';
-                                propertiesFile = '';
+                                    outputFile = '';
+                                    propertiesFile = '';
 
-                                if (csvFile != '') {
-                                    csvData += file +
-                                               columnSeparator +
-                                               property.n +
-                                               columnSeparator +
-                                               property.m +
-                                               columnSeparator +
-                                               property.networkAverageDegree +
-                                               columnSeparator +
-                                               property.networkDensity +
-                                               columnSeparator +
-                                               property.networkAverageClustering +
-                                               columnSeparator +
-                                               property.networkAverageShortestPath +
-                                               columnSeparator +
-                                               property.networkDiameter +
-                                               columnSeparator +
-                                               property.networkGlobalEfficiency +
-                                              '\r\n';
-                                }
-                                if (jsonFile != '') {
-                                    graphProperty = {
-                                        'fileName': file,
-                                        'properties': {
-                                            'n': property.n,
-                                            'm': property.m,
-                                            'networkAverageDegree': property.networkAverageDegree,
-                                            'networkDensity': property.networkDensity,
-                                            'networkAverageClustering': property.networkAverageClustering,
-                                            'networkAverageShortestPath': property.networkAverageShortestPath,
-                                            'networkDiameter': property.networkDiameter,
-                                            'networkGlobalEfficiency': property.networkGlobalEfficiency
-                                        }
-                                    };
-                                    graphsData.push(graphProperty);
-                                }
-                                if (logFile != '') {
-                                    logData += file + columnSeparator + elapsedTime + '\r\n';
+                                    if (csvFile != '') {
+                                        csvData += file +
+                                                columnSeparator +
+                                                property.n +
+                                                columnSeparator +
+                                                property.m +
+                                                columnSeparator +
+                                                property.networkAverageDegree +
+                                                columnSeparator +
+                                                property.networkDensity +
+                                                columnSeparator +
+                                                property.networkAverageClustering +
+                                                columnSeparator +
+                                                property.networkAverageShortestPath +
+                                                columnSeparator +
+                                                property.networkDiameter +
+                                                columnSeparator +
+                                                property.networkGlobalEfficiency +
+                                                '\r\n';
+                                    }
+                                    if (jsonFile != '') {
+                                        graphProperty = {
+                                            'fileName': file,
+                                            'properties': {
+                                                'n': property.n,
+                                                'm': property.m,
+                                                'networkAverageDegree': property.networkAverageDegree,
+                                                'networkDensity': property.networkDensity,
+                                                'networkAverageClustering': property.networkAverageClustering,
+                                                'networkAverageShortestPath': property.networkAverageShortestPath,
+                                                'networkDiameter': property.networkDiameter,
+                                                'networkGlobalEfficiency': property.networkGlobalEfficiency
+                                            }
+                                        };
+                                        graphsData.push(graphProperty);
+                                    }
+                                    if (logFile != '') {
+                                        logData += file + columnSeparator + elapsedTime + '\r\n';
+                                    }
                                 }
                             }
                             if (csvFile != '') {
@@ -625,7 +628,6 @@ function CNATool() {
                                     }
                                 });
                             }
-                            
                         }
                     }
 

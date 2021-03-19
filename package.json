@@ -1,6 +1,6 @@
 {
     "name": "cnatool",
-    "version": "1.7.3",
+    "version": "1.8.0",
     "description": "Complex Network Analysis Tool.",
     "keywords": [
         "maia",
@@ -9,6 +9,8 @@
         "scientific computing",
         "complex network",
         "complex network analysis",
+        "semantic network",
+        "semantic network analysis",
         "smallword",
         "scale-free",
         "clustering",

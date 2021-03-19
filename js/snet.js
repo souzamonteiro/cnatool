@@ -1,0 +1,1 @@
+function snet_() {undefined};snet = new snet_();

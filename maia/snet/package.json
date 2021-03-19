@@ -1,0 +1,16 @@
+{
+  "name": "snet",
+  "version": "1.0.0",
+  "description": "Library for building semantic networks.",
+  "keywords": [
+    "maia",
+    "maiascript",
+    "programming language",
+    "scientific computing",
+    "semantic network",
+    "semantic network building"
+  ],
+  "author": "The MaiaScript Team (https://www.maiascript.com)",
+  "license": "Apache-2.0",
+  "homepage": "https://www.maiascript.com"
+}

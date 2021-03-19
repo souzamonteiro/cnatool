@@ -1,0 +1,63 @@
+animal  N
+be  V
+alive   N
+{S}
+mammal  N
+be  V
+animal  N
+{S}
+human   N
+be  N
+mammal  N
+{S}
+alice   N
+be  V
+human   N
+{S}
+home    N
+be  V
+shelter N
+{S}
+house   N
+be  V
+human   N
+creation    N
+{S}
+house   N
+be  V
+home    N
+{S}
+alice   N
+have    V
+house   N
+{S}
+house   N
+alice   N
+be  V
+blue    N
+{S}
+pedro   N
+be  V
+human   N
+{S}
+pedro   N
+have    V
+house   N
+{S}
+house   N
+pedro   N
+be  V
+green   N
+{S}
+dog N
+be  V
+mammal  N
+{S}
+bob N
+be  V
+dog N
+{S}
+pedro   N
+have    V
+bob N
+{S}
