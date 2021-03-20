@@ -214,12 +214,14 @@ function CNATool() {
             var includeDegrees = false;
             var onlyAvgShortestpath = false;
             var useGPU = false;
+            var buildGraph = false;
+            var isWeighted = false;
             var createGraph = false;
             var isDirected = false;
             var exportGraph = false;
             var saveInJson = false;
             var allowLoops = false;
-            var topology = 'random';
+            var topology = '';
             var prefix = '';
             var vertices = 0;
             var edges = 0;
@@ -276,12 +278,17 @@ function CNATool() {
                         system.log('-p     [properties.json]    Properties file name;');
                         system.log('-r                          Replace commas by dots in CSV numeric columns;');
                         system.log('-s                          CSV column separator;');
+                        system.log('       --build              Builds a semantic network from a file in DLF format;');
+                        system.log('       --weighted           The created network must be weighted based');
+                        system.log('                            on the number of occurrences of the connections');
+                        system.log('                            between the vertices;');
                         system.log('       --create             Creates a network file in Pajet format;');
                         system.log('       --directed           Network is a directed graph;');
                         system.log('       --export             Exports the network file in Pajet format;');
                         system.log('       --json               Save the network file in JSON format;');
                         system.log('       --loops              Allow loops;');
-                        system.log('       --topology           Graph topology (complete, random, scalefree, smallworld, hybrid, semantic);');
+                        system.log('       --topology           Graph topology (complete, random, scalefree, smallworld, hybrid');
+                        system.log('                            For semantic networks it can be: chain, circle or clique');
                         system.log('       --prefix             File name prefix for multiple file creation;');
                         system.log('       --vertices           Number of vertices;');
                         system.log('       --edges              Number of edges;');
@@ -325,6 +332,10 @@ function CNATool() {
                     } else if (argv[i] == '-s') {
                         i++;
                         columnSeparator = argv[i];
+                    } else if (argv[i] == '--build') {
+                        buildGraph = true;
+                    } else if (argv[i] == '--weighted') {
+                        isWeighted = true;
                     } else if (argv[i] == '--create') {
                         createGraph = true;
                     } else if (argv[i] == '--directed') {
@@ -377,7 +388,10 @@ function CNATool() {
                 system.argv = argv.slice(i);
                 system.argc = system.argv.length;
 
-                if (createGraph && (topology != 'semantic')) {
+                if (createGraph) {
+                    if (topology == '') {
+                        topology = 'random';
+                    }
                     if (prefix == '') {
                         prefix = topology;
                     }
@@ -438,6 +452,25 @@ function CNATool() {
                             system.log('CNATool Command Line Interface (CLI)');
                             system.log('Usage: cnatool [options] [network.net] [--] [arguments]');
                         } else {
+                            property = {
+                                'adj': [],
+                                'n': 0,
+                                'm': 0,
+                                'directed': false,
+                                'networkLabel': [],
+                                'networkDegree': [],
+                                'networkAverageDegree': 0,
+                                'networkDegreeDistribution': [],
+                                'networkDensity': 0,
+                                'networkClustering': [],
+                                'networkAverageClustering': 0,
+                                'networkShortestPath': [],
+                                'networkAverageShortestPath': 0,
+                                'networkDiameter': 0,
+                                'networkCentrality': [],
+                                'networkVertexEfficiency': [],
+                                'networkGlobalEfficiency': 0
+                            };
                             var graphsData = [];
                             var csvData = 'fileName' +
                                           columnSeparator +
@@ -463,18 +496,33 @@ function CNATool() {
                                 
                             for (var i = 0; i < files.length; i++) {
                                 file = files[i];
+                                
                                 var fileName = file.split('.').shift();
                                 var fileExtension = file.split('.').pop();
 
+                                if (propertiesFile == '') {
+                                    propertiesFile = fileName + '-properties.json';
+                                }
+
                                 var fileContents = read(String(file));
 
-                                if (createGraph && (topology == 'semantic')) {
+                                if (buildGraph) {
+                                    if (topology == '') {
+                                        topology = 'chain';
+                                    }
+
+                                    var outputFileName = fileName + '.json';
+                                    
+                                    graphsData = snet.dlfFileToJson(fileContents, property, topology, isWeighted);
+                                    
+                                    fs.writeFile(outputFileName, JSON.stringify(graphsData), function(err) {
+                                        if (err) {
+                                            throw err;
+                                        }
+                                    });
                                 } else {
                                     if (outputFile == '') {
                                         outputFile = fileName + '.html';
-                                    }
-                                    if (propertiesFile == '') {
-                                        propertiesFile = fileName + '-properties.json';
                                     }
 
                                     if (fileExtension == 'csv') {
@@ -526,12 +574,7 @@ function CNATool() {
                                             throw err;
                                         }
                                     });
-                                    fs.writeFile(propertiesFile, JSON.stringify(property), function(err) {
-                                        if (err) {
-                                            throw err;
-                                        }
-                                    });
-
+                                    
                                     if (exportGraph) {
                                         if (!allowLoops) {
                                             for (var j = 1; j < property.n; j++) {
@@ -606,6 +649,13 @@ function CNATool() {
                                         logData += file + columnSeparator + elapsedTime + '\r\n';
                                     }
                                 }
+                            }
+                            if (propertiesFile != '') {
+                                fs.writeFile(propertiesFile, JSON.stringify(property), function(err) {
+                                    if (err) {
+                                        throw err;
+                                    }
+                                });
                             }
                             if (csvFile != '') {
                                 fs.writeFile(csvFile, csvData, function(err) {
