@@ -188,6 +188,7 @@
         var graph;
 
         function showGraph(data) {
+            directedGraph = document.getElementById("directedGraph")
             showLabels = document.getElementById("showLabels");
 
             sigmaConfig = {
@@ -197,9 +198,17 @@
                     drawLabels: showLabels.checked,
                     autoResize: true,
                     scalingMode: "inside",
-                    defaultNodeColor: "#ec5148"
+                    defaultNodeColor: "#ec5148",
+                    defaultEdgeType: "line",
+                    minNodeSize: 5,
+                    maxNodeSize: 10,
+                    minEdgeSize: 2,
+                    maxEdgeSize: 10,
+                    minArrowSize: 5,
+                    maxArrowSize: 10,
                 }
             };
+
             document.getElementById("container").innerHTML = "";
             graph = new sigma(sigmaConfig);
 
@@ -211,11 +220,18 @@
         }
 
         function updateGraph() {
-            algorithm = document.getElementById("algorithm");
+            directedGraph = document.getElementById("directedGraph")
             showLabels = document.getElementById("showLabels");
-
+            algorithm = document.getElementById("algorithm");
+            
             try {
                 graph.settings("drawLabels", showLabels.checked);
+                if (directedGraph.checked) {
+                    graph.settings("defaultEdgeType", "arrow");
+                } else {
+                    graph.settings("defaultEdgeType", "line");
+                }
+
                 graph.refresh();
 
                 if (algorithm.value == "noverlap") {
@@ -301,6 +317,7 @@
 
          property.directed = directedGraph.checked
          
+         updateGraph()
          showProperties(property)
       }
 
@@ -308,7 +325,15 @@
          calculateProperties = document.getElementById("calculateProperties")
          useGPU = document.getElementById("useGPU")
 
-         property.networkDensity = cna.getDensity(property.adj, property.directed)
+         if (property.adj.length != 0) {
+            property.networkDensity = cna.getDensity(property.adj, property.directed)
+         } else {
+            if (property.directed) {
+                property.networkDensity = property.m / (property.n * (property.n - 1))
+            } else {
+                property.networkDensity = (property.m / 2) / (property.n * (property.n - 1) / 2)
+            }
+         }
 
          verticesElement = document.getElementById("vertices")
          edgesElement = document.getElementById("edges")
@@ -332,6 +357,15 @@
             return()
          }
          
+         if (property.adj == []) {
+            network = {
+                "nodes": graph.graph.nodes(),
+                "edges": graph.graph.edges()
+            }
+            fileObject.fileData = cna.jsonToPajekFile(network)
+            property.adj = cna.parsePajekFile(fileObject.fileData, property)
+         }
+
          cnatool.calculateProperties(property, useGPU.checked)
          
          property.networkLabel = networkLabel
@@ -625,13 +659,9 @@
                showGraph(fileData)
             } elseif (fileObject.fileExtension == "json") {
                fileData = JSON.parse(fileObject.fileData)
+               property.n = fileData.nodes.length
+               property.m = fileData.edges.length
                showGraph(fileData)
-               network = {
-                  "nodes": graph.graph.nodes(),
-                  "edges": graph.graph.edges()
-               }
-               fileObject.fileData = cna.jsonToPajekFile(network)
-               property.adj = cna.parsePajekFile(fileObject.fileData, property)
             } elseif (core.toLowerCase(fileObject.fileExtension) == "net") {
                fileData = cna.pajekFileToJson(fileObject.fileData)
                property.adj = cna.parsePajekFile(fileObject.fileData, property)
@@ -640,7 +670,9 @@
                system.showMessageDialog("File format not supported!")
             }
             
-            networkLabel = cna.getLabels(property.adj)
+            if (fileObject.fileExtension != "json") {
+                networkLabel = cna.getLabels(property.adj)
+            }
             
             if (core.includes(["csv", "json", "net"], core.toLowerCase(fileObject.fileExtension))) {
                directedGraph = document.getElementById("directedGraph")

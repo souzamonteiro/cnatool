@@ -61,19 +61,20 @@ namespace snet {
     /// @param {boolean}  weighted - The created network must be weighted based
     ///                              on the number of occurrences of the connections
     ///                              between the vertices.
+    /// @param {object}   network - Network previously created to insert new data.
     /// @return {object}  A JSON containing the network.
     ///
-    function dlfFileToJson(fileContents, properties, topology, weighted) {
+    function dlfFileToJson(fileContents, properties, topology, weighted, network) {
         if (core.type(properties) == "undefined") {
             properties = {
                 "n": 0,
                 "m": 0,
-                "directed": false
+                "directed": true
             }
         } else {
             properties.n = 0
             properties.m = 0
-            properties.directed = false
+            properties.directed = true
         }
         if (core.type(topology) == "undefined") {
             topology = "chain"
@@ -81,74 +82,47 @@ namespace snet {
         if (core.type(weighted) == "undefined") {
             weighted = true
         }
-        
-        network = {
-            "nodes": [],
-            "edges": []
+        if (core.type(network) == "undefined") {
+            network = {
+                "nodes": [],
+                "edges": []
+            }
         }
 
-        fileSection = "none"
+        // Search engine.
+        queryObject = ""
+        edgeIndex = []
+
+        function findNode(element, index, list) {
+            thisNode = list[index]
+            found = (element.label == queryObject)
+            return(found)
+        }
+        function findEdge(element, index, list) {
+            thisNode = list[index]
+            found = ((element.source == queryObject.source) &amp;&amp; (element.target== queryObject.target))
+            edgeIndex = index
+            return(found)
+        }
+
+        id = -1
+        nodes = []
+        endOfRecord = false
+
         fileLines = core.split(core.replace(fileContents, "\r\n", "\n"), "\n")
         for (l = 0; l &lt; fileLines.length; l = l + 1) {
             line = fileLines[l]
             record = core.splitCSV(line.trim(), " ", true)
-            if ((core.toLowerCase(record[0]) == "*vertices") || (core.toLowerCase(record[0]) == "*edges") || (core.toLowerCase(record[0]) == "*arcs") || (core.toLowerCase(record[0]) == "*matrix")) {
-                fileSection = core.toLowerCase(record[0])
-                if (fileSection == "*vertices") {
-                    n = ""
-                    for (j = 1; j &lt; record.length; j = j + 1) {
-                        if (record[j] == "") {
-                            continue
-                        }
-                        if (n == "") {
-                            n = core.toNumber(record[j])
-                            break
-                        }
-                    }
-                    if (n == "") {
-                        break
-                    } else {
-                        properties.n = n
-                    }
-                } elseif (fileSection == "*arcs") {
-                    properties.directed = true
-                }
-                i = 0
-                continue
+            if (record[0] == "{S}") {
+                endOfRecord = true
             }
-            if (core.length(record) >= 2) {
-                if (fileSection == "*vertices") {
-                    id = ""
-                    label = ""
+            if (core.length(record) >= 1) {
+                if (!endOfRecord) {
+                    id = id + 1
+                    label = core.toString(record[0])
                     x = ""
                     y = ""
                     size = ""
-                    for (j = 0; j &lt; record.length; j = j + 1) {
-                        if (record[j] == "") {
-                            continue
-                        }
-                        if (id == "") {
-                            id = core.toString(record[j])
-                            continue
-                        }
-                        if (label == "") {
-                            label = core.replace(record[j], core.regExp("\"", "g"), "")
-                            continue
-                        }
-                        if (x == "") {
-                            x = core.toNumber(record[j])
-                            continue
-                        }
-                        if (y == "") {
-                            y = core.toNumber(record[j])
-                            continue
-                        }
-                        if (size == "") {
-                            if (core.type(record[j]) == "number") {
-                                size = core.toNumber(record[j])
-                            }
-                        }
-                    }
                     if (x == "") {
                         x = math.random()
                     }
@@ -165,79 +139,128 @@ namespace snet {
                         "y": y,
                         "size": size
                     }
-                    network.nodes.push(node)
-                    i = i + 1
-                } elseif (fileSection == "*edges") {
-                    source = ""
-                    target = ""
-                    weight = ""
-                    for (j = 0; j &lt; record.length; j = j + 1) {
-                        if (record[j] == "") {
-                            continue
+                    nodes.push(node)
+                } else {
+                    foreach (nodes; index; node) {
+                        queryObject = node.label
+                        nodeFound = network.nodes.find(findNode)
+                        if (core.type(nodeFound) == "undefined") {
+                            node.id = "n" + network.nodes.length
+                            network.nodes.push(node)
                         }
-                        if (source == "") {
-                            source = core.toNumber(record[j])
-                            continue
-                        }
-                        if (target == "") {
-                            target = core.toNumber(record[j])
-                            continue
-                        }
-                        if (weight == "") {
-                            if (core.type(record[j]) == "number") {
-                                weight = core.toNumber(record[j])
+                    }
+                    if (topology == "chain") {
+                        for (i = 0; i &lt; nodes.length - 1; i = i + 1) {
+                            node1 = nodes[i]
+                            node2 = nodes[i + 1]
+
+                            edgeIndex = -1
+                            queryObject = {"source": node1.id, "target": node2.id}
+                            edgeFound = network.edges.find(findEdge)
+
+                            if (core.type(edgeFound) == "undefined") {
+                                edge = {
+                                    "id": "e" + network.edges.length,
+                                    "source": node1.id,
+                                    "target": node2.id,
+                                    "size": 1,
+                                    "type": "arrow"
+                                }
+                                network.edges.push(edge)
+                            } else {
+                                if (weighted) {
+                                    edge = network.edges[edgeIndex]
+                                    edge.size = edge.size + 1
+                                }
                             }
-                            continue
+                        }
+                    } elseif (topology == "clique") {
+                        foreach (nodes; index1; node1) {
+                            foreach (nodes; index2; node2) {
+                                if (index1 != index2) {
+                                    edgeIndex = []
+                                    queryObject = {"source": node1.id, "target": node2.id}
+                                    edgeFound = network.edges.find(findEdge)
+
+                                    if (core.type(edgeFound) == "undefined") {
+                                        edge = {
+                                            "id": "e" + network.edges.length,
+                                            "source": node1.id,
+                                            "target": node2.id,
+                                            "size": 1,
+                                            "type": "arrow"
+                                        }
+                                        network.edges.push(edge)
+                                    } else {
+                                        if (weighted) {
+                                            edge = network.edges[edgeIndex]
+                                            edge.size = edge.size + 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } elseif (topology == "circle") {
+                        for (i = 0; i &lt; nodes.length - 1; i = i + 1) {
+                            node1 = nodes[i]
+                            node2 = nodes[i + 1]
+
+                            edgeIndex = []
+                            queryObject = {"source": node1.id, "target": node2.id}
+                            edgeFound = network.edges.find(findEdge)
+                            
+                            if (core.type(edgeFound) == "undefined") {
+                                edge = {
+                                    "id": "e" + network.edges.length,
+                                    "source": node1.id,
+                                    "target": node2.id,
+                                    "size": 1,
+                                    "type": "arrow"
+                                }
+                                network.edges.push(edge)
+                            } else {
+                                if (weighted) {
+                                    edge = network.edges[edgeIndex]
+                                    edge.size = edge.size + 1
+                                }
+                            }
+
+                            if (i + 1 == nodes.length - 1) {
+                                node1 = nodes[i + 1]
+                                node2 = nodes[0]
+
+                                edgeIndex = []
+                                queryObject = {"source": node1.id, "target": node2.id}
+                                edgeFound = network.edges.find(findEdge)
+
+                                if (core.type(edgeFound) == "undefined") {
+                                    edge = {
+                                        "id": "e" + network.edges.length,
+                                        "source": node1.id,
+                                        "target": node2.id,
+                                        "size": 1,
+                                        "type": "arrow"
+                                    }
+                                    network.edges.push(edge)
+                                } else {
+                                    if (weighted) {
+                                        edge = network.edges[edgeIndex]
+                                        edge.size = edge.size + 1
+                                    }
+                                }
+                            }
                         }
                     }
-                    if (weight == "") {
-                        weight = 1
-                    }
-                    edge = {
-                        "id": "e" + core.toString(i),
-                        "source": "n" + core.toString(source),
-                        "target": "n" + core.toString(target),
-                        "size": weight
-                    }
-                    network.edges.push(edge)
-                    i = i + 1
-                    properties.m = properties.m + 1
-                } elseif (fileSection == "*arcs") {
-                    source = ""
-                    target = ""
-                    weight = ""
-                    for (j = 0; j &lt; record.length; j = j + 1) {
-                        if (record[j] == "") {
-                            continue
-                        }
-                        if (source == "") {
-                            source = core.toNumber(record[j])
-                            continue
-                        }
-                        if (target == "") {
-                            target = core.toNumber(record[j])
-                            continue
-                        }
-                        if (weight == "") {
-                            weight = core.toNumber(record[j])
-                            continue
-                        }
-                    }
-                    if (weight == "") {
-                        weight = 1
-                    }
-                    edge = {
-                        "id": "e" + core.toString(i),
-                        "source": "n" + core.toString(source),
-                        "target": "n" + core.toString(target),
-                        "size": weight
-                    }
-                    network.edges.push(edge)
-                    i = i + 1
-                    properties.m = properties.m + 1
+                    id = -1
+                    nodes = []
+                    endOfRecord = false
                 }
             }
         }
+
+        properties.n = network.nodes.length
+        properties.m = network.edges.length
+        
         return(network)
     }
 }
@@ -257,7 +280,7 @@ namespace snet {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sat Mar 20 2021 12:23:19 GMT-0300 (Brasilia Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sat Mar 20 2021 18:40:13 GMT-0300 (Brasilia Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
