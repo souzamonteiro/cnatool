@@ -165,6 +165,10 @@
                             <label class="label" for="showLabels">Show labels:</label>
                             <input id="showLabels" nome="showLabels" style="float: right;" type="checkbox" value="directed" onchange="updateGraph()">
                         </div>
+                        <div class="item">
+                            <label class="label" for="showWeight">Show weight:</label>
+                            <input id="showWeight" nome="showWeight" style="float: right;" type="checkbox" value="directed" onchange="updateGraph()">
+                        </div>
                     </li>
                     <li>
                         <div class="item">
@@ -200,12 +204,11 @@
                     scalingMode: "inside",
                     defaultNodeColor: "#ec5148",
                     defaultEdgeType: "line",
-                    minNodeSize: 5,
+                    minNodeSize: 1,
                     maxNodeSize: 10,
-                    minEdgeSize: 2,
-                    maxEdgeSize: 10,
-                    minArrowSize: 5,
-                    maxArrowSize: 10,
+                    minEdgeSize: 1,
+                    maxEdgeSize: 1,
+                    minArrowSize: 0
                 }
             };
 
@@ -222,14 +225,17 @@
         function updateGraph() {
             directedGraph = document.getElementById("directedGraph")
             showLabels = document.getElementById("showLabels");
+            showWeight = document.getElementById("showWeight");
             algorithm = document.getElementById("algorithm");
             
             try {
                 graph.settings("drawLabels", showLabels.checked);
-                if (directedGraph.checked) {
-                    graph.settings("defaultEdgeType", "arrow");
+                if (showWeight.checked) {
+                    graph.settings("minEdgeSize", 1);
+                    graph.settings("maxEdgeSize", 5);
                 } else {
-                    graph.settings("defaultEdgeType", "line");
+                    graph.settings("minEdgeSize", 1);
+                    graph.settings("maxEdgeSize", 1);
                 }
 
                 graph.refresh();

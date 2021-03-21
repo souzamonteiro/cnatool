@@ -119,17 +119,20 @@ namespace snet {
                         if (core.type(nodeFound) == "undefined") {
                             node.id = "n" + network.nodes.length
                             network.nodes.push(node)
+                        } else {
+                            node.id = nodeFound.id
                         }
                     }
                     if (topology == "chain") {
+                        console.log(nodes)
                         for (i = 0; i < nodes.length - 1; i = i + 1) {
                             node1 = nodes[i]
                             node2 = nodes[i + 1]
 
-                            edgeIndex = -1
+                            edgeIndex = []
                             queryObject = {"source": node1.id, "target": node2.id}
                             edgeFound = network.edges.find(findEdge)
-
+                            
                             if (core.type(edgeFound) == "undefined") {
                                 edge = {
                                     "id": "e" + network.edges.length,
