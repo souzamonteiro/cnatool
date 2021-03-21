@@ -697,7 +697,7 @@
             "edges": graph.graph.edges()
          }
          fileObject.fileData = cna.jsonToPajekFile(network)
-         system.downloadFile(fileObject.fullFileName, fileObject.fileData, "text/" + fileObject.fileExtension)
+         system.downloadFile(fileObject.fileName + ".net", fileObject.fileData, "text/plain")
       }
 
       function saveJsonFile() {
