@@ -1,4 +1,6 @@
-- [ ] Fix cna.getCentrality
-- [x] Implement cnatool.js
+- [ ] Fix Multiple files conversion
+- [ ] Save semantic networks in Pajek format as an option
+- [ ] Indicate in the json file whether the network is directed or undirected network using type=arrow or type=line
+- [ ] Allow the network building in Pajek file format directly
 - [ ] Prepare binary distributions for macOS, Windows and Linux
 - [ ] Prepare binary distributions for iOS and Android

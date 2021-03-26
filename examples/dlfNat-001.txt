@@ -1,0 +1,2569 @@
+promise	N
+threat	N
+knowledgebased	NOTFOUND
+economy	N
+{S}	
+unitedstates	NOTFOUND
+university	N
+create	V
+bridge	N
+physics	N
+biology	N
+{S}	
+france	N+PR
+question	N
+israeli	N+Hum
+research	N
+deal	N+Conc
+{S}	
+easterneurope	NOTFOUND
+still	N+Conc
+strap	V
+cash	N
+{S}	
+hungarian	N+Hum
+biology	N
+i	N
+world	N
+class	N
+{S}	
+japanese	N
+budget	N
+boost	N
+science	N
+funding	N
+{S}	
+software	N
+problem	N
+delay	N
+unitedstates	NOTFOUND
+spacecraft	N
+meeting	N
+asteroid	N
+{S}	
+taking	N
+knowledge	N
+poor	A
+{S}	
+worldbank	NOTFOUND
+invest	V
+global	A
+science	N
+base	N
+{S}	
+unitedstates	NOTFOUND
+spirit	N+Abst
+i	N
+willing	A
+funds	N
+are	N+Unit
+still	N+Conc
+weak	A
+{S}	
+science	N
+move	N
+europe	N+PR
+aid	N
+agendum	N
+{S}	
+technology	N
+tradition	N
+clash	N
+india	N+PR
+{S}	
+internet	N
+may	N+Hum
+help	N
+bridge	N
+gap	N
+{S}	
+aids	N
+decision	N
+threaten	V
+drug	N+Conc
+trial	N
+{S}	
+money	N
+talk	N
+loud	A
+research	N
+quality	N
+{S}	
+lysenko	NOTFOUND
+take	V
+dismal	A
+view	N
+malthus	NOTFOUND
+{S}	
+beauty	N
+bart	NOTFOUND
+simpson	NOTFOUND
+effect	N
+{S}	
+english	N
+spanish	N
+science	N
+evaluation	N
+{S}	
+eighteenninetynine	NOTFOUND
+{S}	
+evolutionary	A
+biology	N
+mother	N+Hum
+father	N+Hum
+surprise	N
+geneticagreement	NOTFOUND
+{S}	
+biophysics	N
+may	N+Ntime
+force	N
+be	V
+{S}	
+shrike	N+Anl
+mobility	N
+{S}	
+geochemistry	N
+colloidal	A
+culprit	N+Hum
+contamination	N
+{S}	
+plant	N+Conc
+virus	N+Anl
+new	ADV
+tool	N+Conc
+swiss	N+Hum
+army	N+HumColl
+knife	N+Conc
+{S}	
+coral	N
+reef	N
+recruitment	N
+space	N
+time	N
+{S}	
+photosynthesis	N
+making	N
+light	N+Conc
+dark	N
+situation	N
+{S}	
+timing	N
+end	N
+nocturnal	A
+sleep	N
+{S}	
+air	N
+traffic	N
+may	N+Hum
+increase	N
+cirrus	N
+cloudiness	N
+{S}	
+high	N
+metabolic	A
+rate	N
+running	N
+bird	N+Anl
+{S}	
+thomas	NOTFOUND
+jefferson	N+PR+Hum
+paternity	N
+case	N
+{S}	
+starry	A
+night	N
+{S}	
+wizard	N+Hum
+menlo	NOTFOUND
+park	N
+{S}	
+hypnotism	N
+rise	N
+anaesthesia	N
+{S}	
+mother	N+Hum
+love	N
+selective	A
+advantage	N
+{S}	
+brown	N
+dwarf	N+Hum
+star	N+Hum
+fail	V
+{S}	
+giant	N+Hum
+periodic	A
+flare	N
+soft	N
+ray	N
+repeater	N+Hum
+sgroneninezerozeroplusonefour	NOTFOUND
+{S}	
+reversing	N
+direction	N
+supercurrent	NOTFOUND
+controllable	A
+josephsonjunction	NOTFOUND
+{S}	
+scaling	N
+transition	N
+temperature	N
+cuotwo	NOTFOUND
+plane	N
+bucklingin	NOTFOUND
+hightemperature	NOTFOUND
+superconductor	N+Conc
+{S}	
+molecular	A
+growth	N
+moonesevensix	NOTFOUND
+motwofoureight	NOTFOUND
+cluster	N
+{S}	
+energy	N
+landscape	N
+receptorligand	NOTFOUND
+bond	N
+explore	V
+dynamicforce	NOTFOUND
+spectroscopy	N
+{S}	
+fate	N+Abst
+subduct	V
+basaltic	A
+crust	N+Conc
+earth	N
+lower	N
+mantle	N+Conc
+{S}	
+migration	N
+plutonium	N+Conc
+ground	N
+water	N
+nevada	NOTFOUND
+test	N
+site	N
+{S}	
+pattern	N
+recruitment	N
+abundance	N
+coral	N
+great	N
+barrierreef	NOTFOUND
+{S}	
+robust	A
+optimal	A
+use	N
+information	N
+stereo	N+Conc
+vision	N
+{S}	
+protein	N
+maponeb	NOTFOUND
+links	N
+gabac	NOTFOUND
+receptor	N
+cytoskeleton	N+Conc
+retinal	N+Conc
+synapsis	N
+{S}	
+gabaareceptorassociated	NOTFOUND
+protein	N
+links	N
+gabaa	NOTFOUND
+receptor	N
+cytoskeleton	N+Conc
+{S}	
+ampa	NOTFOUND
+receptor	N
+interact	N
+signal	N
+protein	N
+tyrosine	N+Conc
+kinase	N+Conc
+lyn	NOTFOUND
+{S}	
+limhomeodomain	NOTFOUND
+combinatorial	A
+code	N
+motorneuron	NOTFOUND
+pathway	N
+selection	N
+{S}	
+protochlorophyllide	NOTFOUND
+lightharvesting	NOTFOUND
+complex	N
+involve	V
+deetiolation	NOTFOUND
+higher	N
+plant	N+Conc
+{S}	
+imprinting	N
+box	N+Conc
+mouse	N+Conc
+igftwor	NOTFOUND
+gene	N
+{S}	
+can	N
+physics	N
+deliver	V
+biological	N+Conc
+revolution	N
+{S}	
+unitedstates	NOTFOUND
+biologist	N+Hum
+propose	V
+launch	N+Conc
+electronic	A
+preprint	N
+archive	N
+{S}	
+indian	N+Hum
+scientist	N+Hum
+sue	V
+spying	N
+charge	N
+{S}	
+future	N
+german	N+Hum
+neutron	N
+source	N
+hang	N
+balance	N+Conc
+{S}	
+japanese	N
+centre	N
+will	N
+study	N
+origin	N
+universe	N
+{S}	
+china	N+PR
+sign	N
+participation	N
+europeanunion	NOTFOUND
+framework	N
+{S}	
+energy	N
+department	N
+revise	N
+terms	N
+venter	N
+deal	N+Conc
+complaint	N
+{S}	
+brazil	N+PR
+bring	V
+reform	N
+science	N
+funding	N
+agency	N
+{S}	
+gene	N
+therapy	N
+push	N
+doubt	N
+{S}	
+senator	N+Hum
+seek	V
+reassurance	N
+nih	NOTFOUND
+budget	N
+{S}	
+unitedstates	NOTFOUND
+astronomer	N+Hum
+contest	N
+building	N
+project	N
+{S}	
+fuel	N+Conc
+additive	N+Conc
+put	N
+scrutiny	N
+eighttwoonetwo	NOTFOUND
+again	ADV
+{S}	
+russian	N
+physicist	N+Hum
+may	N+Hum
+pay	N
+price	N
+success	N
+{S}	
+global	A
+ecosurvey	NOTFOUND
+plan	N
+get	N
+rough	N
+ride	N
+{S}	
+french	N+Hum
+reform	N
+will	V
+disrupt	V
+research	N
+{S}	
+lab	N
+guideline	N
+aim	N
+prevent	V
+misconduct	N
+{S}	
+do	V
+agriculture	N
+cause	N
+population	N
+explosion	N
+{S}	
+traffic	N
+lights	N
+beringian	NOTFOUND
+crossroads	N
+{S}	
+cell	N
+cycle	N
+checkpoint	N
+nuclear	A
+frontier	N
+{S}	
+atomic	A
+physics	N
+new	ADV
+twist	N
+decay	N
+{S}	
+neurobiology	N
+modulation	N
+minimize	V
+masking	N
+{S}	
+signal	N
+transduction	N
+anchor	N
+activation	N
+{S}	
+lizard	N+Anl
+take	V
+express	N+Conc
+train	N
+polynesia	N+PR
+{S}	
+first	N
+true	N
+inorganic	A
+fullerene	N+Conc
+{S}	
+length	N
+tail	N
+streamer	N+Hum
+barn	N+Unit
+swallow	N+Conc
+{S}	
+sign	N
+language	N
+hear	V
+auditory	N
+cortex	N
+{S}	
+thinking	N
+consciousness	N
+{S}	
+getting	N
+know	V
+{S}	
+ornithologistwatching	NOTFOUND
+{S}	
+mediaeval	A
+cure	N+Hum
+casualty	N
+{S}	
+electroluminescence	N
+conjugate	V
+polymer	N+Conc
+{S}	
+single	N+Hum
+myosin	N
+head	N
+move	N
+actin	N+Conc
+filament	N
+regular	N+Hum
+step	N
+nanometre	N+Conc
+{S}	
+thermal	N
+imprint	N
+galaxy	N
+formation	N
+xray	NOTFOUND
+cluster	N
+{S}	
+detection	N
+environmental	A
+fine	N
+structure	N
+lowenergy	NOTFOUND
+decayspectrum	NOTFOUND
+oneeightsevenre	NOTFOUND
+{S}	
+lateral	N
+drag	N+Conc
+spin	N
+coherence	N
+gallium	N+Conc
+arsenide	N
+{S}	
+entropic	A
+trapping	N+Conc
+macromolecule	N
+mesoscopic	NOTFOUND
+periodic	A
+void	N
+polymer	N+Conc
+hydrogel	N+Conc
+{S}	
+nanomechanical	NOTFOUND
+device	N
+base	V
+bz	NOTFOUND
+transition	N
+dna	N
+{S}	
+sulphidic	NOTFOUND
+mediterranean	N+Hum
+surface	N
+water	N
+pliocene	N
+sapropel	N
+formation	N
+{S}	
+evidence	N
+early	ADV
+opening	N
+bering	NOTFOUND
+strait	N
+{S}	
+experimental	A
+variation	N
+polyandry	N
+affect	N
+parasite	N
+load	N
+fitness	N
+bumblebee	N+Anl
+{S}	
+response	N
+auditorycortex	NOTFOUND
+neuron	N
+structural	N+Conc
+feature	N
+natural	N+Hum
+sound	N
+{S}	
+kainate	NOTFOUND
+receptor	N
+mediate	V
+synaptic	A
+transmission	N
+cone	N
+bipolar	A
+cell	N
+mammalian	N+Anl
+retina	N
+{S}	
+kainatereceptormediated	NOTFOUND
+sensory	A
+synaptic	A
+transmission	N
+mammalian	N+Anl
+spinal	N
+cord	N+Conc
+{S}	
+oncogene	N
+polycombgroup	NOTFOUND
+gene	N
+bmione	NOTFOUND
+regulate	V
+cell	N
+proliferationand	NOTFOUND
+senescence	N
+inkfoura	NOTFOUND
+locus	N
+{S}	
+robustness	N
+bacterial	A
+chemotaxis	N
+{S}	
+nuclear	A
+localization	N
+cdctwofive	NOTFOUND
+i	N
+regulate	V
+dna	N
+damage	N
+onefourthreethree	NOTFOUND
+protein	N
+{S}	
+genomicsequence	NOTFOUND
+comparison	N
+unrelated	A
+isolate	N
+human	N
+gastricpathogen	NOTFOUND
+helicobacter	NOTFOUND
+pylorus	N
+{S}	
+cube	N+Conc
+camera	N+Conc
+chromatography	N
+{S}	
+uncertainty	N
+naivety	N
+germany	N+PR
+science	N
+politics	N
+{S}	
+arima	NOTFOUND
+ascendant	N
+{S}	
+embryonic	A
+stemcell	NOTFOUND
+research	N
+exempt	N+Hum
+ban	N+Unit
+nih	NOTFOUND
+i	N
+tell	V
+{S}	
+insider	N+Hum
+trading	N
+alert	N
+bioscience	N
+company	N
+{S}	
+space	N
+station	N
+face	N+Conc
+research	N
+cut	N
+cover	N+Conc
+risk	N
+russian	N
+default	N
+{S}	
+biochemistry	N
+panel	N
+drop	V
+unitedkingdom	NOTFOUND
+quality	N
+review	N
+{S}	
+french	N+Hum
+scientist	N+Hum
+offer	V
+time	N
+set	N
+company	N
+{S}	
+unitedstates	NOTFOUND
+genome	N
+researcher	N+Hum
+strike	N
+rich	A
+{S}	
+india	N+PR
+approve	V+t
+use	N
+genetically	ADV
+modify	V
+crop	N
+critic	N+Hum
+{S}	
+physicist	N+Hum
+dual	N
+role	N
+can	V+aux
+help	N
+japanese	N
+merger	N
+{S}	
+fossil	N
+dealer	N+Hum
+charge	V
+russian	N
+cache	N
+{S}	
+green	N
+accept	V+t
+reprieve	N
+neutron	N
+source	N
+{S}	
+plan	N
+limit	N
+cambridge	N+PR
+hightech	NOTFOUND
+growth	N
+{S}	
+quebec	N+PR
+tax	N
+incentive	N+Conc
+act	N
+magnet	N+Conc
+research	N
+company	N
+{S}	
+tough	N
+set	N
+continue	V
+unitedstates	NOTFOUND
+biotech	A
+startup	N
+{S}	
+writing	N
+i	N
+web	N
+science	N
+journal	N+Conc
+print	N
+{S}	
+user	N+Abst
+consortium	N
+emerge	V
+broker	N+Hum
+{S}	
+preserving	N
+paper	N
+posterity	N
+{S}	
+roll	N+Conc
+gutenberg	NOTFOUND
+{S}	
+close	N
+southnorth	NOTFOUND
+knowledge	N
+gap	N
+{S}	
+luddite	N+Hum
+must	N
+not	ADV
+block	N
+progress	N
+genetics	N
+{S}	
+computer	N+Hum
+copyright	N
+conundrum	N
+{S}	
+pay	N
+drug	N+Conc
+development	N
+{S}	
+guard	N+Hum
+knowledge	N
+reap	V
+reward	N
+{S}	
+german	N+Hum
+university	N
+reform	N
+misguide	V
+{S}	
+prospecting	N
+jurassic	N
+slab	N+Conc
+{S}	
+protein	N
+transport	N
+molecular	A
+motor	N
+join	N
+force	N
+{S}	
+reproductive	N
+biology	N
+deepsea	NOTFOUND
+clam	N+Anl
+feel	N
+heat	N
+{S}	
+quantum	N
+control	N
+sculpt	V
+wavepacket	NOTFOUND
+{S}	
+stress	N
+response	N
+translational	A
+control	N
+perk	N
+{S}	
+monkey	N+Anl
+business	N
+aquarium	N
+{S}	
+condensedmatter	NOTFOUND
+science	N
+ferroelectric	N+Conc
+ice	N
+{S}	
+telomere	N
+capping	N
+end	N
+{S}	
+bioinorganic	NOTFOUND
+chemistry	N
+hydrogenase	NOTFOUND
+sophistication	N
+{S}	
+neurobiology	N
+homeostatic	A
+switch	N
+{S}	
+densitydependent	NOTFOUND
+warning	N+Conc
+coloration	N
+{S}	
+fasmediated	NOTFOUND
+cell	N
+death	N
+promote	V
+opioid	N+Conc
+{S}	
+doe	N+Anl
+global	A
+warming	N
+make	N
+triton	N+Anl
+blush	N
+{S}	
+shikimate	NOTFOUND
+pathway	N
+apicomplexan	NOTFOUND
+parasite	N
+{S}	
+hagiography	N
+debunking	N
+{S}	
+face	N+Conc
+future	N
+{S}	
+destruction	N
+deliberation	N
+{S}	
+antidote	N
+angst	N
+{S}	
+playful	A
+physics	N
+{S}	
+largescale	NOTFOUND
+smoothness	N
+universe	N
+{S}	
+generation	N
+martian	A+PMCO
+flood	N
+melting	N
+ground	N
+ice	N
+dyke	N+Hum
+{S}	
+controlling	N
+shape	N
+quantum	N
+wavefunction	NOTFOUND
+{S}	
+nanometrescale	NOTFOUND
+rolling	N
+sliding	N
+carbon	N
+nanotube	N
+{S}	
+identifying	N
+force	N
+responsible	A
+selforganization	NOTFOUND
+nanostructures	NOTFOUND
+crystal	N
+surface	N
+{S}	
+coordinate	V
+proton	N
+tunnelling	N
+cyclic	A
+network	N
+hydrogen	N+Conc
+bond	N
+solid	N
+state	N
+{S}	
+possible	N+Hum
+predictability	N
+overflow	N
+denmark	N+PR
+strait	N
+{S}	
+mesozoic	N
+subduct	V
+slab	N+Conc
+siberia	N+PR
+{S}	
+can	N
+aposematic	A
+signal	N
+evolve	V
+gradual	N
+change	N
+{S}	
+kplus	NOTFOUND
+cl	NOTFOUND
+cotransporter	NOTFOUND
+kcctwo	NOTFOUND
+rendersgaba	NOTFOUND
+hyperpolarizing	NOTFOUND
+neuronal	A
+maturation	N
+{S}	
+polyunsaturated	A
+fatty	N
+acid	N
+activate	V+t
+drosophila	N+Anl
+lightsensitive	NOTFOUND
+channel	N
+trp	NOTFOUND
+trpl	NOTFOUND
+{S}	
+direct	V
+activation	N
+human	N
+trpcsix	NOTFOUND
+trpcthree	NOTFOUND
+channel	N
+diacylglycerol	NOTFOUND
+{S}	
+icos	NOTFOUND
+i	N
+inducible	A
+tcell	NOTFOUND
+costimulator	NOTFOUND
+structurally	ADV
+functionally	ADV
+relate	V
+cdtwoeight	NOTFOUND
+{S}	
+direct	V
+interaction	N
+microtubule	N+Conc
+actinbased	NOTFOUND
+transport	N
+motor	N
+{S}	
+protein	N
+translation	N
+folding	N
+are	N+Unit
+couple	V
+endoplasmicreticulumresident	NOTFOUND
+kinase	N+Conc
+{S}	
+controlling	N
+chain	N
+reaction	N
+{S}	
+acceptance	N
+embryo	N
+stemcell	NOTFOUND
+therapy	N
+{S}	
+pig	N+Hum
+middle	N
+{S}	
+europe	N+PR
+i	N
+urge	V
+hold	N
+back	N+Conc
+xenotransplant	NOTFOUND
+clinical	A
+trial	N
+{S}	
+sequence	N
+terrorist	N+Hum
+gene	N
+say	N
+venter	N
+{S}	
+unitedkingdom	NOTFOUND
+woman	N+Hum
+lead	N+Conc
+way	N
+interdisciplinary	A
+research	N
+{S}	
+cancer	N
+body	N
+must	N
+do	N
+minority	N
+{S}	
+german	N+Hum
+swedish	N
+venture	N
+create	V
+plant	N+Conc
+biotechnology	N
+giant	N+Hum
+{S}	
+unitedstates	NOTFOUND
+life	N
+scientist	N+Hum
+seek	V
+onefive	NOTFOUND
+cent	N
+rise	N
+nih	NOTFOUND
+research	N
+funds	N
+{S}	
+japan	N+PR
+try	N
+understand	V
+quake	N
+not	ADV
+predict	V
+{S}	
+china	N+PR
+clamp	N
+inaccurate	A
+warning	N+Conc
+{S}	
+unitedstates	NOTFOUND
+unveil	V
+threesixsix	NOTFOUND
+computing	N
+boost	N
+{S}	
+warning	N+Conc
+pitfall	N
+measuring	N
+research	N
+{S}	
+unitedkingdom	NOTFOUND
+get	N
+green	N
+light	N+Conc
+modify	V
+crop	N
+{S}	
+hope	N+Conc
+reform	N
+rise	N
+spain	N+PR
+replace	V
+hardline	N
+minister	N+Hum
+{S}	
+inadequate	A
+science	N
+unitedstates	NOTFOUND
+habitat	N
+plan	N
+{S}	
+australia	N+PR
+battle	N
+heritage	N
+site	N
+{S}	
+keele	NOTFOUND
+book	N+Conc
+selloff	N
+squander	N
+heritage	N
+{S}	
+green	N
+campaigner	N+Hum
+undermine	V
+iwc	NOTFOUND
+{S}	
+do	N
+not	ADV
+put	N
+research	N
+goalbased	NOTFOUND
+straitjacket	N
+{S}	
+will	N
+mentor	N+Hum
+mentor	N+Hum
+{S}	
+odds	N
+losing	N
+genetic	A
+roulette	N+Conc
+{S}	
+solidstate	NOTFOUND
+laser	N+Conc
+lase	V
+molecular	A
+sieve	N+Conc
+{S}	
+new	ADV
+spin	N
+hand	V
+asymmetry	N
+{S}	
+astrophysics	N
+stress	N
+drive	N
+gas	N
+black	N
+hole	N
+{S}	
+atmospheric	A
+chemistry	N
+bromine	N
+explosion	N
+{S}	
+oceanography	N
+colour	N
+renewal	N
+space	N
+{S}	
+boseeinstein	NOTFOUND
+condensate	N
+vision	N
+vortex	N
+{S}	
+getting	N
+bit	N+Unit
+{S}	
+genetic	A
+tracking	N
+protect	V
+whale	N+Anl
+{S}	
+motion	N
+vortex	N
+superconductor	N+Conc
+{S}	
+role	N
+giant	N+Hum
+panda	N+Anl
+pseudothumb	NOTFOUND
+{S}	
+yeast	N+Conc
+celltype	NOTFOUND
+regulation	N
+dna	N
+repair	N
+{S}	
+child	N+Hum
+unfulfilled	A
+expectation	N
+{S}	
+rat	N+Hum
+psychology	N
+student	N+Hum
+{S}	
+worms	N
+prawn	N+Anl
+{S}	
+look	V
+{S}	
+bone	N
+{S}	
+remember	V
+big	V
+blue	N
+kin	N
+{S}	
+opgl	NOTFOUND
+i	N
+key	N+Conc
+regulator	N+Hum
+osteoclastogenesis	NOTFOUND
+lymphocyte	N
+development	N
+lymphnode	NOTFOUND
+organogenesis	N
+{S}	
+magnetic	A
+field	N
+tracer	N+Hum
+shear	V
+gas	N
+flow	N
+bar	V
+galaxy	N
+{S}	
+predict	V
+signature	N
+rotating	N
+boseeinstein	NOTFOUND
+condensate	N
+{S}	
+clusterweighted	NOTFOUND
+modelling	N
+timeseries	NOTFOUND
+analysis	N
+{S}	
+confirm	V
+continuum	N
+theory	N
+dynamic	N
+brittle	N
+fracture	N
+fast	N
+crack	N+Hum
+{S}	
+controlledrelease	NOTFOUND
+microchip	N+Conc
+{S}	
+evidence	N
+bromine	N
+monoxide	N
+free	V
+troposphere	N
+arctic	N+PR
+polar	N
+sunrise	N
+{S}	
+seismic	A
+reflection	N
+image	N
+revealing	N
+offset	N
+andean	A
+subductionzone	NOTFOUND
+earthquake	N
+location	N
+oceanic	A
+mantle	N+Conc
+{S}	
+high	N
+genomic	A
+deleterious	A
+mutation	N
+rate	N
+hominid	N
+{S}	
+monocular	N+Conc
+deprivation	N
+induce	V
+homosynaptic	NOTFOUND
+longterm	A
+depression	N
+visual	N
+cortex	N
+{S}	
+vivo	ADV
+regulation	N
+axon	N
+extension	N
+pathfinding	N
+growthconecalcium	NOTFOUND
+transient	N+Hum
+{S}	
+secondary	N+Hum
+vdj	NOTFOUND
+recombination	N
+bone	N
+cell	N
+{S}	
+fivehtthreeb	NOTFOUND
+subunit	N
+i	N
+major	N+Hum
+determinant	N
+serotoninreceptor	NOTFOUND
+function	N
+{S}	
+tpltwo	NOTFOUND
+kinase	N+Conc
+regulate	V
+proteolysis	N
+nfbinhibitoryprotein	NOTFOUND
+nfbone	NOTFOUND
+ponezerofive	NOTFOUND
+{S}	
+getting	N
+automatic	N
+gear	N
+{S}	
+assessment	N
+japan	N+PR
+university	N
+long	N
+overdue	A
+{S}	
+hot	ADV
+seat	N
+kitchen	N
+{S}	
+curb	N
+foreign	A
+computer	N+Hum
+put	N
+damper	N+Hum
+unitedstates	NOTFOUND
+climate	N
+modelling	N
+{S}	
+geophysicist	N+Hum
+call	N
+action	N
+global	A
+warming	N
+{S}	
+rubbia	NOTFOUND
+propose	V
+speedy	A
+voyage	N
+mars	N
+back	N+Conc
+{S}	
+aaas	NOTFOUND
+head	N
+want	N
+see	N
+scientist	N+Hum
+school	N
+board	N
+{S}	
+harvard	N+PR+Hum
+reveal	N
+plan	N
+research	N
+centre	N
+{S}	
+treaty	N
+nation	N
+are	N+Unit
+exploiting	N
+antarctica	N+PR
+{S}	
+german	N+Hum
+science	N
+council	N+HumColl
+clash	N
+antinuclear	A
+government	N
+{S}	
+fear	N+Abst
+bse	NOTFOUND
+risk	N
+can	V+aux
+hit	N
+unitedstates	NOTFOUND
+blood	N
+bank	N+HumColl
+{S}	
+asian	N+Hum
+scientist	N+Hum
+call	N
+unesco	NOTFOUND
+protect	V
+indigenous	A
+knowledge	N
+{S}	
+unitedstates	NOTFOUND
+budget	N
+freeze	N
+spending	N
+research	N
+{S}	
+leak	V
+cnrs	NOTFOUND
+report	N
+raise	N
+fear	N+Abst
+hope	N+Conc
+job	N
+security	N
+{S}	
+japanese	N
+lab	N
+balk	N
+bid	N
+boost	N
+external	N
+evaluation	N
+{S}	
+tough	A
+europeanunion	NOTFOUND
+copyright	N
+rule	N+Conc
+come	V
+fire	N
+{S}	
+risk	N
+inherent	A
+fetal	A
+gene	N
+therapy	N
+{S}	
+visible	A
+virus	N+Anl
+geodesic	N
+dome	N+Conc
+{S}	
+spanish	N
+researcher	N+Hum
+defeat	V
+system	N
+{S}	
+can	N
+teaching	N
+ethics	N
+make	N
+people	N+HumColl
+ethical	N
+{S}	
+glaciation	N
+snowball	N+Conc
+theory	N
+still	N+Conc
+hold	N
+water	N
+{S}	
+pan	N+Conc
+pandemic	N
+{S}	
+condensedmatter	NOTFOUND
+physics	N
+return	N
+itinerant	N+Hum
+electron	N
+{S}	
+apoptosis	N
+cellular	A
+poison	N
+cupboard	N+Conc
+{S}	
+oceanography	N
+change	N
+arctic	N+PR
+{S}	
+neurobiology	N
+striving	N
+coherence	N
+{S}	
+mathematics	N
+counting	N
+{S}	
+volcanology	N
+fragment	V
+magma	N
+{S}	
+halfawake	NOTFOUND
+risk	N
+predation	N
+{S}	
+pattern	N
+formation	N
+semiconductor	N
+{S}	
+uvb	NOTFOUND
+damage	N
+amplify	V
+transposon	N
+maize	N+Conc
+{S}	
+collective	N
+decision	N
+cognition	N
+bee	N+HumColl
+{S}	
+japan	N+PR
+enthuse	V
+individualist	N+Hum
+{S}	
+pick	N
+bunch	N
+{S}	
+bestiary	N
+chaos	N
+biodiversity	N
+{S}	
+worth	N
+salt	N+Conc
+{S}	
+science	N
+culture	N
+{S}	
+female	N
+development	N
+mammal	N+Anl
+i	N
+regulate	V
+wntfour	NOTFOUND
+signalling	N
+{S}	
+coherence	N
+singleparticle	NOTFOUND
+excitation	N
+hightemperature	NOTFOUND
+superconductor	N+Conc
+{S}	
+hightemperature	NOTFOUND
+weak	A
+ferromagnetism	N
+lowdensity	NOTFOUND
+freeelectron	NOTFOUND
+gas	N
+{S}	
+improve	V
+quantum	N
+efficiency	N
+electroluminescence	N
+semiconducting	A
+polymer	N+Conc
+{S}	
+hybrid	N
+hydrogel	N+Conc
+assemble	V
+synthetic	N+Conc
+polymer	N+Conc
+coiledcoil	NOTFOUND
+protein	N
+domain	N
+{S}	
+complex	N
+clathrate	A
+hydrate	N+Conc
+structure	N
+showing	N
+bimodal	A
+guest	N+Hum
+hydration	N
+{S}	
+upward	ADV
+transport	N
+oceanic	A
+nitrate	N
+migrate	V
+diatom	N
+mat	N+Conc
+{S}	
+straininduced	NOTFOUND
+magma	N
+fragmentation	N
+explosive	N+Conc
+eruption	N
+{S}	
+neuronal	A
+representation	N
+location	N
+nearby	ADV
+sound	N
+{S}	
+perception	N
+shadow	N
+longdistance	NOTFOUND
+synchronization	N
+human	N
+brain	N
+activity	N
+{S}	
+coherence	N
+gammaband	NOTFOUND
+eeg	NOTFOUND
+activity	N
+basis	N
+associative	A
+learning	N
+{S}	
+origin	N
+hivone	NOTFOUND
+chimpanzee	N+Anl
+pan	N+Conc
+troglodyte	N+Hum
+{S}	
+molecular	A
+characterization	N
+mitochondrial	A
+apoptosisinducing	NOTFOUND
+factor	N+Hum
+{S}	
+transcriptional	A
+cofactor	N
+complex	N
+crsp	NOTFOUND
+i	N
+require	V
+activity	N
+ofthe	NOTFOUND
+enhancerbinding	NOTFOUND
+protein	N
+spone	NOTFOUND
+{S}	
+bottle	N+Conc
+washer	N+Hum
+{S}	
+illadvised	NOTFOUND
+freedom	N
+scientific	A
+information	N
+{S}	
+planetary	A
+persistence	N
+{S}	
+europe	N+PR
+bid	N
+pull	N
+unitedstates	NOTFOUND
+patent	N
+law	N
+line	N
+firsttofile	NOTFOUND
+system	N
+{S}	
+german	N+Hum
+call	N
+invest	V
+technology	N
+{S}	
+doe	N+Anl
+budget	N
+scramble	N
+closure	N
+plan	N
+axe	V
+{S}	
+unitedkingdom	NOTFOUND
+panel	N
+form	V
+rebuild	V
+trust	N
+government	N
+science	N
+advice	N
+{S}	
+scientist	N+Hum
+fight	N
+right	N
+withhold	V
+datum	N
+{S}	
+soiree	N
+soirée	N
+aim	N
+iron	N+Conc
+out	N
+atmospheric	A
+puzzle	N+Conc
+{S}	
+roche	NOTFOUND
+promega	NOTFOUND
+back	N+Conc
+court	N
+taq	NOTFOUND
+{S}	
+unitedstates	NOTFOUND
+sanction	N
+hurt	N
+basic	N
+research	N
+india	N+PR
+{S}	
+german	N+Hum
+science	N
+fight	N
+animal	N
+right	N
+bill	N
+{S}	
+japanese	N
+university	N
+approve	V+t
+genetic	A
+test	N
+vitro	NOTFOUND
+embryo	N
+{S}	
+everglade	N
+plan	N
+flaw	V
+claim	N
+ecologist	N+Hum
+{S}	
+chandra	NOTFOUND
+slip	N+Conc
+space	N
+shuttle	N+Conc
+run	N
+risk	N
+{S}	
+french	N+Hum
+ministry	N
+climbdown	N
+reform	N
+{S}	
+british	N+Hum
+university	N
+face	N+Conc
+review	N
+increase	N
+accountability	N
+{S}	
+pressure	N
+publish	V
+stifle	N
+young	N+Hum
+talent	N
+{S}	
+language	N
+bias	N
+discredit	N
+peerreview	NOTFOUND
+system	N
+{S}	
+german	N+Hum
+job	N
+security	N
+lead	N+Conc
+stagnation	N
+{S}	
+reduce	V
+student	N+Hum
+chance	N
+publishing	N
+{S}	
+freacute	NOTFOUND
+miet	NOTFOUND
+phantasm	N
+{S}	
+physics	N
+take	N
+biscuit	N+Conc
+{S}	
+transform	V
+view	N
+cyclosporine	N
+{S}	
+particle	N
+physics	N
+undemocratic	A
+proton	N
+{S}	
+colour	N
+vision	N
+patchwork	N
+cone	N
+{S}	
+oceanography	N
+bacterium	N
+silica	N
+cycling	N
+{S}	
+active	N+Hum
+galactic	A
+nucleus	N
+unstable	A
+design	N
+{S}	
+cell	N
+adhesion	N
+new	ADV
+way	N
+activate	V+t
+caspases	NOTFOUND
+{S}	
+photochemistry	N
+electronic	A
+motion	N
+dna	N
+{S}	
+making	N
+makeup	N
+ancient	N+Hum
+egypt	N+PR
+{S}	
+josephson	N+PR
+effect	N
+state	N
+superfluid	N+Conc
+threehe	NOTFOUND
+{S}	
+how	N+Conc
+why	N
+parasitic	A
+nematode	N+Anl
+jump	N
+{S}	
+nonfertile	A
+sperm	N
+delay	N
+female	N
+remating	NOTFOUND
+{S}	
+fashion	N
+foible	N
+science	N
+{S}	
+darwinize	V
+psychology	N
+{S}	
+getting	N
+head	N
+{S}	
+earth	N
+internally	ADV
+generate	V
+motion	N
+{S}	
+science	N
+culture	N
+{S}	
+change	V
+source	N
+nutrient	N+Conc
+year	N+Ntime
+ecosystem	N
+development	N
+{S}	
+scaling	N
+criticality	N
+stochastic	A
+multiagent	NOTFOUND
+model	N
+financial	N
+market	N
+{S}	
+singlephoton	NOTFOUND
+turnstile	N+Conc
+device	N
+{S}	
+modulate	V
+phase	N
+proton	N
+centring	N
+ice	N
+observe	V
+xray	NOTFOUND
+diffraction	N
+onesevenzero	NOTFOUND
+gpa	NOTFOUND
+{S}	
+circularly	ADV
+polarize	V
+light	N+Conc
+generate	V
+photoexcitation	NOTFOUND
+luminophore	N
+glassy	A
+liquidcrystal	NOTFOUND
+film	N
+{S}	
+accelerate	V
+dissolution	N
+diatom	N
+silica	N
+marine	N+Hum
+bacterial	A
+assemblage	N
+{S}	
+cool	N
+surface	N
+water	N
+subtropical	A
+north	N
+pacific	N+PR
+ocean	N
+last	N
+glacial	A
+{S}	
+holocene	N
+periodicity	N
+north	N
+atlantic	N+PR
+climate	N
+deepocean	NOTFOUND
+flow	N
+southof	NOTFOUND
+iceland	N+PR
+{S}	
+auditory	N
+distance	N
+perception	N
+room	N
+{S}	
+arrangement	N
+cone	N
+classis	N
+living	N
+human	N
+eye	N+Conc
+{S}	
+asymmetric	A
+notch	N
+activation	N
+specify	V
+photoreceptor	N+Conc
+rthree	NOTFOUND
+rfour	NOTFOUND
+planar	A
+polarity	N
+drosophila	N+Anl
+eye	N+Conc
+{S}	
+frizzle	V
+regulation	N
+notch	N
+signalling	N
+polarize	V
+cell	N
+fate	N+Abst
+drosophila	N+Anl
+eye	N+Conc
+{S}	
+cyclosporine	N
+induce	V
+cancer	N
+progression	N
+cellautonomous	NOTFOUND
+mechanism	N
+{S}	
+rgd	NOTFOUND
+peptide	N
+induce	V
+apoptosis	N
+direct	V
+caspasethree	NOTFOUND
+activation	N
+{S}	
+protein	N
+peptide	N
+{S}	
+expanding	N
+canada	N+PR
+knowledge	N
+base	N
+{S}	
+career	N
+recruitment	N
+nature	N
+{S}	
+due	N
+process	N
+french	N+Hum
+farce	N+Conc
+{S}	
+food	N
+thought	N
+{S}	
+gag	N+Conc
+food	N
+scientist	N+Hum
+i	N
+lift	V
+gene	N
+modification	N
+row	N+Conc
+hots	N
+{S}	
+blair	NOTFOUND
+resist	N
+demand	N
+moratorium	N
+{S}	
+african	N+Hum
+flexibility	N
+may	N+Hum
+open	N
+path	N
+biosafety	NOTFOUND
+agreement	N
+{S}	
+scientist	N+Hum
+defend	V
+french	N+Hum
+exministers	NOTFOUND
+blood	N
+trial	N
+{S}	
+federal	N+Hum
+panel	N
+endorse	V
+baylor	NOTFOUND
+fraud	N
+claim	N
+{S}	
+anticancer	NOTFOUND
+activity	N
+endostatin	N
+redeem	V
+{S}	
+higher	N
+status	N
+research	N
+risk	N
+office	N
+{S}	
+congressman	N+Hum
+aim	N
+punish	V
+cloning	N
+research	N
+{S}	
+early	ADV
+american	N
+go	N
+test	N
+eighttwoonetwo	NOTFOUND
+last	N
+{S}	
+union	N
+back	N+Conc
+toronto	NOTFOUND
+researcher	N+Hum
+claim	N
+{S}	
+unitedstates	NOTFOUND
+panel	N
+say	N
+research	N
+can	N
+be	V
+assess	V+t
+{S}	
+giant	N+Hum
+radio	N
+telescope	N+Conc
+will	N
+boost	N
+search	N
+extraterrestrial	N+Hum
+life	N
+{S}	
+mexico	N+PR
+overhaul	N
+rd	NOTFOUND
+funding	N
+system	N
+{S}	
+switzerland	N+PR
+adopt	V
+transplant	N
+guideline	N
+{S}	
+do	N
+not	ADV
+count	N+Hum
+worldbank	NOTFOUND
+initiative	N
+{S}	
+harvest	N
+time	N
+i	N
+unitedkingdom	NOTFOUND
+agricultural	A
+research	N
+{S}	
+evolutionary	A
+force	N
+human	N
+infertility	N
+{S}	
+why	N
+spanish	N
+science	N
+i	N
+standstill	N
+{S}	
+slow	V
+light	N+Conc
+cool	N
+atom	N
+{S}	
+planetary	A
+science	N
+snapshot	N
+ancient	N+Hum
+coverup	N
+{S}	
+neurobiology	N
+place	N
+space	N
+smell	N
+{S}	
+fishy	A
+family	N+HumColl
+tree	N+Conc
+{S}	
+physical	N
+chemistry	N
+protean	A
+proton	N
+water	N
+{S}	
+synthetic	N+Conc
+chemistry	N
+sugaring	N
+vancomycin	N+Conc
+{S}	
+gene	N
+expression	N
+amaze	V
+demethylase	NOTFOUND
+{S}	
+stem	N
+cell	N
+breaking	N
+brainblood	NOTFOUND
+barrier	N+Conc
+{S}	
+superalliance	NOTFOUND
+bottlenose	N
+dolphin	N+Conc
+{S}	
+anterior	A
+sphenoid	N
+modern	N+Hum
+human	N
+{S}	
+iodine	N+Conc
+oxide	N+Conc
+marine	N+Hum
+boundary	N
+layer	N+Hum
+{S}	
+horse	N+Anl
+sickness	N
+enso	NOTFOUND
+southafrica	NOTFOUND
+{S}	
+unique	A
+memory	N
+create	V
+mind	N+Abst
+{S}	
+seminal	A
+work	N
+{S}	
+new	ADV
+edition	N
+{S}	
+illuminating	N
+past	N
+{S}	
+thing	N
+void	N
+{S}	
+nature	N
+abhor	V
+vacuum	N
+{S}	
+mammalian	N+Anl
+protein	N
+specific	N
+demethylase	NOTFOUND
+activity	N
+mcpg	NOTFOUND
+dna	N
+{S}	
+voluminous	A
+volcanism	N
+early	ADV
+mars	N
+reveal	V
+valles	NOTFOUND
+marineris	NOTFOUND
+{S}	
+evidence	N
+recent	A
+volcanism	N
+mars	N
+crater	N
+count	N+Hum
+{S}	
+groundwater	N
+formation	N
+martian	A+PMCO
+valley	N
+{S}	
+bright	N
+dune	N
+mars	N
+{S}	
+light	N+Conc
+speed	N
+reduction	N
+oneseven	NOTFOUND
+metre	N
+second	N
+ultracold	A
+atomicgas	NOTFOUND
+{S}	
+luttingerliquid	NOTFOUND
+behaviour	N
+carbon	N
+nanotube	N
+{S}	
+nature	N
+hydrate	V
+excess	N
+proton	N
+water	N
+{S}	
+discrete	A
+alternate	V
+hotspot	N
+island	N
+form	V
+interaction	N
+magma	N
+transportand	NOTFOUND
+lithospheric	NOTFOUND
+flexure	N
+{S}	
+primitive	N+Hum
+fossil	N
+fish	N+Conc
+shed	N+Conc
+light	N+Conc
+origin	N
+bony	A
+fish	N+Conc
+{S}	
+influence	N
+motion	N
+signal	N
+perceive	V
+position	N
+spatial	A
+pattern	N
+{S}	
+global	A
+record	N
+memory	N
+hippocampal	A
+neuronal	A
+activity	N
+{S}	
+vertebrate	N
+hedgehog	N+Anl
+signalling	N
+modulate	V
+induction	N
+hedgehogbinding	NOTFOUND
+protein	N
+{S}	
+rabfive	NOTFOUND
+effector	N+Conc
+eeaone	NOTFOUND
+i	N
+core	N
+component	N
+endosome	N+Conc
+docking	N
+{S}	
+photosynthetic	A
+control	N
+chloroplast	N
+gene	N
+expression	N
+{S}	
+soft	N
+focus	N
+{S}	
+i	N
+postdoc	NOTFOUND
+{S}	
+debt	N
+salary	N
+tempt	V
+british	N+Hum
+graduate	N+Hum
+away	N
+research	N
+{S}	
+former	N+Hum
+pasteur	NOTFOUND
+head	N
+defend	V
+politician	N+Hum
+{S}	
+unitedstates	NOTFOUND
+group	N
+sue	V
+approval	N
+bt	NOTFOUND
+crop	N
+{S}	
+spain	N+PR
+make	N
+transgenic	A
+crop	N
+producer	N+Hum
+pay	N
+insurance	N
+fund	N
+{S}	
+unitedkingdom	NOTFOUND
+press	N
+report	N
+come	V
+fire	N
+{S}	
+britain	N+PR
+reassure	V
+critic	N+Hum
+risk	N
+research	N
+{S}	
+japan	N+PR
+target	N
+double	N
+science	N
+spend	V
+{S}	
+canada	N+PR
+budget	N
+boost	N
+innovation	N
+{S}	
+congress	N
+may	N+Hum
+block	N
+stemcell	NOTFOUND
+research	N
+{S}	
+codiscoverer	NOTFOUND
+evidence	N
+quark	N+Conc
+kill	V
+diving	N
+accident	N
+{S}	
+europe	N+PR
+young	N+Hum
+researcher	N+Hum
+seek	V
+proper	N
+reward	N
+{S}	
+trial	N
+tribulation	N
+phd	NOTFOUND
+student	N+Hum
+{S}	
+how	N+Conc
+hunger	N
+keep	N
+population	N
+{S}	
+revolutionary	N+Hum
+idea	N+Abst
+come	V
+again	ADV
+{S}	
+patent	N
+attorney	N+Hum
+pay	N
+way	N
+{S}	
+benefit	N
+climate	N
+forecast	N
+{S}	
+driving	N
+parent	N+Hum
+cuckoo	N+Anl
+{S}	
+condensedmatter	NOTFOUND
+physics	N
+nanotube	N
+laboratory	N
+{S}	
+development	N
+hox	NOTFOUND
+protein	N
+reach	N
+out	N
+dna	N
+{S}	
+bioenergetics	N
+price	N
+run	N
+swim	N
+fly	N+Conc
+{S}	
+neurobiology	N
+sorting	N
+out	N
+neuron	N
+{S}	
+rna	N
+splicing	N
+running	N
+ring	N+Conc
+rna	N
+{S}	
+materials	N
+science	N
+measures	N+Conc
+crystal	N
+vacancy	N
+{S}	
+climate	N
+change	N
+question	N
+significance	N
+{S}	
+growing	N
+season	N
+extend	V
+europe	N+PR
+{S}	
+breathing	N
+skin	N
+newborn	N+Hum
+mammal	N+Anl
+{S}	
+formation	N
+ice	N
+xii	NOTFOUND
+condition	N
+{S}	
+biologic	A
+facial	N
+geometry	N
+{S}	
+exit	N
+homo	N+Hum
+sapiens	A
+stage	N
+left	N
+{S}	
+affect	V+t
+climate	N
+secondbest	NOTFOUND
+world	N
+{S}	
+diversity	N
+danger	N
+{S}	
+happy	A
+accident	N
+{S}	
+species	N
+frontier	N
+{S}	
+ritual	N
+meaning	N
+lose	V
+vegetable	N
+stew	N
+{S}	
+signal	N
+need	N
+parentoffspring	NOTFOUND
+communication	N
+exploitation	N
+common	N
+cuckoo	N+Anl
+{S}	
+aharonovbohm	NOTFOUND
+oscillation	N
+carbon	N
+nanotube	N
+{S}	
+spontaneous	A
+chaotic	A
+granular	A
+mixing	N
+{S}	
+selforganized	NOTFOUND
+growth	N
+alloy	N
+superlattices	NOTFOUND
+{S}	
+nonaqueous	A
+supramolecular	A
+assembly	N+HumColl
+mesostructured	NOTFOUND
+metal	N+Conc
+germanium	N+Conc
+sulphide	N
+gefoursonezerofour	NOTFOUND
+cluster	N
+{S}	
+onetwofour	NOTFOUND
+zerozerozeroyear	NOTFOUND
+periodicity	N
+terrestrial	N+Hum
+vegetation	N
+change	N
+late	ADV
+pliocene	N
+epoch	N
+{S}	
+relative	N+Hum
+impact	N
+humaninduced	NOTFOUND
+climate	N
+change	N
+natural	N+Hum
+climate	N
+variability	N
+{S}	
+origin	N
+spinifex	N+Conc
+texture	N
+komatiites	NOTFOUND
+{S}	
+ferricchelate	NOTFOUND
+reductase	N
+iron	N+Conc
+uptake	N
+soil	N
+{S}	
+diffusion	N
+barrier	N+Conc
+maintain	V
+distribution	N
+membrane	N
+protein	N
+polarize	V
+neuron	N
+{S}	
+development	N
+peripheral	N
+lymphoid	A
+organ	N
+natural	N+Hum
+killer	N+Hum
+cell	N
+depend	V
+helixloophelix	NOTFOUND
+inhibitor	N+Hum
+idtwo	NOTFOUND
+{S}	
+head	N
+inducer	N+Hum
+cerberus	N+PR+Hum
+i	N
+multifunctional	A
+antagonist	N+Hum
+nodal	A
+bmp	NOTFOUND
+wnt	NOTFOUND
+signal	N
+{S}	
+inhibition	N
+transforming	N
+growth	N
+factor	N+Hum
+smad	NOTFOUND
+signalling	N
+interferon	N+Conc
+stat	N
+pathway	N
+{S}	
+structure	N
+dnaboundultrabithoraxextradenticle	NOTFOUND
+homeodomain	NOTFOUND
+complex	N
