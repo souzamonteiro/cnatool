@@ -282,9 +282,9 @@ function CNATool() {
                         system.log('       --weighted           The created network must be weighted based');
                         system.log('                            on the number of occurrences of the connections');
                         system.log('                            between the vertices;');
-                        system.log('       --create             Creates a network file in Pajet format;');
+                        system.log('       --create             Creates a network file in Pajek format;');
                         system.log('       --directed           Network is a directed graph;');
-                        system.log('       --export             Exports the network file in Pajet format;');
+                        system.log('       --export             Exports the network file in Pajek format;');
                         system.log('       --json               Save the network file in JSON format;');
                         system.log('       --loops              Allow loops;');
                         system.log('       --topology           Graph topology (complete, random, scalefree, smallworld, hybrid');
