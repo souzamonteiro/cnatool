@@ -45,14 +45,14 @@
 /// limitations under the License.
 ///
 
- ///
- /// Library for building semantic networks.
- /// @namespace snet
- ///
+///
+/// Library for building semantic networks.
+/// @namespace snet
+///
 namespace snet {
     ///
-    /// Convert a file in DLF format to JSON.
-    /// @method dlfFileToJson
+    /// Create a JSON graph from a file in DLF format.
+    /// @method createFromDlf
     /// @memberof snet
     /// @param {string}   fileContents - DLF file contents.
     /// @param {object}   properties - Network properties (n, m and directed).
@@ -61,10 +61,11 @@ namespace snet {
     /// @param {boolean}  weighted - The created network must be weighted based
     ///                              on the number of occurrences of the connections
     ///                              between the vertices.
+    /// @param {boolean}  allowLoops - Allows the existence of loops.
     /// @param {object}   network - Network previously created to insert new data.
     /// @return {object}  A JSON containing the network.
     ///
-    function dlfFileToJson(fileContents, properties, topology, weighted, network) {
+    function createFromDlf(fileContents, properties, topology, weighted, allowLoops, network) {
         if (core.type(properties) == "undefined") {
             properties = {
                 "n": 0,
@@ -74,7 +75,6 @@ namespace snet {
         } else {
             properties.n = 0
             properties.m = 0
-            properties.directed = true
         }
         if (core.type(topology) == "undefined") {
             topology = "chain"
@@ -85,24 +85,45 @@ namespace snet {
         if (core.type(network) == "undefined") {
             network = {
                 "nodes": [],
-                "edges": []
+                "edges": [],
+                "numberOfSentences": 0,
+                "vocabulary": 0
             }
+        }
+        if (core.type(allowLoops) == "undefined") {
+            allowLoops = false
+        }
+
+        if (properties.directed == true) {
+            edgeType = "arrow"
+        } else {
+            edgeType = "line"
         }
 
         // Search engine.
-        queryObject = ""
-        edgeIndex = []
-
+        queryObject = {
+            "label": "",
+            "source": "",
+            "target": "",
+            "index": -1
+        }
+        
         function findNode(element, index, list) {
             thisNode = list[index]
-            found = (element.label == queryObject)
-            return(found)
+            found = (element.label == queryObject.label)
+            if (found) {
+                queryObject.index = index
+            }
+            return (found)
         }
+
         function findEdge(element, index, list) {
             thisNode = list[index]
-            found = ((element.source == queryObject.source) &amp;&amp; (element.target== queryObject.target))
-            edgeIndex = index
-            return(found)
+            found = ((element.source == queryObject.source) &amp;&amp; (element.target == queryObject.target))
+            if (found) {
+                queryObject.index = index
+            }
+            return (found)
         }
 
         id = -1
@@ -110,7 +131,7 @@ namespace snet {
         endOfRecord = false
 
         t1 = core.date()
-        
+
         fileLines = core.split(core.replace(fileContents, "\r\n", "\n"), "\n")
 
         system.println("Processing " + fileLines.length + " lines ...")
@@ -123,7 +144,13 @@ namespace snet {
             line = core.replace(line, "\t", " ")
             record = core.splitCSV(line.trim(), " ", true)
             if (record[0] == "{S}") {
+                network.numberOfSentences = network.numberOfSentences + 1
                 endOfRecord = true
+            } else {
+                if (l == fileLines.length - 1) {
+                    network.numberOfSentences = network.numberOfSentences + 1
+                    endOfRecord = true
+                }
             }
             if (core.length(record) >= 1) {
                 if (!endOfRecord) {
@@ -150,88 +177,134 @@ namespace snet {
                     }
                     nodes.push(node)
                 } else {
-                    foreach (nodes; index; node) {
-                        queryObject = node.label
+                    existingNodes = []
+                    foreach(nodes; index; node) {
+                        queryObject = {
+                            "label": node.label,
+                            "index": -1
+                        }
                         nodeFound = network.nodes.find(findNode)
                         if (core.type(nodeFound) == "undefined") {
                             node.id = "n" + network.nodes.length
                             network.nodes.push(node)
+                            existingNodes.push(node.label)
+                            network.vocabulary = network.vocabulary + 1
                         } else {
-                            node.id = nodeFound.id
+                            if (!existingNodes.includes(node.label)) {
+                                node = network.nodes[queryObject.index]
+                                node.size = node.size + 1
+                            }
                         }
                     }
+
                     if (topology == "chain") {
                         for (i = 0; i &lt; nodes.length - 1; i = i + 1) {
                             node1 = nodes[i]
                             node2 = nodes[i + 1]
 
-                            edgeIndex = []
-                            queryObject = {"source": node1.id, "target": node2.id}
+                            if (!allowLoops &amp;&amp; (node1.id == node2.id)) {
+                                continue
+                            }
+
+                            queryObject = {
+                                "source": node1.id,
+                                "target": node2.id,
+                                "index": -1
+                            }
                             edgeFound = network.edges.find(findEdge)
-                            
+
                             if (core.type(edgeFound) == "undefined") {
                                 edge = {
                                     "id": "e" + network.edges.length,
                                     "source": node1.id,
                                     "target": node2.id,
                                     "size": 1,
-                                    "type": "arrow"
+                                    "type": edgeType
                                 }
                                 network.edges.push(edge)
                             } else {
                                 if (weighted) {
-                                    edge = network.edges[edgeIndex]
+                                    edge = network.edges[queryObject.index]
                                     edge.size = edge.size + 1
                                 }
                             }
                         }
-                    } elseif (topology == "clique") {
-                        foreach (nodes; index1; node1) {
-                            foreach (nodes; index2; node2) {
-                                if (index1 != index2) {
-                                    edgeIndex = []
-                                    queryObject = {"source": node1.id, "target": node2.id}
-                                    edgeFound = network.edges.find(findEdge)
+                    }
+                    elseif(topology == "clique") {
+                        foreach(nodes; index1; node1) {
+                            foreach(nodes; index2; node2) {
+                                if (!allowLoops) {
+                                    if (node1.id == node2.id) {
+                                        continue
+                                    }
+                                }
 
-                                    if (core.type(edgeFound) == "undefined") {
-                                        edge = {
-                                            "id": "e" + network.edges.length,
-                                            "source": node1.id,
-                                            "target": node2.id,
-                                            "size": 1,
-                                            "type": "arrow"
-                                        }
-                                        network.edges.push(edge)
-                                    } else {
-                                        if (weighted) {
-                                            edge = network.edges[edgeIndex]
-                                            edge.size = edge.size + 1
-                                        }
+                                queryObject = {
+                                    "source": node1.id,
+                                    "target": node2.id,
+                                    "index": -1
+                                }
+                                edgeFound = network.edges.find(findEdge)
+                                if (core.type(edgeFound) == "undefined") {
+                                    system.println("Não achou: [" + node1.label + ", " + node2.label + "]")
+                                    queryObject = {
+                                        "source": node2.id,
+                                        "target": node1.id,
+                                        "index": -1
+                                    }
+                                    edgeFound = network.edges.find(findEdge)
+                                } else {
+                                    system.println("Achou: [" + node1.label + ", " + node2.label + "]")
+                                }
+
+                                if (core.type(edgeFound) == "undefined") {
+                                    system.println("Inseriu: [" + node1.label + ", " + node2.label + "]")
+                                    edge = {
+                                        "id": "e" + network.edges.length,
+                                        "source": node1.id,
+                                        "target": node2.id,
+                                        "size": 1,
+                                        "type": edgeType
+                                    }
+                                    network.edges.push(edge)
+                                } else {
+                                    system.println("Atualizou: [" + node1.label + ", " + node2.label + "]")
+                                    if (weighted) {
+                                        edge = network.edges[queryObject.index]
+                                        edge.size = edge.size + 1
                                     }
                                 }
                             }
                         }
-                    } elseif (topology == "circle") {
+                    }
+                    elseif(topology == "circle") {
                         for (i = 0; i &lt; nodes.length - 1; i = i + 1) {
                             node1 = nodes[i]
                             node2 = nodes[i + 1]
 
-                            edgeIndex = []
-                            queryObject = {"source": node1.id, "target": node2.id}
+                            if (!allowLoops &amp;&amp; (node1.id == node2.id)) {
+                                continue
+                            }
+
+                            queryObject = {
+                                "source": node1.id,
+                                "target": node2.id,
+                                "index": -1
+                            }
                             edgeFound = network.edges.find(findEdge)
-                            
+
                             if (core.type(edgeFound) == "undefined") {
                                 edge = {
                                     "id": "e" + network.edges.length,
                                     "source": node1.id,
                                     "target": node2.id,
                                     "size": 1,
-                                    "type": "arrow"
+                                    "type": edgeType
                                 }
                                 network.edges.push(edge)
                             } else {
                                 if (weighted) {
-                                    edge = network.edges[edgeIndex]
+                                    edge = network.edges[queryObject.index]
                                     edge.size = edge.size + 1
                                 }
                             }
@@ -240,8 +313,11 @@ namespace snet {
                                 node1 = nodes[i + 1]
                                 node2 = nodes[0]
 
-                                edgeIndex = []
-                                queryObject = {"source": node1.id, "target": node2.id}
+                                queryObject = {
+                                    "source": node1.id,
+                                    "target": node2.id,
+                                    "index": -1
+                                }
                                 edgeFound = network.edges.find(findEdge)
 
                                 if (core.type(edgeFound) == "undefined") {
@@ -250,12 +326,12 @@ namespace snet {
                                         "source": node1.id,
                                         "target": node2.id,
                                         "size": 1,
-                                        "type": "arrow"
+                                        "type": edgeType
                                     }
                                     network.edges.push(edge)
                                 } else {
                                     if (weighted) {
-                                        edge = network.edges[edgeIndex]
+                                        edge = network.edges[queryObject.index]
                                         edge.size = edge.size + 1
                                     }
                                 }
@@ -271,17 +347,16 @@ namespace snet {
 
         properties.n = network.nodes.length
         properties.m = network.edges.length
-        
+
         t2 = core.date()
         t = t2 - t1
 
         system.println("Processed " + l.toString() + " lines of " + fileLines.length.toString() + ".")
         system.println("Elapsed time: " + t + " ms.")
 
-        return(network)
+        return (network)
     }
-}
-</code></pre>
+}</code></pre>
         </article>
     </section>
 
@@ -297,7 +372,7 @@ namespace snet {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sun Mar 21 2021 01:16:54 GMT-0300 (Brasilia Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Tue Jul 20 2021 12:01:47 GMT-0300 (Brasilia Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

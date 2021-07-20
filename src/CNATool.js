@@ -513,7 +513,11 @@ function CNATool() {
 
                                     var outputFileName = fileName + '.json';
                                     
-                                    graphsData = snet.dlfFileToJson(fileContents, property, topology, isWeighted);
+                                    if (isDirected) {
+                                        property.directed = true;
+                                    }
+                                    
+                                    graphsData = snet.createFromDlf(fileContents, property, topology, isWeighted, allowLoops);
                                     
                                     fs.writeFile(outputFileName, JSON.stringify(graphsData), function(err) {
                                         if (err) {
