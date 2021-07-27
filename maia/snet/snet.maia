@@ -72,46 +72,34 @@ namespace snet {
             edgeType = "line"
         }
 
-        function findNode(list, query) {
-            found = false
+        function findNode(list, label) {
             foreach (list; index; value) {
-                if (value.id == query.id) {
-                    query = list[index]
-                    query.index = index
-                    found = true
-                    break
+                if (value.label == label) {
+                    return(value)
                 }
             }
-            return (found)
+            return("undefined")
         }
 
-        function findEdge(list, query, directed) {
+        function findEdge(list, source, target, directed) {
             if (core.type(directed) == "undefined") {
                 directed = false
             }
 
-            found = false
             foreach (list; index; value) {
                 if (directed) {
-                    if ((value.source == query.source) && (value.target == query.target)) {
-                        query = list[index]
-                        query.index = index
-                        found = true
-                        break
+                    if ((value.source == source) && (value.target == target)) {
+                        return(value)
                     }
                 } else {
-                    if (((value.source == query.source) && (value.target == query.target)) || ((value.source == query.target) && (value.target == query.source))) {
-                        query = list[index]
-                        query.index = index
-                        found = true
-                        break
+                    if (((value.source == source) && (value.target == target)) || ((value.source == target) && (value.target == source))) {
+                        return(value)
                     }
                 }
             }
-            return (found)
+            return("undefined")
         }
 
-        id = -1
         nodes = []
         endOfRecord = false
 
@@ -139,7 +127,6 @@ namespace snet {
             }
             if (core.length(record) >= 1) {
                 if (!endOfRecord) {
-                    id = id + 1
                     label = core.toString(record[0])
                     x = ""
                     y = ""
@@ -154,30 +141,34 @@ namespace snet {
                         size = 1
                     }
                     node = {
-                        "id": "n" + id,
+                        "id": "",
                         "label": label,
                         "x": x,
                         "y": y,
                         "size": size
                     }
+                    nodeFound = findNode(network.nodes, node.label)
+                    if (nodeFound != "undefined") {
+                        node.id = nodeFound.id
+                    } else {
+                        node.id = "n" + network.nodes.length
+                    }
                     nodes.push(node)
                 } else {
                     foreach (nodes; index; node) {
-                        nodeObject = {
-                            "id": node.id,
-                            "index": -1
-                        }
-                        nodeFound = findNode(network.nodes, nodeObject)
-                        if (!nodeFound) {
-                            node.id = "n" + network.nodes.length
+                        nodeFound = findNode(network.nodes, node.label)
+                        if (nodeFound == "undefined") {
+                            //node.id = "n" + network.nodes.length
+                            node.id = node.label
                             network.nodes.push(node)
                             network.vocabulary = network.vocabulary + 1
                         } else {
-                            thisNode = network.nodes[nodeObject.index]
-                            thisNode.size = thisNode.size + 1
+                            nodeFound.size = nodeFound.size + 1
                         }
                     }
-
+                    foreach (nodes; index; node) {
+                        system.println(node.id + " : " + node.label)
+                    }
                     if (topology == "chain") {
                         for (i = 0; i < nodes.length - 1; i = i + 1) {
                             node1 = nodes[i]
@@ -189,13 +180,8 @@ namespace snet {
                                 }
                             }
 
-                            edgeObject = {
-                                "source": node1.id,
-                                "target": node2.id,
-                                "index": -1
-                            }
-                            edgeFound = findEdge(network.edges, edgeObject, properties.directed)
-                            if (!edgeFound) {
+                            edgeFound = findEdge(network.edges, node1.id, node2.id, properties.directed)
+                            if (edgeFound == "undefined") {
                                 edge = {
                                     "id": "e" + network.edges.length,
                                     "source": node1.id,
@@ -206,8 +192,7 @@ namespace snet {
                                 network.edges.push(edge)
                             } else {
                                 if (weighted) {
-                                    thisEdge = network.edges[edgeObject.index]
-                                    thisEdge.size = thisEdge.size + 1
+                                    edgeFound.size = edgeFound.size + 1
                                 }
                             }
                         }
@@ -220,16 +205,8 @@ namespace snet {
                                     }
                                 }
 
-                                system.println(JSON.stringify(node1) + ", " + JSON.stringify(node2))
-                                edgeObject = {
-                                    "source": node1.id,
-                                    "target": node2.id,
-                                    "index": -1
-                                }
-                                system.println("Procurando: " + edgeObject.source + ", " + edgeObject.target + " [" + node1.label + ", " + node2.label + "]")
-                                edgeFound = findEdge(network.edges, edgeObject, properties.directed)
-                                if (!edgeFound) {
-                                    system.println("Não achou e inseriu: [" + node1.label + ", " + node2.label + "]")
+                                edgeFound = findEdge(network.edges, node1.id, node2.id, properties.directed)
+                                if (edgeFound == "undefined") {
                                     edge = {
                                         "id": "e" + network.edges.length,
                                         "source": node1.id,
@@ -239,10 +216,8 @@ namespace snet {
                                     }
                                     network.edges.push(edge)
                                 } else {
-                                    system.println("Achou e atualizou: [" + node1.label + ", " + node2.label + "]")
                                     if (weighted) {
-                                        thisEdge = network.edges[edgeObject.index]
-                                        thisEdge.size = thisEdge.size + 1
+                                        edgeFound.size = edgeFound.size + 1
                                     }
                                 }
                             }
@@ -258,13 +233,8 @@ namespace snet {
                                 }
                             }
 
-                            edgeObject = {
-                                "source": node1.id,
-                                "target": node2.id,
-                                "index": -1
-                            }
-                            edgeFound = findEdge(network.edges, edgeObject, properties.directed)
-                            if (!edgeFound) {
+                            edgeFound = findEdge(network.edges, node1.id, node2.id, properties.directed)
+                            if (edgeFound == "undefined") {
                                 edge = {
                                     "id": "e" + network.edges.length,
                                     "source": node1.id,
@@ -275,8 +245,7 @@ namespace snet {
                                 network.edges.push(edge)
                             } else {
                                 if (weighted) {
-                                    thisEdge = network.edges[edgeObject.index]
-                                    thisEdge.size = thisEdge.size + 1
+                                    edgeFound.size = edgeFound.size + 1
                                 }
                             }
 
@@ -284,13 +253,8 @@ namespace snet {
                                 node1 = nodes[i + 1]
                                 node2 = nodes[0]
 
-                                edgeObject = {
-                                    "source": node1.id,
-                                    "target": node2.id,
-                                    "index": -1
-                                }
-                                edgeFound = findEdge(network.edges, edgeObject, properties.directed)
-                                if (!edgeFound) {
+                                edgeFound = findEdge(network.edges, node1.id, node2.id, properties.directed)
+                                if (edgeFound == "undefined") {
                                     edge = {
                                         "id": "e" + network.edges.length,
                                         "source": node1.id,
@@ -301,14 +265,12 @@ namespace snet {
                                     network.edges.push(edge)
                                 } else {
                                     if (weighted) {
-                                        thisEdge = network.edges[edgeObject.index]
-                                        thisEdge.size = thisEdge.size + 1
+                                        edgeFound.size = edgeFound.size + 1
                                     }
                                 }
                             }
                         }
                     }
-                    id = -1
                     nodes = []
                     endOfRecord = false
                 }
