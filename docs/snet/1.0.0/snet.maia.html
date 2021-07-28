@@ -141,6 +141,7 @@ namespace snet {
             if ((l != 0) &amp;&amp; (l % 1000 == 0)) {
                 system.println("Processed " + l.toString() + " lines of " + fileLines.length.toString() + ".")
             }
+
             line = fileLines[l]
             line = core.replace(line, "\t", " ")
             record = core.splitCSV(line.trim(), " ", true)
@@ -153,6 +154,7 @@ namespace snet {
                     endOfRecord = true
                 }
             }
+
             if (core.length(record) >= 1) {
                 if (!endOfRecord) {
                     label = core.toString(record[0])
@@ -317,6 +319,260 @@ namespace snet {
 
         return (network)
     }
+
+    ///
+    /// Create a JSON graph from a file in JSON data.
+    /// @method createFromJson
+    /// @memberof snet
+    /// @param {object}   jsonData - JSON data.
+    /// @param {object}   properties - Network properties (n, m and directed).
+    /// @param {string}   topology - Network topology. It can be:
+    ///                              chain, circle or clique.
+    /// @param {boolean}  weighted - The created network must be weighted based
+    ///                              on the number of occurrences of the connections
+    ///                              between the vertices.
+    /// @param {boolean}  allowLoops - Allows the existence of loops.
+    /// @param {object}   network - Network previously created to insert new data.
+    /// @return {object}  A JSON containing the network.
+    ///
+    function createFromJson(jsonData, properties, topology, weighted, allowLoops, network) {
+        if (core.type(properties) == "undefined") {
+            properties = {
+                "n": 0,
+                "m": 0,
+                "directed": true
+            }
+        } else {
+            properties.n = 0
+            properties.m = 0
+        }
+        if (core.type(topology) == "undefined") {
+            topology = "chain"
+        }
+        if (core.type(weighted) == "undefined") {
+            weighted = true
+        }
+        if (core.type(network) == "undefined") {
+            network = {
+                "nodes": [],
+                "edges": [],
+                "numberOfSentences": 0,
+                "vocabulary": 0
+            }
+        }
+        if (core.type(allowLoops) == "undefined") {
+            allowLoops = false
+        }
+
+        if (properties.directed == true) {
+            edgeType = "arrow"
+        } else {
+            edgeType = "line"
+        }
+
+        function findNode(list, label) {
+            foreach (list; index; value) {
+                if (value.label == label) {
+                    return(value)
+                }
+            }
+            return("undefined")
+        }
+
+        function findEdge(list, source, target, directed) {
+            if (core.type(directed) == "undefined") {
+                directed = false
+            }
+
+            foreach (list; index; value) {
+                if (directed) {
+                    if ((value.source == source) &amp;&amp; (value.target == target)) {
+                        return(value)
+                    }
+                } else {
+                    if (((value.source == source) &amp;&amp; (value.target == target)) || ((value.source == target) &amp;&amp; (value.target == source))) {
+                        return(value)
+                    }
+                }
+            }
+            return("undefined")
+        }
+
+        nodes = []
+        
+        t1 = core.date()
+
+        system.println("Processing " + jsonData.length + " records ...")
+
+        network.numberOfSentences = jsonData.length
+        
+        for (r = 0; r &lt; jsonData.length; r = r + 1) {
+            if ((r != 0) &amp;&amp; (r % 1000 == 0)) {
+                system.println("Processed " + r.toString() + " records of " + jsonData.length.toString() + ".")
+            }
+
+            
+            record = jsonData[r]
+            
+            for (w = 0; w &lt; record.length; w = w + 1) {
+                word = record[w]
+
+                label = word.object
+                x = math.random()
+                y = math.random()
+                size = 1
+                
+                node = {
+                    "id": "",
+                    "label": label,
+                    "x": x,
+                    "y": y,
+                    "size": size,
+                    "class": word.class,
+                    "subClass": word.subClass,
+                    "subSubClass": word.subSubClass
+                }
+
+                nodeFound = findNode(network.nodes, node.label)
+                if (nodeFound != "undefined") {
+                    node.id = nodeFound.id
+                } else {
+                    node.id = "n" + network.nodes.length
+                }
+                nodes.push(node)
+            }
+
+            foreach (nodes; index; node) {
+                nodeFound = findNode(network.nodes, node.label)
+                if (nodeFound == "undefined") {
+                    node.id = "n" + network.nodes.length
+                    network.nodes.push(node)
+                    network.vocabulary = network.vocabulary + 1
+                } else {
+                    nodeFound.size = nodeFound.size + 1
+                }
+            }
+            
+            if (topology == "chain") {
+                for (i = 0; i &lt; nodes.length - 1; i = i + 1) {
+                    node1 = nodes[i]
+                    node2 = nodes[i + 1]
+
+                    if (!allowLoops) {
+                        if (node1.id == node2.id) {
+                            continue
+                        }
+                    }
+
+                    edgeFound = findEdge(network.edges, node1.id, node2.id, properties.directed)
+                    if (edgeFound == "undefined") {
+                        edge = {
+                            "id": "e" + network.edges.length,
+                            "source": node1.id,
+                            "target": node2.id,
+                            "size": 1,
+                            "type": edgeType
+                        }
+                        network.edges.push(edge)
+                    } else {
+                        if (weighted) {
+                            edgeFound.size = edgeFound.size + 1
+                        }
+                    }
+                }
+            } elseif (topology == "clique") {
+                foreach (nodes; index1; node1) {
+                    foreach (nodes; index2; node2) {
+                        if (!allowLoops) {
+                            if (node1.id == node2.id) {
+                                continue
+                            }
+                        }
+
+                        if (index1 > index2) {
+                            continue
+                        }
+
+                        edgeFound = findEdge(network.edges, node1.id, node2.id, properties.directed)
+                        if (edgeFound == "undefined") {
+                            edge = {
+                                "id": "e" + network.edges.length,
+                                "source": node1.id,
+                                "target": node2.id,
+                                "size": 1,
+                                "type": edgeType
+                            }
+                            network.edges.push(edge)
+                        } else {
+                            if (weighted) {
+                                edgeFound.size = edgeFound.size + 1
+                            }
+                        }
+                    }
+                }
+            } elseif (topology == "circle") {
+                for (i = 0; i &lt; nodes.length - 1; i = i + 1) {
+                    node1 = nodes[i]
+                    node2 = nodes[i + 1]
+
+                    if (!allowLoops) {
+                        if (node1.id == node2.id) {
+                            continue
+                        }
+                    }
+
+                    edgeFound = findEdge(network.edges, node1.id, node2.id, properties.directed)
+                    if (edgeFound == "undefined") {
+                        edge = {
+                            "id": "e" + network.edges.length,
+                            "source": node1.id,
+                            "target": node2.id,
+                            "size": 1,
+                            "type": edgeType
+                        }
+                        network.edges.push(edge)
+                    } else {
+                        if (weighted) {
+                            edgeFound.size = edgeFound.size + 1
+                        }
+                    }
+
+                    if (i + 1 == nodes.length - 1) {
+                        node1 = nodes[i + 1]
+                        node2 = nodes[0]
+
+                        edgeFound = findEdge(network.edges, node1.id, node2.id, properties.directed)
+                        if (edgeFound == "undefined") {
+                            edge = {
+                                "id": "e" + network.edges.length,
+                                "source": node1.id,
+                                "target": node2.id,
+                                "size": 1,
+                                "type": edgeType
+                            }
+                            network.edges.push(edge)
+                        } else {
+                            if (weighted) {
+                                edgeFound.size = edgeFound.size + 1
+                            }
+                        }
+                    }
+                }
+            }
+            nodes = []
+        }
+
+        properties.n = network.nodes.length
+        properties.m = network.edges.length
+
+        t2 = core.date()
+        t = t2 - t1
+
+        system.println("Processed " + r.toString() + " records of " + jsonData.length.toString() + ".")
+        system.println("Elapsed time: " + t + " ms.")
+
+        return (network)
+    }
 }</code></pre>
         </article>
     </section>
@@ -333,7 +589,7 @@ namespace snet {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Tue Jul 27 2021 20:56:40 GMT-0300 (Brasilia Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Jul 28 2021 14:16:58 GMT-0300 (Brasilia Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

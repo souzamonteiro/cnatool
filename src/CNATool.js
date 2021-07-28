@@ -517,8 +517,14 @@ function CNATool() {
                                         property.directed = true;
                                     }
                                     
-                                    graphsData = snet.createFromDlf(fileContents, property, topology, isWeighted, allowLoops);
-                                    
+                                    if (fileExtension == 'json') {
+                                        var outputFileName = fileName + '-net.json';
+                                        var jsonData = JSON.parse(fileContents);
+                                        graphsData = snet.createFromJson(jsonData, property, topology, isWeighted, allowLoops);
+                                    } else {
+                                        graphsData = snet.createFromDlf(fileContents, property, topology, isWeighted, allowLoops);
+                                    }
+
                                     fs.writeFile(outputFileName, JSON.stringify(graphsData), function(err) {
                                         if (err) {
                                             throw err;
