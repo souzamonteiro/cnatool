@@ -158,17 +158,14 @@ namespace snet {
                     foreach (nodes; index; node) {
                         nodeFound = findNode(network.nodes, node.label)
                         if (nodeFound == "undefined") {
-                            //node.id = "n" + network.nodes.length
-                            node.id = node.label
+                            node.id = "n" + network.nodes.length
                             network.nodes.push(node)
                             network.vocabulary = network.vocabulary + 1
                         } else {
                             nodeFound.size = nodeFound.size + 1
                         }
                     }
-                    foreach (nodes; index; node) {
-                        system.println(node.id + " : " + node.label)
-                    }
+                    
                     if (topology == "chain") {
                         for (i = 0; i < nodes.length - 1; i = i + 1) {
                             node1 = nodes[i]
@@ -203,6 +200,10 @@ namespace snet {
                                     if (node1.id == node2.id) {
                                         continue
                                     }
+                                }
+
+                                if (index1 > index2) {
+                                    continue
                                 }
 
                                 edgeFound = findEdge(network.edges, node1.id, node2.id, properties.directed)
