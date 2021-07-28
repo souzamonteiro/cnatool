@@ -97,56 +97,56 @@
 
         <div class="panel">
             <div class="split left">
-                <ul class="list"></ul>
-                    <li>
+                <ul></ul>
+                    <li class="list">
                         <div class="item">
                             <div class="label">Vertices:</div>
                             <div id="vertices" class="value"></div>
                         </div>
                     </li>
-                    <li>
+                    <li class="list">
                         <div class="item">
                             <div class="label">Edges:</div>
                             <div id="edges" class="value"></div>
                         </div>
                     </li>
-                    <li>
+                    <li class="list">
                         <div class="item">
                             <div class="label">Density:</div>
                             <div id="density" class="value"></div>
                         </div>
                     </li>
-                    <li>
+                    <li class="list">
                         <div class="item">
                             <div class="label">Avg. Degree:</div>
                             <div id="averageDegree" class="value"></div>
                         </div>
                     </li>
-                    <li>
+                    <li class="list">
                         <div class="item">
                             <div class="label">Avg. Clustering Coef.:</div>
                             <div id="averageClusteringCoefficient" class="value"></div>
                         </div>
                     </li>
-                    <li>
+                    <li class="list">
                         <div class="item">
                             <div class="label">Avg. Shortest Path:</div>
                             <div id="averageShortestPath" class="value"></div>
                         </div>
                     </li>
-                    <li>
+                    <li class="list">
                         <div class="item">
                             <div class="label">Diameter:</div>
                             <div id="diameter" class="value"></div>
                         </div>
                     </li>
-                    <li>
+                    <li class="list">
                         <div class="item">
                             <div class="label">Global Efficiency:</div>
                             <div id="globalEfficiency" class="value"></div>
                         </div>
                     </li>
-                    <li>
+                    <li class="list">
                         <div class="item">
                             <label class="label" for="algorithm">Algorithm:</label>
                             <select id="algorithm" name="algorithm" style="float: right;" onchange="updateGraph()">
@@ -156,7 +156,7 @@
                             </select>
                         </div>
                     </li>
-                    <li>
+                    <li class="list">
                         <div class="item">
                             <label class="label" for="directedGraph">Directed Graph:</label>
                             <input id="directedGraph" nome="directedGraph" style="float: right;" type="checkbox" value="directed" onchange="updateProperties()">
@@ -170,7 +170,7 @@
                             <input id="showWeight" nome="showWeight" style="float: right;" type="checkbox" value="directed" onchange="updateGraph()">
                         </div>
                     </li>
-                    <li>
+                    <li class="list">
                         <div class="item">
                             <label class="label" for="calculateProperties">Calculate Properties:</label>
                             <input id="calculateProperties" nome="calculateProperties" style="float: right;" type="checkbox" value="calculate" onchange="updateProperties()">
@@ -208,7 +208,7 @@
                     maxNodeSize: 10,
                     minEdgeSize: 1,
                     maxEdgeSize: 1,
-                    minArrowSize: 0
+                    minArrowSize: 5
                 }
             };
 
@@ -717,8 +717,9 @@
          svgConfig = {
             "download": true,
             "data": true,
-            "filename": fileObject.fileName + ".svg",
-            "labels": showLabels.checked
+            "labels": showLabels.checked,
+            "freeStyle": true,
+            "filename": fileObject.fileName + ".svg"
          }
          graph.toSVG(svgConfig)
       }
