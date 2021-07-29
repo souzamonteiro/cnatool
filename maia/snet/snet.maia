@@ -176,6 +176,7 @@ namespace snet {
                             if (edgeFound == "undefined") {
                                 edge = {
                                     "id": "e" + network.edges.length,
+                                    "label": "1",
                                     "source": node1.id,
                                     "target": node2.id,
                                     "size": 1,
@@ -185,6 +186,7 @@ namespace snet {
                             } else {
                                 if (weighted) {
                                     edgeFound.size = edgeFound.size + 1
+                                    edgeFound.label = core.toString(edgeFound.size)
                                 }
                             }
                         }
@@ -205,6 +207,7 @@ namespace snet {
                                 if (edgeFound == "undefined") {
                                     edge = {
                                         "id": "e" + network.edges.length,
+                                        "label": "1",
                                         "source": node1.id,
                                         "target": node2.id,
                                         "size": 1,
@@ -214,6 +217,7 @@ namespace snet {
                                 } else {
                                     if (weighted) {
                                         edgeFound.size = edgeFound.size + 1
+                                        edgeFound.label = core.toString(edgeFound.size)
                                     }
                                 }
                             }
@@ -233,6 +237,7 @@ namespace snet {
                             if (edgeFound == "undefined") {
                                 edge = {
                                     "id": "e" + network.edges.length,
+                                    "label": "1",
                                     "source": node1.id,
                                     "target": node2.id,
                                     "size": 1,
@@ -242,6 +247,7 @@ namespace snet {
                             } else {
                                 if (weighted) {
                                     edgeFound.size = edgeFound.size + 1
+                                    edgeFound.label = core.toString(edgeFound.size)
                                 }
                             }
 
@@ -253,6 +259,7 @@ namespace snet {
                                 if (edgeFound == "undefined") {
                                     edge = {
                                         "id": "e" + network.edges.length,
+                                        "label": "1",
                                         "source": node1.id,
                                         "target": node2.id,
                                         "size": 1,
@@ -262,6 +269,7 @@ namespace snet {
                                 } else {
                                     if (weighted) {
                                         edgeFound.size = edgeFound.size + 1
+                                        edgeFound.label = core.toString(edgeFound.size)
                                     }
                                 }
                             }
@@ -425,6 +433,7 @@ namespace snet {
                     if (edgeFound == "undefined") {
                         edge = {
                             "id": "e" + network.edges.length,
+                            "label": "1",
                             "source": node1.id,
                             "target": node2.id,
                             "size": 1,
@@ -434,6 +443,7 @@ namespace snet {
                     } else {
                         if (weighted) {
                             edgeFound.size = edgeFound.size + 1
+                            edgeFound.label = core.toString(edgeFound.size)
                         }
                     }
                 }
@@ -454,6 +464,7 @@ namespace snet {
                         if (edgeFound == "undefined") {
                             edge = {
                                 "id": "e" + network.edges.length,
+                                "label": "1",
                                 "source": node1.id,
                                 "target": node2.id,
                                 "size": 1,
@@ -463,6 +474,7 @@ namespace snet {
                         } else {
                             if (weighted) {
                                 edgeFound.size = edgeFound.size + 1
+                                edgeFound.label = core.toString(edgeFound.size)
                             }
                         }
                     }
@@ -482,6 +494,7 @@ namespace snet {
                     if (edgeFound == "undefined") {
                         edge = {
                             "id": "e" + network.edges.length,
+                            "label": "1",
                             "source": node1.id,
                             "target": node2.id,
                             "size": 1,
@@ -491,6 +504,7 @@ namespace snet {
                     } else {
                         if (weighted) {
                             edgeFound.size = edgeFound.size + 1
+                            edgeFound.label = core.toString(edgeFound.size)
                         }
                     }
 
@@ -502,6 +516,7 @@ namespace snet {
                         if (edgeFound == "undefined") {
                             edge = {
                                 "id": "e" + network.edges.length,
+                                "label": "1",
                                 "source": node1.id,
                                 "target": node2.id,
                                 "size": 1,
@@ -511,6 +526,7 @@ namespace snet {
                         } else {
                             if (weighted) {
                                 edgeFound.size = edgeFound.size + 1
+                                edgeFound.label = core.toString(edgeFound.size)
                             }
                         }
                     }
