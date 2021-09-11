@@ -216,6 +216,7 @@ function CNATool() {
             var useGPU = false;
             var buildGraph = false;
             var isWeighted = false;
+            var calculateIncidenceFidelity = false;
             var createGraph = false;
             var isDirected = false;
             var exportGraph = false;
@@ -282,6 +283,7 @@ function CNATool() {
                         system.log('       --weighted           The created network must be weighted based');
                         system.log('                            on the number of occurrences of the connections');
                         system.log('                            between the vertices;');
+                        system.log('       --if                 Calculate the incidence fidelity index');
                         system.log('       --create             Creates a network file in Pajek format;');
                         system.log('       --directed           Network is a directed graph;');
                         system.log('       --export             Exports the network file in Pajek format;');
@@ -336,6 +338,8 @@ function CNATool() {
                         buildGraph = true;
                     } else if (argv[i] == '--weighted') {
                         isWeighted = true;
+                    } else if (argv[i] == '--if') {
+                        calculateIncidenceFidelity = true;
                     } else if (argv[i] == '--create') {
                         createGraph = true;
                     } else if (argv[i] == '--directed') {
@@ -523,6 +527,38 @@ function CNATool() {
                                         graphsData = snet.createFromJson(jsonData, property, topology, isWeighted, allowLoops);
                                     } else {
                                         graphsData = snet.createFromDlf(fileContents, property, topology, isWeighted, allowLoops);
+                                    }
+
+                                    if (calculateIncidenceFidelity) {
+                                        var ifDataOutputFileName = fileName + '-if.json';
+                                        var ifData = snet.calculateIncidenceFidelity(graphsData);
+
+                                        fs.writeFile(ifDataOutputFileName, JSON.stringify(ifData), function(err) {
+                                            if (err) {
+                                                throw err;
+                                            }
+                                        });
+
+                                        var ifDataCsvOutputFileName = fileName + '-if.csv';
+                                        var ifCsvData = ''
+
+                                        ifCsvData += 'Network file: ' + fileName + '\n';
+                                        ifCsvData += 'Total of sentences: ' + ifData.numberOfSentences + '\n';
+                                        ifCsvData += 'Vocabulary: ' + ifData.vocabulary + '\n';
+                                        ifCsvData += 'Vocabulary / Number of sentences: ' + ifData.vocabularyByNumberOfSentences + '\n';
+                                        ifCsvData += '\n';
+                                        ifCsvData += 'Pair;QtSentencesPhi;QtSentencesPsi;FreqOfPair;Incidence;Fidelity;IF\n';
+
+                                        for (j = 0; j < ifData.rows.length; j++) {
+                                            var row = ifData.rows[j].join(';');
+                                            ifCsvData += row + '\n';
+                                        }
+                                        
+                                        fs.writeFile(ifDataCsvOutputFileName, ifCsvData, function(err) {
+                                            if (err) {
+                                                throw err;
+                                            }
+                                        });
                                     }
 
                                     fs.writeFile(outputFileName, JSON.stringify(graphsData), function(err) {

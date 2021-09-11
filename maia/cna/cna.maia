@@ -1163,7 +1163,7 @@ namespace cna {
     
     ///
     /// Removes the network vertices labels.
-    /// @method getLabels
+    /// @method removeLabels
     /// @memberof cna
     /// @param {object}   adj - Adjascence matrix.
     /// @return {number}  Removes the network vertices labels.

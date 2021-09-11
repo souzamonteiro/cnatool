@@ -546,4 +546,61 @@ namespace snet {
 
         return (network)
     }
+
+    ///
+    /// Calculate de incidence fidelity index from JSON network data.
+    /// @method calculateIncidenceFidelity
+    /// @memberof snet
+    /// @param {object}   jsonData - JSON network data.
+    /// @return {object}  Incidence fidelity table.
+    ///
+    function calculateIncidenceFidelity(jsonData) {
+        if (core.type(jsonData) == "undefined") {
+            return("undefined")
+        }
+
+        nodes = jsonData.nodes
+        edges = jsonData.edges
+        numberOfSentences = jsonData.numberOfSentences
+        vocabulary = jsonData.vocabulary
+
+        ifData = {
+            "numberOfSentences": numberOfSentences,
+            "vocabulary": vocabulary,
+            "vocabularyByNumberOfSentences": vocabulary / numberOfSentences
+        }
+
+        function findNode(list, id) {
+            foreach (list; index; value) {
+                if (value.id == id) {
+                    return(value)
+                }
+            }
+            return("undefined")
+        }
+
+        rows = []
+
+        foreach (edges; index; value) {
+            source = findNode(nodes, value.source)
+            target = findNode(nodes, value.target)
+
+            row = []
+            row.push(source.label + "-" + target.label)
+            row.push(source.size)
+            row.push(target.size)
+            row.push(value.size)
+            incidence = value.size / numberOfSentences
+            fidelity = value.size / (source.size + target.size - value.size)
+            incidenceFidelity = incidence * fidelity
+            row.push(incidence)
+            row.push(fidelity)
+            row.push(incidenceFidelity)
+            rows.push(row)
+        }
+        
+        ifData.rows = rows
+        
+        return(ifData)
+    }
 }
