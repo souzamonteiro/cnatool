@@ -552,11 +552,15 @@ namespace snet {
     /// @method calculateIncidenceFidelity
     /// @memberof snet
     /// @param {object}   jsonData - JSON network data.
+    /// @param {object}   updateWeights - Update weights on the network.
     /// @return {object}  Incidence fidelity table.
     ///
-    function calculateIncidenceFidelity(jsonData) {
+    function calculateIncidenceFidelity(jsonData, updateWeights) {
         if (core.type(jsonData) == "undefined") {
             return("undefined")
+        }
+        if (core.type(updateWeights) == "undefined") {
+            updateWeights = false
         }
 
         nodes = jsonData.nodes
@@ -586,6 +590,7 @@ namespace snet {
             target = findNode(nodes, value.target)
 
             row = []
+            row.push(value.id)
             row.push(source.label + "-" + target.label)
             row.push(source.size)
             row.push(target.size)
@@ -597,6 +602,9 @@ namespace snet {
             row.push(fidelity)
             row.push(incidenceFidelity)
             rows.push(row)
+            if (updateWeights) {
+                value.size = incidenceFidelity
+            }
         }
         
         ifData.rows = rows

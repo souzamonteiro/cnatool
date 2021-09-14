@@ -289,8 +289,8 @@ function CNATool() {
                         system.log('       --export             Exports the network file in Pajek format;');
                         system.log('       --json               Save the network file in JSON format;');
                         system.log('       --loops              Allow loops;');
-                        system.log('       --topology           Graph topology (complete, random, scalefree, smallworld, hybrid');
-                        system.log('                            For semantic networks it can be: chain, circle or clique');
+                        system.log('       --topology           Graph topology (complete, random, scalefree, smallworld or hybrid.');
+                        system.log('                            For semantic networks it can be: chain, circle or clique);');
                         system.log('       --prefix             File name prefix for multiple file creation;');
                         system.log('       --vertices           Number of vertices;');
                         system.log('       --edges              Number of edges;');
@@ -531,7 +531,7 @@ function CNATool() {
 
                                     if (calculateIncidenceFidelity) {
                                         var ifDataOutputFileName = fileName + '-if.json';
-                                        var ifData = snet.calculateIncidenceFidelity(graphsData);
+                                        var ifData = snet.calculateIncidenceFidelity(graphsData,true);
 
                                         fs.writeFile(ifDataOutputFileName, JSON.stringify(ifData), function(err) {
                                             if (err) {
@@ -547,7 +547,7 @@ function CNATool() {
                                         ifCsvData += 'Vocabulary: ' + ifData.vocabulary + '\n';
                                         ifCsvData += 'Vocabulary / Number of sentences: ' + ifData.vocabularyByNumberOfSentences + '\n';
                                         ifCsvData += '\n';
-                                        ifCsvData += 'Pair;QtSentencesPhi;QtSentencesPsi;FreqOfPair;Incidence;Fidelity;IF\n';
+                                        ifCsvData += 'Id;Pair;QtSentencesPhi;QtSentencesPsi;FreqOfPair;Incidence;Fidelity;IF\n';
 
                                         for (j = 0; j < ifData.rows.length; j++) {
                                             var row = ifData.rows[j].join(';');
