@@ -10575,14 +10575,13 @@ function CNATool() {
                                         topology = 'chain';
                                     }
 
-                                    var outputFileName = fileName + '.json';
+                                    var outputFileName = fileName + '-net.json';
                                     
                                     if (isDirected) {
                                         property.directed = true;
                                     }
                                     
                                     if (fileExtension == 'json') {
-                                        var outputFileName = fileName + '-net.json';
                                         var jsonData = JSON.parse(fileContents);
                                         graphsData = snet.createFromJson(jsonData, property, topology, isWeighted, allowLoops);
                                     } else {
@@ -10627,85 +10626,75 @@ function CNATool() {
                                         }
                                     });
                                 } else {
-                                    if (outputFile == '') {
-                                        outputFile = fileName + '.html';
-                                    }
+                                    if (!exportGraph) {
+                                        if (outputFile == '') {
+                                            outputFile = fileName + '.html';
+                                        }
 
-                                    if (fileExtension == 'csv') {
-                                        property.adj = cna.parseMatrixFile(fileContents, property, columnSeparator, replaceCommas);
-                                    } else if (fileExtension == 'json') {
+                                        if (fileExtension == 'csv') {
+                                            property.adj = cna.parseMatrixFile(fileContents, property, columnSeparator, replaceCommas);
+                                        } else if (fileExtension == 'json') {
+                                            var network = JSON.parse(fileContents);
+                                            var pajekFileContents = cna.jsonToPajekFile(network);
+                                            property.adj = cna.parsePajekFile(pajekFileContents, property);
+                                        } else if (fileExtension == 'net') {
+                                            property.adj = cna.parsePajekFile(fileContents, property);
+                                        } else {
+                                            system.log('Unsupported file format when processing file ' + file + '');
+                                        }
+
+                                        if (isDirected) {
+                                            property.directed = true;
+                                        }
+
+                                        system.log('Processing file: ' + file + ' ...\n');
+                                        if (onlyAvgShortestpath) {
+                                            var startTime = new Date();
+                                            cnatool.calculateAverageShortestPath(property, useGPU);
+                                            var endTime = new Date();
+                                        } else {
+                                            var startTime = new Date();
+                                            cnatool.calculateProperties(property, useGPU);
+                                            var endTime = new Date();
+                                        }
+                                        var elapsedTime = endTime - startTime;
+                                        system.log('Elapsed time: ' + elapsedTime + ' ms\n');
+
+                                        var html = '<!DOCTYPE html>';
+                                        html = html + '<html lang="en"><head><meta charset="UTF-8"><title>Network Properties Report' + file + '</title></head>';
+                                        html = html + '<body>';
+                                        html = html + cnatool.getSummaryReport(property, !onlyAvgShortestpath);
+                                        if (includeDegrees || includeAll) {
+                                            html = html + cnatool.getDegreesReport(property);
+                                        }
+                                        if (includeClustering || includeAll) {
+                                            html = html + cnatool.getClusteringReport(property);
+                                        }
+                                        if (includeCentralities || includeAll) {
+                                            html = html + cnatool.getCentralitiesReport(property);
+                                        }
+                                        html = html + '</body>';
+                                        html = html + '</html>';
+                                        fs.writeFile(outputFile, html, function(err) {
+                                            if (err) {
+                                                throw err;
+                                            }
+                                        });
+                                    } else {
                                         var network = JSON.parse(fileContents);
-                                        var pajekFileContents = cna.jsonToPajekFile(network);
-                                        property.adj = cna.parsePajekFile(pajekFileContents, property);
-                                    } else if (fileExtension == 'net') {
-                                        property.adj = cna.parsePajekFile(fileContents, property);
-                                    } else {
-                                        system.log('Unsupported file format when processing file ' + file + '');
-                                    }
-
-                                    if (isDirected) {
-                                        property.directed = true;
-                                    }
-
-                                    system.log('Processing file: ' + file + ' ...\n');
-                                    if (onlyAvgShortestpath) {
-                                        var startTime = new Date();
-                                        cnatool.calculateAverageShortestPath(property, useGPU);
-                                        var endTime = new Date();
-                                    } else {
-                                        var startTime = new Date();
-                                        cnatool.calculateProperties(property, useGPU);
-                                        var endTime = new Date();
-                                    }
-                                    var elapsedTime = endTime - startTime;
-                                    system.log('Elapsed time: ' + elapsedTime + ' ms\n');
-
-                                    var html = '<!DOCTYPE html>';
-                                    html = html + '<html lang="en"><head><meta charset="UTF-8"><title>Network Properties Report' + file + '</title></head>';
-                                    html = html + '<body>';
-                                    html = html + cnatool.getSummaryReport(property, !onlyAvgShortestpath);
-                                    if (includeDegrees || includeAll) {
-                                        html = html + cnatool.getDegreesReport(property);
-                                    }
-                                    if (includeClustering || includeAll) {
-                                        html = html + cnatool.getClusteringReport(property);
-                                    }
-                                    if (includeCentralities || includeAll) {
-                                        html = html + cnatool.getCentralitiesReport(property);
-                                    }
-                                    html = html + '</body>';
-                                    html = html + '</html>';
-                                    fs.writeFile(outputFile, html, function(err) {
-                                        if (err) {
-                                            throw err;
-                                        }
-                                    });
-                                    
-                                    if (exportGraph) {
-                                        if (!allowLoops) {
-                                            for (var j = 1; j < property.n; j++) {
-                                                for (var k = 1; k < property.m; k++) {
-                                                    if (j == k) {
-                                                        property.adj[j][k] = 0;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        if (typeof minw != 'undefined') {
-                                            if (typeof minw == 'number') {
-                                                for (var j = 1; j < property.n; j++) {
-                                                    for (var k = 1; k < property.m; k++) {
-                                                        if (property.adj[j][k] < minw) {
-                                                            property.adj[j][k] = 0;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        cna.setLabels(property.adj, property.networkLabel);
-                                        var outputFileContents = cna.createPajekFile(property.adj, 'arcs');
+                                        property.n = network.nodes.length
+                                        property.m = network.edges.length
+                                        var outputFileContents = cna.jsonToPajekFile(network)
                                         var outputFileName = fileName + '.net';
                                         fs.writeFile(outputFileName, outputFileContents, function(err) {
+                                            if (err) {
+                                                throw err;
+                                            }
+                                        });
+                                    }
+                                    
+                                    if (propertiesFile != '') {
+                                        fs.writeFile(propertiesFile, JSON.stringify(property), function(err) {
                                             if (err) {
                                                 throw err;
                                             }
@@ -10756,13 +10745,7 @@ function CNATool() {
                                     }
                                 }
                             }
-                            if (propertiesFile != '') {
-                                fs.writeFile(propertiesFile, JSON.stringify(property), function(err) {
-                                    if (err) {
-                                        throw err;
-                                    }
-                                });
-                            }
+                            
                             if (csvFile != '') {
                                 fs.writeFile(csvFile, csvData, function(err) {
                                     if (err) {
