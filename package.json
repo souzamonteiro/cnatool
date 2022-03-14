@@ -1,6 +1,6 @@
 {
     "name": "cnatool",
-    "version": "1.8.4",
+    "version": "1.8.5",
     "description": "Complex Network Analysis Tool.",
     "keywords": [
         "maia",
@@ -27,7 +27,8 @@
         "cnatool": "./bin/cnatool.js"
     },
     "dependencies": {
-        "maiascript-cli": "^3.3.2"
+        "jsdoc": "^3.6.10",
+        "jsdom": "^16.2.2"
     },
     "scripts": {
         "build": "./build.sh",
