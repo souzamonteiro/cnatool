@@ -531,7 +531,9 @@ namespace cna {
                     size = core.toString(edge.size)
                 }
                 if (!((edge.source == "") || (edge.target == ""))) {
-                    fileContents = fileContents + source + " " + target + " " + size + "\r\n"
+                    if (size != 0) {
+                        fileContents = fileContents + source + " " + target + " " + size + "\r\n"
+                    }
                 }
             }
         }
