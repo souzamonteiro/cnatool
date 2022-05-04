@@ -10661,15 +10661,17 @@ function CNATool() {
                                         var html = '<!DOCTYPE html>';
                                         html = html + '<html lang="en"><head><meta charset="UTF-8"><title>Network Properties Report' + file + '</title></head>';
                                         html = html + '<body>';
-                                        html = html + cnatool.getSummaryReport(property, !onlyAvgShortestpath);
-                                        if (includeDegrees || includeAll) {
-                                            html = html + cnatool.getDegreesReport(property);
-                                        }
-                                        if (includeClustering || includeAll) {
-                                            html = html + cnatool.getClusteringReport(property);
-                                        }
-                                        if (includeCentralities || includeAll) {
-                                            html = html + cnatool.getCentralitiesReport(property);
+                                        if ((property.n > 0) && (property.m > 0)) {
+                                            html = html + cnatool.getSummaryReport(property, !onlyAvgShortestpath);
+                                            if (includeDegrees || includeAll) {
+                                                html = html + cnatool.getDegreesReport(property);
+                                            }
+                                            if (includeClustering || includeAll) {
+                                                html = html + cnatool.getClusteringReport(property);
+                                            }
+                                            if (includeCentralities || includeAll) {
+                                                html = html + cnatool.getCentralitiesReport(property);
+                                            }
                                         }
                                         html = html + '</body>';
                                         html = html + '</html>';
