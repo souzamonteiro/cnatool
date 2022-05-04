@@ -10538,8 +10538,6 @@ function CNATool() {
                             var graphsData = [];
                             var csvData = 'fileName' +
                                           columnSeparator +
-                                          'properties' +
-                                          columnSeparator +
                                           'n' +
                                           columnSeparator +
                                           'm' +
