@@ -261,7 +261,7 @@ function CNATool() {
                 while (i < argv.length) {
                     if (argv[i] == '-c') {
                         justCompile = true;
-                    } else if ((argv[i] == '-h') | (argv[i] == '--help')) {
+                    } else if ((argv[i] == '-h') || (argv[i] == '--help')) {
                         system.log('CNATool Command Line Interface (CLI)');
                         system.log('Usage: cnatool [options] [network.net] [--] [arguments]');
                         system.log('Options:');
