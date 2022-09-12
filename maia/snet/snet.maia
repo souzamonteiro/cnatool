@@ -59,7 +59,8 @@ namespace snet {
                 "nodes": [],
                 "edges": [],
                 "numberOfSentences": 0,
-                "vocabulary": 0
+                "vocabulary": 0,
+                "density": []
             }
         }
         if (core.type(allowLoops) == "undefined") {
@@ -275,6 +276,16 @@ namespace snet {
                             }
                         }
                     }
+
+                    properties.n = network.nodes.length
+                    properties.m = network.edges.length
+                    if (properties.directed) {
+                        density = (properties.m / (properties.n * (properties.n - 1)))
+                    } else {
+                        density = (2 * properties.m / (properties.n * (properties.n - 1)))
+                    }
+                    network.density.push([properties.n, properties.m, density])
+
                     nodes = []
                     endOfRecord = false
                 }
@@ -330,7 +341,8 @@ namespace snet {
                 "nodes": [],
                 "edges": [],
                 "numberOfSentences": 0,
-                "vocabulary": 0
+                "vocabulary": 0,
+                "density": []
             }
         }
         if (core.type(allowLoops) == "undefined") {
@@ -385,6 +397,10 @@ namespace snet {
             }
 
             record = jsonData[r]
+
+            if (record.length == 0) {
+                continue
+            }
             
             for (w = 0; w < record.length; w = w + 1) {
                 word = record[w]
@@ -532,6 +548,16 @@ namespace snet {
                     }
                 }
             }
+
+            properties.n = network.nodes.length
+            properties.m = network.edges.length
+            if (properties.directed) {
+                density = (properties.m / (properties.n * (properties.n - 1)))
+            } else {
+                density = (2 * properties.m / (properties.n * (properties.n - 1)))
+            }
+            network.density.push([properties.n, properties.m, density])
+
             nodes = []
         }
 
