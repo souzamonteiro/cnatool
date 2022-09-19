@@ -284,7 +284,7 @@ namespace snet {
                     } else {
                         density = (2 * properties.m / (properties.n * (properties.n - 1)))
                     }
-                    network.density.push([properties.n, properties.m, density])
+                    network.density.push(density)
 
                     nodes = []
                     endOfRecord = false
@@ -556,7 +556,7 @@ namespace snet {
             } else {
                 density = (2 * properties.m / (properties.n * (properties.n - 1)))
             }
-            network.density.push([properties.n, properties.m, density])
+            network.density.push(density)
 
             nodes = []
         }
