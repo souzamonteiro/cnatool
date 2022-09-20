@@ -111,7 +111,7 @@ namespace snet {
         system.println("Processing " + fileLines.length + " lines ...")
 
         for (l = 0; l < fileLines.length; l = l + 1) {
-            if ((l != 0) && (l % 1000 == 0)) {
+            if ((l != 0) || (l % 100 == 0)) {
                 system.println("Processed " + l.toString() + " lines of " + fileLines.length.toString() + ".")
             }
 
@@ -392,7 +392,7 @@ namespace snet {
         network.numberOfSentences = jsonData.length
 
         for (r = 0; r < jsonData.length; r = r + 1) {
-            if ((r != 0) && (r % 1000 == 0)) {
+            if ((r != 0) || (r % 100 == 0)) {
                 system.println("Processed " + r.toString() + " records of " + jsonData.length.toString() + ".")
             }
 

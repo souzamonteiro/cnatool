@@ -561,10 +561,8 @@ function CNATool() {
                                     var dansityDataCsvOutputFileName = fileName + '-density.csv';
                                     var densityCsvData = ""
                                     for (k = 0; k < graphsData.density.length; k++) {
-                                        let n = graphsData.density[k][0]
-                                        let m = graphsData.density[k][1]
-                                        let density = graphsData.density[k][2]
-                                        densityCsvData = densityCsvData + n + columnSeparator + m + columnSeparator + density + "\r\n"
+                                        let density = graphsData.density[k]
+                                        densityCsvData = density + "\r\n"
                                     }
                                     fs.writeFile(dansityDataCsvOutputFileName, densityCsvData, function(err) {
                                         if (err) {
