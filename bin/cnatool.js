@@ -10622,7 +10622,7 @@ function CNATool() {
                                     var densityCsvData = ""
                                     for (k = 0; k < graphsData.density.length; k++) {
                                         let density = graphsData.density[k]
-                                        densityCsvData = density + "\r\n"
+                                        densityCsvData = densityCsvData + density + "\r\n"
                                     }
                                     fs.writeFile(dansityDataCsvOutputFileName, densityCsvData, function(err) {
                                         if (err) {
