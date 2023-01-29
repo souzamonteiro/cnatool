@@ -30,7 +30,7 @@ authors:
     orcid: 0000-0002-8193-5419
     affiliation: 2
   - name: Hernane Borges de Barros Pereira
-    orcid: 0000-0001-7576-9267
+    orcid: 0000-0001-7476-9267
     affiliation: "1, 2"
 affiliations:
  - name: SENAI CIMATEC University, Brasil \newline
