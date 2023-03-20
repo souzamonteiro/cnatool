@@ -89,31 +89,6 @@ CNATool's development took these aspects into consideration, prioritizing accura
 
 Table: Summary of the main features presented by each of the analyzed programs.\label{tb:tb1}
 
-# Software Framework 
-
-The mind map presented in \autoref{fig:pic1} allowed to define the requirements for the CNATool application. These requirements were formalized in the use-case diagram illustrated in \autoref{fig:pic2}. This diagram summarizes the minimal functionalities that, based on data presented in the literature, a complex network analysis software should have.
-
-![Use case diagram.\label{fig:pic2}](Picture2.png)
-
-## Software Functionalities
-
-Currently, CNATool offers the following features:
-
-- Create artificial networks (e.g., complete graph, random graph, scale free graph, small world grade, hybrid graph and semantic networks (Command Line Interface - CLI only)).
--	Display the network graph.
--	Define the graph layout algorithm.
--	Calculate basic properties of the graph: average degree, density, average clustering coefficient, average shortest path, diameter, efficiency of the graph and incidence-fidelity index (CLI only).
--	Use the GPU, if available, to speed up property calculations.
--	See detailed properties of the vertices: degree, clustering coefficient and closeness and betweenness centralities.
--	Exports CSV file with the incidences fidelities of each pair of semantic network words (CLI only).
--	Save graph in Pajek and JSON format.
--	Export graph in SVG format.
--	Save a summary of the graph's properties in HTML format.
-
-# Impact
-
-We often encounter problems that can be represented using network diagrams (graphs). These problems may involve the analysis of one, dozens, hundreds or thousands of complex networks. Analyzes of this type require batch processing, which is not always easy to implement using the software most commonly used in this activity. On the other hand, many ideas arise when a researcher is away from a computer with appropriate tools for carrying out concept proofs. In this context, having a software that allows the analysis of social and complex networks from a cell phone or tablet and that still allows subsequent detailed analysis of phenomena observed in a large number of networks easily and quickly, represents great impact. This project seeks to meet these needs, combining ease usage with the accuracy required in this type of investigation. Although installation is not necessary, the download for offline use is available and according to the website [npm-stat](https://npm-stat.com) the CNATool tool has had 5122 downloads since its launch in September 2020. It also has been used by our undergraduate, master's and doctoral students at the State University of Bahia, Federal University of Bahia and SENAI-CIMATEC University Center.
-
 # Conclusions
 
 The CNATool tool was developed having in mind the analysis of complex and social networks from any device connected to the Internet. This application offers a friendly and intuitive user interface, while providing accurate results and detailed reports of global and local network properties being analyzed.
@@ -123,10 +98,6 @@ The program allows exporting of results in the most common file formats and also
 The project used good software engineering practices, valuing the reusability and maintenance of the code, since it is an open source project and contributions are expected to be made to its development.
 
 The tool presented similar results to the most used applications in complex and social network analysis, having also fulfilled the objective of its project: to offer an easy-to-use software, available from any device connected to the Internet.
-
-# Conflict of Interest 
-
-We wish to confirm that there are no known conflicts of interest associated with this publication and there has been no significant financial support for this work that could have influenced its outcome.
 
 # Acknowledgements 
 
