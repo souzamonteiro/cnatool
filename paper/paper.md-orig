@@ -95,6 +95,12 @@ The mind map presented in \autoref{fig:pic1} allowed to define the requirements 
 
 ![Use case diagram.\label{fig:pic2}](Picture2.png)
 
+## Software Architecture
+
+The software consists of four elements: front end, CNATool library, CNALib library (Complex Network Analysis Library) and MaiaLib library (MaiaScript Library). The front end was implemented in HTML, CSS, JavaScript and MaiaScript. MaiaScript is a high-level, object-oriented programming language developed specifically for the construction of scientific applications. It has an integrated CAS (Computer Algebra System), capable of performing linear algebra operations, calculations with complex numbers, matrices operations and, through a second CAS, Algebrite, integrated into the MaiaStudio development environment, performs differential and symbolic integral calculations and operations with arbitrary number precision. MaiaScript code embedded in the front end is compiled at runtime and converted to JavaScript. The CNATool library contains high-level functions to facilitate the generation of reports by the application. This library was developed in Javascript.
+
+The CNALib library was completely written in MaiaScript but, unlike the code embedded in the front end, it is precompiled to JavaScript, a necessary requirement due to security restrictions present in most browsers that prevent non-JavaScript code loading through the web page.
+
 ## Software Functionalities
 
 Currently, CNATool offers the following features:
@@ -109,6 +115,90 @@ Currently, CNATool offers the following features:
 -	Save graph in Pajek and JSON format.
 -	Export graph in SVG format.
 -	Save a summary of the graph's properties in HTML format.
+
+## Sample code snippets analysis
+
+The CNATool supports two network file formats: Pajek and JSON. The Pajek format consists of a human-readable text file, where vertices (id, label and plane coordinates, as well as vertex diameter) and edges (origin vertex, destination vertex and edge weight) are defined.  The following code fragment presents a graph with 3 vertices and 3 edges:
+
+```
+*Vertices 3
+1 "v1" 1.4938470125198364 0.5946584343910217 1
+2 "v2" -1.3428300619125366 0.9276683330535889 1
+3 "v3" -0.21226459741592407 -1.7475401163101196 1
+*Arcs
+1 2 1
+1 3 1
+2 1 1
+2 3 1
+3 1 1
+3 2 1
+```
+
+# Implementation and Empirical Results
+
+The program herein described was developed considering the principle of reusability. Modeling details and empirical results are presented below.
+
+## Implementation
+
+The application was modeled according to the object-oriented paradigm. \autoref{fig:pic3} shows the diagram of the implemented classes and their interdependencies.
+
+![Class diagram.\label{fig:pic3}](Picture3.png)
+
+The Property class defines graph properties that will be calculated by the CNA class. This class, in turn, returns calculated values for the CNATool class, which uses them to produce the reports made available by the application. The CNATool class also provides methods used by the application when running on the command line, allowing to create graphs with complete, random, scale-free, small world and hybrid topologies, as well as batch files processing. The command line tool calls the run method of this class to process the arguments passed to the application and execute the corresponding methods provided by the CNA class.
+
+The web interface uses these three classes to provide all its functionality, privileging usability without compromising the performance and accuracy required in the analysis of complex and social networks. \autoref{fig:pic4} shows the web interface when running from a desktop browser. In browsers for mobile devices, the web page reorganizes itself and assumes a more appropriate layout for small screens (responsiveness).
+
+![CNATool program interface.\label{fig:pic4}](Picture4.png)
+
+## Unit tests
+
+Any computer program is subject to failure due to coding errors in the program itself or in the libraries and frameworks used in its construction. To minimize this problem, it is necessary to carry out exhaustive tests with each new version of the application. In this project we have implemented a set of unit tests that is performed at each change within its source code. These tests were implemented using the automation test engine of the MaiaScript programming language.
+
+The test script executes each of the functions of the CNA library comparing the results obtained with values previously calculated and validated using other network analysis softwares (Gephi, Pajek and SocNetV).
+
+The tests are repeated countless times to eliminate the possibility of sporadic errors.
+
+## Empirical Results
+
+In order to validate the accuracy of the results provided by CNATool, we created the network shown in \autoref{fig:pic5} and calculated its properties using CNATool, Gephi, Pajek and SocNetV tools, the last three being the ones that most appear in the literature.
+
+![Network used to measure the precision of the results presented by CNATool.\label{fig:pic5}](Picture5.png){ width=70% }
+
+From the results presented in \autoref{tb:tb2}, it can be seen that the precision of the calculations of the four tools is very close. The Pajek application showed better accuracy than the others when calculating density, average clustering coefficient and average shortest path. In relation to the other properties, CNATool, Pajek and SocNetV applications presented the same results. The Gephi tool showed less precision than the others when calculating the density, the average clustering coefficient and the average shortest path.
+
+These differences, however, do not invalidate any of the tools presented, as for most problems involving analysis of complex networks, 3 decimal digits are sufficient
+ 
+| Property	| CNATool	| Gephi	| Pajek	| SocNetV |
+| :---- | ---- | ---- | ---- | ----: |
+| Vertices	| 50	| 50	| 50	| 50 |
+| Edges	| 140	| 140	| 140	| 140 |
+| Density	| 0.05710000	| 0.05700000	| 0.05714286	| 0.05710000 |
+| Average Degree	| 2.8	| 2.8	| 2.8	| 2.8 |
+| Average Clustering Coefficient	| 0.34430000	| 0.34400000	| 0.34431746	| 0.34400000 |
+| Average Shortest Path	| 2.45140	| 2.45100	| 2.45143	| 2.45140 |
+| Diameter	| 5	| 5	| 5	| 5 |
+| Global Efficiency	| 0.4520	| No	| No	| No |
+Table: Comparison of results obtained using the main complex network analysis software.\label{tb:tb2}
+
+# Illustrative Examples
+
+As an illustration of the process of visualizing and calculating properties of a graph using CNATool, we will create a random network with 20 vertices and average degree 2. The steps to accomplish this task are as follows:
+
+1.	Click the Random Graph option.
+2.	Enter the number of vertices (20).
+3.	Select the desired number of edges (in this case 0, as the network will be created by defining the average degree).
+4.	Enter the probability of edge formation (in this case 0, as the network will be created by defining the average degree).
+5.	Define the average degree (2).
+
+After performing these steps, the network will be created and displayed on the application screen.
+
+To calculate the properties of the created graph, select the Calculate Properties option in the properties panel.
+
+The created graph presents a random organization of the vertices. To modify this layout, a layout algorithm must be selected in the properties panel. Two algorithms are supported: Force Atlas 2 and No Overlap.
+
+\autoref{fig:pic6} presents the activity diagrams of CNATool's main functionalities.
+
+![Activity diagram of the main functionalities of the CNATool program.\label{fig:pic6}](Picture6.png)
 
 # Impact
 
