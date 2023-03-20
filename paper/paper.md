@@ -57,19 +57,13 @@ Health studies have also benefited from the use of network theory and its comput
 
 These are just some applications involving the use of techniques and software developed for social and complex network analysis. @Watts2004, in its review on the state of the art in complex network analysis presents other applications, highlighting economy, transportation and energy distribution.
 
-It is in this context that we developed the CNATool software, based on the need to perform fast data analysis involving models represented as complex networks from any device connected to the Internet. This need is due to the fact that many ideas arise when we are not in front of a computer to run traditional programs in network analysis. On the other hand, researchers are often involved in the analysis and comparison of multiple networks. Analyzes of this type usually require time to be performed, involving the construction of scripts for batch processing. The tool presented here fulfills not only the need for an online network analysis program, but also the batch processing of an arbitrary number of networks, in a simple and accurate way.
-
 Next, we will present the requirements taken into consideration for the CNATool development, its architecture and implementation.
 
 # Problems and Background 
 
 @Newman2003 presents the main concepts involved in complex and social network analysis. The author discusses the types of networks, topologies, local and global properties. Regarding the types of networks, Newman highlights social, informational, technological and biological networks. These networks, despite having different natures, present common properties such as number of vertices, number of edges, density [@Pereira2016; @Chatterjee2007], average degree, average clustering coefficient [@Schank2005], average shortest path [@Johnson1977], diameter [@Razzaque2008] and efficiency [@Latora2001]. And even at micro scale, similar parameters are observed, highlighting the clustering coefficient and the closeness [@Freeman1978; @Freeman1979; @Bhardwaj2011] and betweenness [@Freeman1977; @Brandes2001; @Barthelemy2004; @Curado2022] centralities. With regard to topologies, networks of apparently different natures, such as social and biological, often present phenomena common to small-world [@Watts1998; @Marchiori2000; @Emmert2006; @Bakshy2011] and scale-free networks [@Barabasi2002; @Crucitti2003].
 
-These similarities allow the use of the same software for the analysis of different phenomena in different study objects, as long as these phenomena and objects can be expressed as network diagrams (graphs).
-
-This premise has led us to consolidate the main parameters used by the authors in the mental map presented in \autoref{fig:pic1}. In this map we highlight, besides the network properties and topologies found in the literature, the main free software used in the references surveyed. In the mind map, the Tools node presents the software Gephi, Pajek, SocNetV and CNATool (the tool described in this article). For comparison purposes, we have considered the aspects accuracy, complexity of use, operating platform, and computing technology. It is clear from this graph that the three softwares are accurate, differentiating with respect to the complexity of operation, operational platform, and computing technology. In this respect it is important to stress that an increase in complexity does not represent a demerit but stems from a greater number of resources presented by the software. Likewise, a limitation regarding the operating platform does not invalidate its use but is only restricted to users of the operating systems highlighted in the graph. On the other hand, the computing technology used represents a great differential. Applications capable of using the graphics card processing cores (GPU) present superior performance, especially when processing graphs with a large number of vertices and edges. In this research, only CNATool offered this possibility. Moreover, CNATool implements some properties not found in other software, for example incidence-fidelity index [@Teixeira2010]. \autoref{tb:tb1} presents a summary of the main features presented by each of the analyzed programs.
-
-CNATool's development took these aspects into consideration, prioritizing accuracy and speed, but not neglecting parameters such as usability and mobility.
+Based on this view of the literature, we designed the mind map presented in \autoref{fig:pic1}. Moreover, CNATool implements some properties not found in other software, for example incidence-fidelity index [@Teixeira2010]. \autoref{tb:tb1} presents a summary of the main features presented by each of the analyzed programs.
 
 ![Mind map of concepts involving analysis of complex networks. Green means high; yellow means medium and; red mean low value. Olive highlights CNATool’s advantages.\label{fig:pic1}](Picture1.png)
  
@@ -94,14 +88,5 @@ Table: Summary of the main features presented by each of the analyzed programs.\
 The CNATool tool was developed having in mind the analysis of complex and social networks from any device connected to the Internet. This application offers a friendly and intuitive user interface, while providing accurate results and detailed reports of global and local network properties being analyzed.
 
 The program allows exporting of results in the most common file formats and also provides a command line tool that allows batch processing, contributing to speed up analysis processes when an experiment requires calculation of properties of a large number of networks.
-
-The project used good software engineering practices, valuing the reusability and maintenance of the code, since it is an open source project and contributions are expected to be made to its development.
-
-The tool presented similar results to the most used applications in complex and social network analysis, having also fulfilled the objective of its project: to offer an easy-to-use software, available from any device connected to the Internet.
-
-# Acknowledgements 
-
-Fundação de Amparo à Pesquisa do Estado da Bahia, an agency for induction and promotion of research and scientific and technological innovation in the State of Bahia, Grant No. BOL0239/2018 - Renata Souza Freitas Dantas Barreto.
-
 
 # References
