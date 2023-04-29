@@ -2,9 +2,10 @@
 
 Copyright (C) 2020,2021 Roberto Luiz Souza Monteiro, Renata Souza Barreto, Hernane Borges de Barros Pereira.
 
-This software is distributed under the terms of several open sources licenses.
+The software is provided under the terms of the Apache License, version 2.0, but some modules provided
+by third parties may be under different licenses.
 
-Please read the files LICENSE, COPYING or COPYING.LIB for further information.
+Please read the file LICENSE for further information.
 
 The CNATool tool was developed, using the MaiaScript programming language, to allow quick and simplified analysis of graphs of complex networks, from any device connected to the Internet.
 
@@ -69,3 +70,19 @@ To try CNATool on-line go to [http://www.maiascript.com/cnatool]
 Lauro de Freitas, October 2020.
 
 Roberto Luiz Souza Monteiro
+
+## LICENSE
+
+Copyright 2020,2021 Roberto Luiz Souza Monteiro, Renata Souza Barreto, Hernane Borges de Barros Pereira.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
