@@ -29,6 +29,22 @@ To use the online tool, access:
 
 [http://www.maiascript.com/cnatool]
 
+## DEPENDENCIES
+
+The program depends on the following packages:
+- algebrite
+Install using the command:
+`npm install -g algebrite`
+- web-worker
+Install using the command:
+`npm install -g web-worker`
+- cross-blob
+Install using the command:
+`npm install -g cross-blob`
+- gpu.js
+Install using the command:
+`npm install -g gpu.js`
+
 ## INSTALL COMMAND LINE INTERFACE (CLI):
 
 To install the CNATool command line tool use the command:
