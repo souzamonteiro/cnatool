@@ -57,8 +57,6 @@ Health studies have also benefited from the use of network theory and its comput
 
 These are just some applications involving the use of techniques and software developed for social and complex network analysis. @Watts2004, in its review on the state of the art in complex network analysis presents other applications, highlighting economy, transportation and energy distribution.
 
-Next, we will present the requirements taken into consideration for the CNATool development, its architecture and implementation.
-
 # Statement of Need 
 
 @Newman2003 presents the main concepts involved in complex and social network analysis. The author discusses the types of networks, topologies, local and global properties. Regarding the types of networks, Newman highlights social, informational, technological and biological networks. These networks, despite having different natures, present common properties such as number of vertices, number of edges, density [@Pereira2016; @Chatterjee2007], average degree, average clustering coefficient [@Schank2005], average shortest path [@Johnson1977], diameter [@Razzaque2008] and efficiency [@Latora2001]. And even at micro scale, similar parameters are observed, highlighting the clustering coefficient and the closeness [@Freeman1978; @Freeman1979; @Bhardwaj2011] and betweenness [@Freeman1977; @Brandes2001; @Barthelemy2004; @Curado2022] centralities. With regard to topologies, networks of apparently different natures, such as social and biological, often present phenomena common to small-world [@Watts1998; @Marchiori2000; @Emmert2006; @Bakshy2011] and scale-free networks [@Barabasi2002; @Crucitti2003].
@@ -66,7 +64,9 @@ Next, we will present the requirements taken into consideration for the CNATool 
 Based on this view of the literature, we designed the mind map presented in \autoref{fig:pic1}. Moreover, CNATool implements some properties not found in other software, for example incidence-fidelity index [@Teixeira2010]. \autoref{tb:tb1} presents a summary of the main features presented by each of the analyzed programs.
 
 ![Mind map of concepts involving analysis of complex networks. Green means high; yellow means medium and; red mean low value. Olive highlights CNATool’s advantages.\label{fig:pic1}](Picture1.png)
- 
+
+This program is intended for researchers working in the analysis of social and biological networks. Knowledge of network analysis and familiarity with scripting languages is essential.
+
 | Feature	| CNATool	| Gephi	| Pajek	| SocNetV |
 | :---- | ---- | ---- | ---- | ----: |
 | Has high accuracy	| Yes	| Yes	| Yes	| Yes |

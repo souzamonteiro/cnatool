@@ -87,6 +87,9 @@ Lauro de Freitas, October 2020.
 
 Roberto Luiz Souza Monteiro
 
+## CONTRIBUTORS
+To contribute to this project, please clone the repository on github, make the changes, and send the link to your repository containing your contributions to support@maiascript.com.
+
 ## LICENSE
 
 Copyright 2020,2021 Roberto Luiz Souza Monteiro, Renata Souza Barreto, Hernane Borges de Barros Pereira.
