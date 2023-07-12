@@ -63,6 +63,10 @@ Or, download the latest zipped version:
 
 `npm install -g .`
 
+## PROBLEMS WHEN INSTALLING USING NPM
+
+Some packages may not be compatible with some Linux distributions or Windows. In these cases, download the program via gitgub, unzip the file and double-click on the index.html file. The GUI will run. It has been tested on Windows, Linux, macOS, iOS and Android using Google Chrome.
+
 ## RUN TESTS:
 
 To run the test scripts execute:
@@ -83,9 +87,9 @@ To launch CNATool open the file `index.html`, in the main directory of the packa
 
 To try CNATool on-line go to [http://www.maiascript.com/cnatool]
 
-Lauro de Freitas, October 2020.
+## USING THE SAMPLE FILES
 
-Roberto Luiz Souza Monteiro
+Use the example network files to practice using the command line tool as well as the GUI. They were created by the author and are available under the same license as the program.
 
 ## CONTRIBUTORS
 To contribute to this project, please clone the repository on github, make the changes, and send the link to your repository containing your contributions to support@maiascript.com.
@@ -105,3 +109,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+Lauro de Freitas, October 2023.
+
+Roberto Luiz Souza Monteiro
