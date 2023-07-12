@@ -73,6 +73,14 @@ To run the test scripts execute:
 
 `./test.sh`
 
+Please, any testing or development must be carried out in a UNIX environment and if you want to do this in Windows, you must install Cygwin or MSYS. These tools provide a complete UNIX environment on Windows and can be obtained from [https://www.cygwin.com] and [https://www.msys2.org] respectively. Explanations on how to install and use the programs provided with them can be found on their websites.
+
+To facilitate testing in a Windows environment, a script for PowerShell test.cmd is provided, but it is preferable to test this software using the environments provided by Cygwin or MSYS.
+
+To run the tests on Windows, open a command prompt, move to the directory where you unzipped this program and run:
+
+test.cmd
+
 ## USING THE COMMAND LINE INTERFACE (CLI) AND CNATool:
 
 To run the command line tool, use the command:
@@ -91,7 +99,52 @@ To try CNATool on-line go to [http://www.maiascript.com/cnatool]
 
 Use the example network files to practice using the command line tool as well as the GUI. They were created by the author and are available under the same license as the program.
 
+### Neural Network of C. elegans
+
+The `examples/c_elegans_neural_network.net` file contains a neural network representation of the C. elegans worm. This network was created for my doctoral thesis and I distribute it here because it is a network with hybrid characteristics (small world and free of scale).
+
+To calculate the parameters of this network, execute the following command, from inside the directory where you unzipped this program:
+
+`./bin/cnatool.js --all examples/c_elegans_neural_network.net`
+
+### Semantic Network
+
+The `semantic.txt` file contains the original text used to create the `semantic.dlf` file, which was manually created from the text file. The DLF file can be used to create a semantic network using the following command:
+
+`./bin/cnatool.js --build --weighted --directed --loops --topology chain examples/semantic.dlf`
+
+This will create the `semantic-net.json` file.
+
+To calculate the parameters of the semantic network created, use the command:
+
+`./bin/cnatool.js --all examples/semantic-net.json`
+
+This will create the `semantic-net.html` file containing the calculated data.
+
+### Complete, Random, Scale-Free, Small World, and Hybrid Networks
+
+In the examples directory there are artificial networks with Complete, Random, Scale-Free, Small World and Hybrid topologies, created using CNATOOL.
+
+To recreate this networks, use the commands:
+
+`./bin/cnatool.js --create --topology complete --vertices 50 --avgdeg 3 --prefix examples/complete`
+
+`./bin/cnatool.js --create --topology random --vertices 50 --avgdeg 3 --prefix examples/random`
+
+`./bin/cnatool.js --create --topology scalefree --vertices 50 --avgdeg 3 --probability 0.3 --prefix examples/scalefree`
+
+`./bin/cnatool.js --create --topology smallworld --vertices 50 --avgdeg 3 --probability 0.3 --prefix examples/smallworld`
+
+`./bin/cnatool.js --create --topology hybrid --vertices 50 --avgdeg 3 --probability 0.3 --prefix examples/hybrid`
+
+The files `complete-1.net`, `random-1.net`, `scalefree-1.net`, `smallworld-1.net` and `hybrid-1.net` will be created.
+
+You can use these files to test the program's graphical interface. For information on how to open files and view them in the graphical interface, consult the program's manual, in the `manual` folder.
+
 ## CONTRIBUTORS
+
+Contributions are always appreciated. You can contribute with code improvements, documentation improvements, implementation of new features or testing programs and sending us a report with the results you get.
+
 To contribute to this project, please clone the repository on github, make the changes, and send the link to your repository containing your contributions to support@maiascript.com.
 
 ## LICENSE
