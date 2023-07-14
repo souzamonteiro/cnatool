@@ -62,7 +62,7 @@ These examples demonstrate the wide range of applications and tools developed fo
 CNATool is an innovative online program designed specifically for analyzing complex and social networks. With its user-friendly interface and accessibility from any internet-connected device, CNATool provides researchers with a convenient and streamlined approach to network graph analysis.
 Key Features:
 <ul>
-<li><strong>Graph Visualization:</strong> Visualization of graphs: CNATool allows the visualization of graphs, from the graphical interface, thanks to the [@Sigma2023] library, including resources such as dynamic adjustment of the layout of the graph, either through algorithms such as ForceAtlas2, or manually dragging and positioning the vertices.
+<li><strong>Graph Visualization:</strong> Visualization of graphs: CNATool allows the visualization of graphs, from the graphical interface, thanks to the sigma.js [@Sigma2023] library, including resources such as dynamic adjustment of the layout of the graph, either through algorithms such as ForceAtlas2, or manually dragging and positioning the vertices.
 <li><strong>Graph File Formats:</strong> CNATool supports Pajek and JSON formats, allowing researchers to import network graphs effortlessly.</li>
 <li><strong>Artificial Networks:</strong> Researchers can create artificial networks within CNATool, enabling customizable experimental analysis.</li>
 <li><strong>Customizable Layout Algorithms:</strong> CNATool offers customizable layout algorithms, facilitating the visualization of network structures.</li>
@@ -81,14 +81,14 @@ By offering a comprehensive range of features and analysis capabilities, CNATool
 
 @Newman2003 presents the main concepts involved in complex and social network analysis. The author discusses the types of networks, topologies, local and global properties. Regarding the types of networks, Newman highlights social, informational, technological and biological networks. These networks, despite having different natures, present common properties such as number of vertices, number of edges, density [@Pereira2016; @Chatterjee2007], average degree, average clustering coefficient [@Schank2005], average shortest path [@Johnson1977], diameter [@Razzaque2008] and efficiency [@Latora2001]. And even at micro scale, similar parameters are observed, highlighting the clustering coefficient and the closeness [@Freeman1978; @Freeman1979; @Bhardwaj2011] and betweenness [@Freeman1977; @Brandes2001; @Barthelemy2004; @Curado2022] centralities. With regard to topologies, networks of apparently different natures, such as social and biological, often present phenomena common to small-world [@Watts1998; @Marchiori2000; @Emmert2006; @Bakshy2011] and scale-free networks [@Barabasi2002; @Crucitti2003].
 
-Based on this view of the literature, we designed the mind map presented in \autoref{fig:pic1}. Moreover, CNATool implements some properties not found in other software, for example incidence-fidelity index [@Teixeira2010]. \autoref{tb:tb1} presents a summary of the main features presented by each of the analyzed programs. An important observation is that the Cytoscape program, although it does not allow its execution directly on the Web, as an application, it allows, through the [@Cytoscape2023] library, the creation of Web programs for visualization and analysis of network graphs. Other popular and powerful software such as [@Igraph2023] and [@NetworkX2023] were not compared as they are not user applications but programming libraries.
+Based on this view of the literature, we designed the mind map presented in \autoref{fig:pic1}. Moreover, CNATool implements some properties not found in other software, for example incidence-fidelity index [@Teixeira2010]. \autoref{tb:tb1} presents a summary of the main features presented by each of the analyzed programs. An important observation is that the Cytoscape program, although it does not allow its execution directly on the Web, as an application, it allows, through the Cytoscape.js [@Cytoscape2023] library, the creation of Web programs for visualization and analysis of network graphs. Other popular and powerful software such as igraph [@Igraph2023] and NetworkX [@NetworkX2023] were not compared as they are not user applications but programming libraries.
 
 ![Mind map of concepts involving analysis of complex networks. Green means high; yellow means medium and; red mean low value. Olive highlights CNATool’s advantages.\label{fig:pic1}](Picture1.png)
 
 This program is intended for researchers working in the analysis of social and biological networks. Knowledge of network analysis and familiarity with scripting languages is essential.
 
 | Feature	| CNATool	| Gephi	| Pajek	| SocNetV | Cytoscape | 
-| :---- | ---- | ---- | ---- | ----: |
+| :---- | ---- | ---- | ---- | ----: | ----: |
 | Has high accuracy	| Yes	| Yes	| Yes	| Yes | Yes |
 | Is user-friendly	| Yes	| Yes	| No	| No | Yes |
 | Runs on Windows	| Yes	| Yes	| Yes	| Yes | Yes |
