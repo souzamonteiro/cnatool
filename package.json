@@ -1,6 +1,6 @@
 {
     "name": "cnatool",
-    "version": "2.0.8",
+    "version": "2.0.9",
     "description": "Complex Network Analysis Tool.",
     "keywords": [
         "maia",
@@ -46,5 +46,8 @@
     "repository": {
         "type": "git",
         "url": "git+https://github.com/souzamonteiro/cnatool.git"
+    },
+    "devDependencies": {
+        "sigma": "^1.2.1"
     }
 }

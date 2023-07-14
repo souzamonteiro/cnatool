@@ -1,6 +1,0 @@
-[submodule "joss-CNATool"]
-	path = joss-CNATool
-	url = https://github.com/a-nsilva/joss-CNATool.git
-[submodule "joss"]
-	path = joss
-	url = https://github.com/a-nsilva/joss-CNATool.git

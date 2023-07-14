@@ -3,6 +3,8 @@
 rm -rf build/*
 rm -rf docs/*
 
+cp -rf node_modules/sigma/build/* js/
+
 bin/maiascript.js -c -o build/cna.js ./maia/cna/cna.maia
 bin/maiascript.js -c -o build/snet.js ./maia/snet/snet.maia
 cp build/* src/
