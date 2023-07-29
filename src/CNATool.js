@@ -41,7 +41,22 @@ function CNATool() {
         if (typeof useGPU == 'undefined') {
             var useGPU = false;
         }
-        property.networkShortestPath = cna.getShortestPath(property.adj, useGPU);
+        
+        var booleanAdj = core.copyMatrix(property.adj);
+
+        var dimAdj = core.dim(booleanAdj);
+        var dimJ = dimAdj[0];
+        var dimK = dimAdj[1];
+
+        for (var j = 0; j < dimJ; j++) {
+            for (var k = 0; k < dimK; k++) {
+                if (booleanAdj[j][k] != 0) {
+                    booleanAdj[j][k] = 1;
+                }
+            }
+        }
+
+        property.networkShortestPath = cna.getShortestPath(booleanAdj, useGPU);
         property.networkAverageShortestPath = cna.getAverageShortestPath(property.networkShortestPath);
     }
 
@@ -55,13 +70,28 @@ function CNATool() {
         if (typeof useGPU == 'undefined') {
             var useGPU = false;
         }
+        
+        var booleanAdj = core.copyMatrix(property.adj);
+        var dimAdj = core.dim(booleanAdj);
+        var dimJ = dimAdj[0];
+        var dimK = dimAdj[1];
+        for (var j = 0; j < dimJ; j++) {
+            for (var k = 0; k < dimK; k++) {
+                if (booleanAdj[j][k] != 0) {
+                    booleanAdj[j][k] = 1;
+                }
+            }
+        }
+
         property.networkLabel = cna.getLabels(property.adj);
-        property.networkDegree = cna.getDegrees(property.adj, property.directed);
+        property.networkDegree = cna.getDegrees(booleanAdj, property.directed);
         property.networkAverageDegree = cna.getAverageDegree(property.networkDegree);
-        property.networkDensity = cna.getDensity(property.adj, property.directed);
-        property.networkClustering = cna.getClustering(property.adj, property.directed);
+        property.networkDensity = cna.getDensity(booleanAdj, property.directed);
+        property.networkClustering = cna.getClustering(booleanAdj, property.directed);
         property.networkAverageClustering = cna.getAverageClustering(property.networkClustering);
-        property.networkShortestPath = cna.getShortestPath(property.adj, useGPU);
+
+        property.networkShortestPath = cna.getShortestPath(booleanAdj, useGPU);
+
         property.networkAverageShortestPath = cna.getAverageShortestPath(property.networkShortestPath);
         property.networkDiameter = cna.getDiameter(property.networkShortestPath);
         property.networkVertexEfficiency = cna.getVertexEfficiency(property.networkShortestPath);
@@ -228,7 +258,10 @@ function CNATool() {
             var edges = 0;
             var probability = 0
             var avgdegree = 0;
-            var minw;
+            var minw = '';
+            var maxw = '';
+            var minsd = '';
+            var maxsd = '';
             var nfiles = 1;
             var vinc = 0;
             var einc = 0;
@@ -297,6 +330,13 @@ function CNATool() {
                         system.log('       --probability        Edge probability;');
                         system.log('       --avgdeg             Average degree;');
                         system.log('       --minw               Minimum weight;');
+                        system.log('       --maxw               Maximum weight;');
+                        system.log('       --minsd              Percentage of the standard deviation that will be added to the');
+                        system.log('                            average value of the weights to determine the existence of an edge.');
+                        system.log('                            Will be used to determine the minw parameter;');
+                        system.log('       --maxsd              Percentage of the standard deviation that will be added to the');
+                        system.log('                            average value of the weights to determine the existence of an edge.');
+                        system.log('                            Will be used to determine the maxw parameter;');
                         system.log('       --nfiles             number of files to create;');
                         system.log('       --vinc               increment to number of vertices;');
                         system.log('       --einc               increment to number of edges;');
@@ -371,6 +411,15 @@ function CNATool() {
                     } else if (argv[i] == '--minw') {
                         i++;
                         minw = core.toNumber(argv[i]);
+                    } else if (argv[i] == '--maxw') {
+                        i++;
+                        maxw = core.toNumber(argv[i]);
+                    } else if (argv[i] == '--minsd') {
+                        i++;
+                        minsd = core.toNumber(argv[i]);
+                    } else if (argv[i] == '--maxsd') {
+                        i++;
+                        maxsd = core.toNumber(argv[i]);
                     } else if (argv[i] == '--nfiles') {
                         i++;
                         nfiles = core.toNumber(argv[i]);
@@ -633,16 +682,84 @@ function CNATool() {
                                             }
                                         });
                                     } else {
-                                        var network = JSON.parse(fileContents);
-                                        property.n = network.nodes.length
-                                        property.m = network.edges.length
-                                        var outputFileContents = cna.jsonToPajekFile(network)
+                                        if (fileExtension == 'csv') {
+                                            property.adj = cna.parseMatrixFile(fileContents, property, columnSeparator, replaceCommas);
+
+                                            var dimAdj = core.dim(property.adj);
+                                            var dimJ = dimAdj[0];
+                                            var dimK = dimAdj[1];
+                                            
+                                            if (!allowLoops) {
+                                                for (var j = 1; j < dimJ; j++) {
+                                                    for (var k = 1; k < dimK; k++) {
+                                                        if (j == k) {
+                                                            property.adj[j][k] = 0;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            
+                                            minValue = matrix.min(property.adj, 1, 1, dimJ - 1, dimK - 1);
+                                            maxValue = matrix.max(property.adj, 1, 1, dimJ - 1, dimK - 1);
+                                            var mtxAvgDev = matrix.avg(property.adj, 1, 1, dimJ - 1, dimK - 1);
+
+                                            var avgReport = '';
+                                            avgReport += 'Min: ' + minValue + '\n';
+                                            avgReport += 'Max: ' + maxValue + '\n';
+                                            avgReport += 'Avg: ' + mtxAvgDev.avg + '\n';
+                                            avgReport += 'Dev: ' + mtxAvgDev.dev + '\n';
+                                            
+                                            if (minsd === '') {
+                                                if (minw === '') {
+                                                    minw = minValue;
+                                                }
+                                            } else {
+                                                minw = mtxAvgDev.avg + (mtxAvgDev.dev / 100.0) * minsd;
+                                                avgReport += 'Factor (avg + ' + minsd + ' * dev / 100): ' + minw + '\n';
+                                            }
+                                            if (maxsd === '') {
+                                                if (maxw === '') {
+                                                    maxw = maxValue;
+                                                }
+                                            } else {
+                                                maxw = mtxAvgDev.avg + (mtxAvgDev.dev / 100.0) * maxsd;
+                                                avgReport += 'Factor (avg + ' + maxsd + ' * dev / 100): ' + maxw + '\n';
+                                            }
+
+                                            for (var j = 1; j < dimJ; j++) {
+                                                for (var k = 1; k < dimK; k++) {
+                                                    if ((property.adj[j][k] < minw) || (property.adj[j][k] > maxw)) {
+                                                        property.adj[j][k] = 0;
+                                                    }
+                                                }
+                                            }
+
+                                            var outputFileContents = cna.createPajekFile(property.adj, 'arcs');
+                                        } else if (fileExtension == 'json') {
+                                            var network = JSON.parse(fileContents);
+                                            property.n = network.nodes.length
+                                            property.m = network.edges.length
+                                            var outputFileContents = cna.jsonToPajekFile(network)
+                                        } else {
+                                            system.log('Unsupported file format when processing file ' + file + '');
+                                            var outputFileContents = '';
+                                        }
+                                        
                                         var outputFileName = fileName + '.net';
                                         fs.writeFile(outputFileName, outputFileContents, function(err) {
                                             if (err) {
                                                 throw err;
                                             }
                                         });
+
+                                        if (avgReport != '') {
+                                            var outputFileName = fileName + '-average.txt';
+                                            fs.writeFile(outputFileName, avgReport, function(err) {
+                                                if (err) {
+                                                    throw err;
+                                                }
+                                            });
+                                        }
                                     }
                                     
                                     if (propertiesFile != '') {
