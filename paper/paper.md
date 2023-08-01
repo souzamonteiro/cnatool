@@ -77,7 +77,7 @@ Key Features:
 
 Based on this view of the literature, we designed the mind map presented in \autoref{fig:pic1}. Moreover, CNATool implements some properties not found in other software, for example incidence-fidelity index [@Teixeira2010]. \autoref{tb:tb1} presents a summary of the main features presented by each of the analyzed programs. An important observation is that the Cytoscape program, although it does not allow its execution directly on the Web, as an application, it allows, through the Cytoscape.js [@Cytoscape2023] library, the creation of Web programs for visualization and analysis of network graphs. Other popular and powerful software such as igraph [@Igraph2023] and NetworkX [@NetworkX2023] were not compared as they are not user applications but programming libraries.
 
-![Mind map of concepts involving analysis of complex networks. Green means low, yellow means medium and, red mean high value. Olive highlights CNATool’s advantages.\label{fig:pic1}](Picture1.png)
+![Mind map of concepts involving analysis of complex networks. For calculation accuracy and interface complexity, green means desirable feature, yellow means acceptable feature, and red means undesirable feature. \label{fig:pic1}](Picture1.png)
 
 This program is intended for researchers working in the analysis of social and biological networks. Knowledge of network analysis and familiarity with scripting languages is essential.
 
