@@ -16,9 +16,10 @@ authors:
     corresponding: true
     email: roberto.monteiro@fieb.org.br
   - name: Renata Souza Freitas Dantas Barreto
+    orcid: 0000-0002-1607-4800
     affiliation: 2
-    orcid: 0000-0003-3042-2493
   - name: Andréia Rita da Silva
+    orcid: 0009-0009-0587-1263
     affiliation: 2
   - name: Alexandre do Nascimento Silva
     orcid: 0000-0001-7436-8818
@@ -33,7 +34,7 @@ authors:
     orcid: 0000-0001-7476-9267
     affiliation: "1, 2"
 affiliations:
- - name: SENAI CIMATEC University, Brasil \newline
+ - name: SENAI CIMATEC University Center, Brasil \newline
    index: 1
  - name: Universidade do Estado da Bahia, Brasil \newline
    index: 2
