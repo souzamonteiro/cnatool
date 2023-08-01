@@ -163,6 +163,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-Lauro de Freitas, October 2023.
+Lauro de Freitas, August 2023.
 
 Roberto Luiz Souza Monteiro
