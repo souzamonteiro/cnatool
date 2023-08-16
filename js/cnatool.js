@@ -10797,9 +10797,9 @@ function CNATool() {
                                             var outputFileContents = cna.createPajekFile(property.adj, 'arcs');
                                         } else if (fileExtension == 'json') {
                                             var network = JSON.parse(fileContents);
-                                            property.n = network.nodes.length
-                                            property.m = network.edges.length
-                                            var outputFileContents = cna.jsonToPajekFile(network)
+                                            property.n = network.nodes.length;
+                                            property.m = network.edges.length;
+                                            var outputFileContents = cna.jsonToPajekFile(network);
                                         } else {
                                             system.log('Unsupported file format when processing file ' + file + '');
                                             var outputFileContents = '';
@@ -10813,12 +10813,14 @@ function CNATool() {
                                         });
 
                                         if (avgReport != '') {
-                                            var outputFileName = fileName + '-average.txt';
-                                            fs.writeFile(outputFileName, avgReport, function(err) {
-                                                if (err) {
-                                                    throw err;
-                                                }
-                                            });
+                                            if (avgReport != undefined) {
+                                                var outputFileName = fileName + '-average.txt';
+                                                fs.writeFile(outputFileName, avgReport, function(err) {
+                                                    if (err) {
+                                                        throw err;
+                                                    }
+                                                });
+                                            }
                                         }
                                     }
                                     
