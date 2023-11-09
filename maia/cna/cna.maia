@@ -473,9 +473,13 @@ namespace cna {
     /// @method jsonToPajekFile
     /// @memberof cna
     /// @param {object}   network - JSON containing the network.
+    /// @param {string}   type - File type (edges, arcs or matrix).
     /// @return {string}  A Pajek file.
     ///
-    function jsonToPajekFile(network) {
+    function jsonToPajekFile(network, type) {
+        if (core.type(type) == "undefined") {
+            type = "edges"
+        }
         n = network.nodes.length
         m = network.edges.length
         fileContents = "*Vertices " + core.toString(n) + "\r\n"
@@ -511,7 +515,11 @@ namespace cna {
                 }
             }
         }
-        fileContents = fileContents + "*Arcs\r\n"
+        if (type == "arcs") {
+            fileContents = fileContents + "*Arcs\r\n"
+        } else {
+            fileContents = fileContents + "*Edges\r\n"
+        }
         for (i = 0; i < m; i = i + 1) {
             edge = network.edges[i]
             if (core.type(edge) != "undefined") {

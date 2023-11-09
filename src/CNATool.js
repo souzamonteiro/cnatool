@@ -682,6 +682,12 @@ function CNATool() {
                                             }
                                         });
                                     } else {
+                                        var outputFileType = 'edges';
+
+                                        if (isDirected) {
+                                            outputFileType = 'arcs'
+                                        }
+
                                         if (fileExtension == 'csv') {
                                             property.adj = cna.parseMatrixFile(fileContents, property, columnSeparator, replaceCommas);
 
@@ -734,7 +740,7 @@ function CNATool() {
                                                 }
                                             }
 
-                                            var outputFileContents = cna.createPajekFile(property.adj, 'arcs');
+                                            var outputFileContents = cna.createPajekFile(property.adj, outputFileType);
                                         } else if (fileExtension == 'json') {
                                             var network = JSON.parse(fileContents);
                                             property.n = network.nodes.length;

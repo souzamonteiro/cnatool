@@ -113,6 +113,8 @@ The `semantic.txt` file contains the original text used to create the `semantic.
 
 `./bin/cnatool.js --build --weighted --directed --loops --topology chain examples/semantic.dlf`
 
+`./bin/cnatool.js --export --directed examples/semantic-net.json`
+
 This will create the `semantic-net.json` file.
 
 To calculate the parameters of the semantic network created, use the command:
