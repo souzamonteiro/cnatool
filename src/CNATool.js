@@ -745,7 +745,7 @@ function CNATool() {
                                             var network = JSON.parse(fileContents);
                                             property.n = network.nodes.length;
                                             property.m = network.edges.length;
-                                            var outputFileContents = cna.jsonToPajekFile(network);
+                                            var outputFileContents = cna.jsonToPajekFile(network, outputFileType);
                                         } else {
                                             system.log('Unsupported file format when processing file ' + file + '');
                                             var outputFileContents = '';
