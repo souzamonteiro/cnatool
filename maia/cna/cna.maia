@@ -540,7 +540,9 @@ namespace cna {
                 }
                 if (!((edge.source == "") || (edge.target == ""))) {
                     if (size != 0) {
-                        fileContents = fileContents + source + " " + target + " " + size + "\r\n"
+                        if (!((core.type(source) == "undefined") || (core.type(target) == "undefined"))) {
+                            fileContents = fileContents + source + " " + target + " " + size + "\r\n"
+                        }
                     }
                 }
             }
